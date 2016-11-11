@@ -157,6 +157,11 @@ $('#gdToEnToggle').on("click", function() {
 	return false;
 });
 
+$('#backbutton').on("click", function() {
+	goBack();
+	return false;
+});
+
 $('#gaelicSearchField').on({
 	keyup: function (e) {
 		var m = false;

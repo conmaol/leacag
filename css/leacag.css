@@ -67,6 +67,10 @@ a:hover {
     display: none;
 }
 
+#backbutton {
+    display: none;
+}
+
 div#gaelicEquivalentsList {
     padding-top: 10px;
     padding-bottom: 10px;
