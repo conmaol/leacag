@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="gd">
+<head>
+  <meta charset="UTF-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>LeaCaG</title>
+  <link href="../code/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="../code/css/lexicopia-entries.css" rel="stylesheet"/>
+  <link href="../code/css/leacag.css" rel="stylesheet"/>
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+          <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container-fluid" style="padding-top: 10px;">
+              <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                </button>
+                <form class="navbar-form navbar-left" role="search" id="englishSearchForm">
+                  <div class="form-group">
+                    <span class="glyphicon glyphicon-search"></span>
+                    <input type="search" id="englishSearchField" placeholder="Beurla" autocomplete="off"/>
+                    <!-- <a id="enToGdToggle" href="#">Gàidhlig?</a> -->
+                  </div>
+                </form>
+                <form class="navbar-form navbar-left" role="search" id="gaelicSearchForm">
+                  <div class="form-group">
+                    <span class="glyphicon glyphicon-search"></span>
+                    <input type="search" id="gaelicSearchField" placeholder="Gàidhlig" autocomplete="off"/>
+                    <!-- <a id="gdToEnToggle" href="#">Beurla?</a> -->
+                  </div>
+                </form>
+              </div>
+              <div>
+                <ul id="suggestions">
+                </ul>
+              </div>
+              <div class="collapse navbar-collapse navbar-right" id="navbar-collapse">
+                <ul class="nav navbar-nav">
+                  <li><a id="enToGdToggle" href="#">Gàidhlig?</a></li>
+                  <li><a id="gdToEnToggle" href="#">Beurla?</a></li>
+                  <li><a href="about-leacag.html">fios</a></li>
+                  <li><a href="#" id="randomEntry">iongnadh</a></li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div id="gaelicEquivalentsList">
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div id="content-div-entry">
+          <p><strong>Fàilte gu siostam briathrachais LeaCaG!</strong></p>
+          <p>Chì sibh bocsa teacsa aig ceann na duilleige seo, air an làimh chlì. Cuiribh a-steach na ciad litrichean dhen fhacal a tha sibh a' sireadh, agus taghaibh fear de na molaidhean.</p>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div id="backbutton" style="display: none"><a class="back" href="#" onclick="goBack();">&nbsp;&lt; BACK&nbsp;</a></div>
+      </div>
+    </div>
+  </div>
+  <script src="../code/js/jquery-3.1.1.min.js"></script>
+  <script src="../code/js/bootstrap.min.js"></script>
+  <script src="../code/js/lexicopia-entries.js"></script>
+  <script src="../code/js/leacag.js"></script>
+  <script type="text/javascript">
+    $(function() { //close the dropdown when a navbar link is clicked (mobile)
+      $('.navbar-collapse a').on('click', function(){
+        $(".navbar-collapse").collapse('hide');
+      });
+    });
+    var lang = 'gd';
+    var entryhistory = [];
+    $('#englishSearchField').focus();
+  </script>
+</body>
+</html>

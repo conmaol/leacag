@@ -1,0 +1,79 @@
+@charset "UTF-8";
+
+@media screen and (-webkit-min-device-pixel-ratio:0) { 
+  select,
+  textarea,
+  input {
+    font-size: 16px;
+  }
+}
+
+body {
+    font-family: Verdana, Helvetica, sans-serif;
+    font-size: 12pt;
+    color: black;
+    padding-top: 100px;
+}
+
+#suggestions {
+    position:absolute;
+    background-color: white;
+    width:21em;
+    display: none;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border: 1px solid black;
+    margin-top: 40px;
+    margin-left: 30px;
+    z-index: 1;
+}
+
+#suggestions li {
+    padding: 5px;
+}
+
+#suggestions li:hover {
+    cursor: pointer;
+}
+
+.chosen {
+    background: rgba(0,120,0, .2);
+}
+
+#suggestions li:hover, li:active {
+    background: rgba(0,120,0, .2);
+}
+
+a:link {
+    color:#336699;
+    text-decoration: none;
+}
+
+a:visited {
+    color:#336699;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+#gaelicSearchForm {
+    display: none;
+}
+
+#gdToEnToggle {
+    display: none;
+}
+
+div#gaelicEquivalentsList {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+div.lexicopia-entry {
+    border: thin solid;
+}
+
+
