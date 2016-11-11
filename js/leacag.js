@@ -15,7 +15,7 @@ $('#englishSearchField').on({
 		var searchString = $(this).val();
 		if (searchString.length >= minChars) {
 			//get the list of suggestions from the server
-			$.getJSON("../code/php/leacag.php?action=getEnglish&q=" + searchString, function(data) {
+			$.getJSON("php/leacag.php?action=getEnglish&q=" + searchString, function(data) {
 				suggestedTerms = data.results;	//save the results for later use
 				$.each(data.results, function(k, v) {
 					//assemble the suggested items list
@@ -90,7 +90,7 @@ $('#randomEntry').on("click", function() {
 	$('#englishSearchField').val("");
 	$('#gaelicSearchField').val("");
 	$('#gaelicEquivalentsList').html("");
-	$.getJSON("../code/php/leacag.php?action=getRandom", function(data) {
+	$.getJSON("php/leacag.php?action=getRandom", function(data) {
 		var randomid = data.randomEntry.id; // THIS DOESN'T WORK
         entryhistory=[randomid];
         updateContent(randomid);
@@ -170,7 +170,7 @@ $('#gaelicSearchField').on({
 		var searchString = $(this).val();
 		if (searchString.length >= minChars) {
 			//get the list of suggestions from the server
-			$.getJSON("../code/php/leacag.php?action=getGaelic&q=" + searchString, function(data) {
+			$.getJSON("php/leacag.php?action=getGaelic&q=" + searchString, function(data) {
 				suggestedTerms = data.results;	//save the results for later use
 				$.each(data.results, function(k, v) {
 					//assemble the suggested items list
@@ -196,3 +196,14 @@ $('#gaelicSearchField').on({
 		$(this).val("");	//clear the search field for a new query
 	}
 });
+
+function updateContent(id) {
+	// update the content panel when a new lexical entry is selected
+	$('#content-div-entry').load("../lexicopia/lexicopia-entries/" + lang + "/html/" + id + ".html");
+	if (entryhistory.length > 1) {
+		document.getElementById("backbutton").style.display = 'block';
+	}
+	else {
+		document.getElementById("backbutton").style.display = 'none';
+	}
+}
