@@ -85,3 +85,7 @@ div.lexicopia-entry {
     border-bottom: none;
 }
 
+.englishTranslation {
+    color:gray;
+    font-size: 11pt;
+}
