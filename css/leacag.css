@@ -80,4 +80,8 @@ div.lexicopia-entry {
     border: thin solid;
 }
 
+.navbar-form {
+    border-top: none;
+    border-bottom: none;
+}
 
