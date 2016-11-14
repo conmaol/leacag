@@ -89,3 +89,20 @@ div.lexicopia-entry {
     color:gray;
     font-size: 11pt;
 }
+
+.navbar {
+    background-color: #996633;
+}
+
+.navbar-default .navbar-nav>li>a  {
+    color: white;
+}
+
+.navbar-default .navbar-nav>li>a:hover  {
+    color: white;
+    text-decoration: underline;
+}
+
+.glyphicon-search {
+    color: white;
+}
