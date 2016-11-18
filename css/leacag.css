@@ -16,7 +16,9 @@ body {
 }
 
 #suggestions {
-    position:absolute;
+    position:fixed;
+    left:40px;
+    top:70px;
     background-color: white;
     width:21em;
     display: none;
@@ -24,8 +26,6 @@ body {
     margin: 0;
     padding: 0;
     border: 1px solid black;
-    margin-top: 0px;
-    margin-left: 0px;
     z-index: 1;
 }
 
@@ -105,4 +105,15 @@ div.lexicopia-entry {
 
 .glyphicon-search {
     color: white;
+}
+
+/*
+overriding bootstrap CSS
+ */
+.navbar {
+    height: 60px;
+}
+
+.navbar-form {
+    box-shadow: 0 0 0 rgba(255, 255, 255, 0.1) inset, 0 0 0 rgba(255, 255, 255, 0.1);
 }
