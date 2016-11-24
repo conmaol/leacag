@@ -92,7 +92,8 @@ $('#randomEntry').on("click", function() {
 	$('#gaelicEquivalentsList').html("");
 	$.getJSON("php/leacag.php?action=getRandom", function(data) {
 		var randomid = data.randomEntry.id; // THIS DOESN'T WORK
-        entryhistory=[randomid];
+		entryhistory.push(randomid);
+        //entryhistory=[randomid];
         updateContent(randomid);
         return false;
 	})
@@ -131,12 +132,14 @@ function chooseSelectedTerm(term, lang) {
             $('#content-div-entry').empty();
         }
         else {
-			entryhistory=[gds[0].id];
+			entryhistory.push(gds[0].id);
+			//entryhistory=[gds[0].id];
             updateContent(gds[0].id);
         }
     }
 	else if (lang=='gd') {
-		entryhistory=[suggestedTerms[$('.chosen').index()].id];
+		entryhistory.push(suggestedTerms[$('.chosen').index()].id);
+		//entryhistory=[suggestedTerms[$('.chosen').index()].id];
         updateContent(suggestedTerms[$('.chosen').index()].id);
     }
 }
