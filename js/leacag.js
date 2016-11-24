@@ -103,6 +103,7 @@ $('#aboutLeacag').on("click", function() {
 	$('#englishSearchField').val("");
 	$('#gaelicSearchField').val("");
 	$('#gaelicEquivalentsList').html("");
+	$('#backbutton').hide();
 	$('#content-div-entry').load("about.html");
 	return false;
 });

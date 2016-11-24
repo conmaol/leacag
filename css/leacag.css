@@ -59,6 +59,22 @@ a:hover {
     text-decoration: underline;
 }
 
+a#backlink:link {
+    background-color: #336699;
+    color: white;
+    text-decoration: none;
+}
+
+a#backlink:visited {
+    background-color: #336699;
+    color: white;
+    text-decoration: none;
+}
+
+a#backlink:hover {
+    text-decoration: underline;
+}
+
 #gaelicSearchForm {
     display: none;
 }
