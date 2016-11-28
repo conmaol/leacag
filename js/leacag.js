@@ -99,16 +99,6 @@ $('#randomEntry').on("click", function() {
 	})
 });
 
-$('#aboutLeacag').on("click", function() {
-	$('#englishSearchField').val("");
-	$('#gaelicSearchField').val("");
-	$('#gaelicEquivalentsList').html("");
-	$('#backbutton').hide();
-	$('#content-div-entry').load("about.html");
-	return false;
-});
-
-
 /**
  *
  * @param word: the string value of the selected word
