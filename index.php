@@ -1,14 +1,15 @@
 <?php
 
+/*
 session_start();
 
 date_default_timezone_set("Europe/London");
 
 require_once 'vendor/autoload.php';
 
-$client_id = "288152230357-nhbn2rhb252lp994m87h2i5iq2fi45pa.apps.googleusercontent.com";
-$client_secret = "NOKaTqsMTwuGX_AftCqsNZVU";
-$redirect_uri = "http://localhost/~stephen/leacag/index.php";
+$client_id = "380282622225-rv86npt8t1n41etqti5a65a2mdtoig6c.apps.googleusercontent.com";
+$client_secret = "z6mnwIQgWJFdqkSqXDEHUSiN";
+$redirect_uri = "http://localhost/~stephenbarrett/leacag/index.php";
 
 $client = new Google_Client();
 $client->setClientId($client_id);
@@ -40,16 +41,17 @@ HTML;
 
     echo "<h1>User name: " . $user->name . "</h1>";
 }
+*/
+?>
 
 
-/*
 <!DOCTYPE html>
 <html lang="gd">
 <head>
   <meta charset="UTF-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="google-signin-client_id" content="288152230357-nhbn2rhb252lp994m87h2i5iq2fi45pa.apps.googleusercontent.com">
+  <meta name="google-signin-client_id" content="380282622225-rv86npt8t1n41etqti5a65a2mdtoig6c.apps.googleusercontent.com">
   <title>LeaCaG</title>
   <script src="https://apis.google.com/js/platform.js" async defer></script>
   <link href="css/bootstrap.min.css" rel="stylesheet"/>
@@ -122,6 +124,7 @@ HTML;
         </div>
       </div>
     </div>
+    <a href="#" onclick="javascript:signOut();">Sign Out</a>
   </div>
   <script src="js/jquery-3.1.1.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
@@ -144,17 +147,31 @@ HTML;
       console.log('Image URL: ' + profile.getImageUrl());
       console.log('Email: ' + profile.getEmail());
 
+      $.ajax({
+          method: "GET",
+          url: 'http://localhost/~stephenbarrett/leacag/ajax.php?action=email&user='+profile.getEmail()
+      })
+          .done(function (msg) {
+              console.log("AJAX called : " + msg);
+          });
+   /*
       var id_token = googleUser.getAuthResponse().id_token;
       var xhr = new XMLHttpRequest();
-      xhr.open('POST', 'https://dasg.ac.uk/leacag/tokensignin.php');
+      xhr.open('GET', 'http://localhost/~stephenbarrett/leacag/ajax.php?action=email&user='+profile.getEmail());
       xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
       xhr.onload = function() {
-        console.log('Signed in as: ' + xhr.responseText);
+        console.log('Email sent. Trace: ' + xhr.responseText);
       };
-      xhr.send('idtoken' + id_token);
+   //   xhr.send('idtoken' + id_token);
+   */
     }
 
+    function signOut() {
+      var auth2 = gapi.auth2.getAuthInstance();
+      auth2.signOut().then(function () {
+        console.log('User signed out.');
+      });
+    }
   </script>
 </body>
 </html>
-*/
