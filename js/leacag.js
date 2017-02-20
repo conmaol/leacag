@@ -1,6 +1,6 @@
 var listIndex;		//the position of the cursor within the suggested list
 var suggestedTerms;	//the array of suggested result objects loaded via AJAX
-var minChars = 2;
+var minChars = 3;
 
 $('#englishSearchField').on({
 	keyup: function(e) {
@@ -105,6 +105,7 @@ $('#randomEntry').on("click", function() {
  * @param arrayIdx: the position of the selected word within the file's array
  */
 function chooseSelectedTerm(term, lang) {
+	updateUserSearchDB(term);
 	$('#englishSearchField').val("");
     $('#gaelicSearchField').val("");
 	$('#suggestions').hide();
@@ -214,4 +215,33 @@ function updateContent(id) {
 	else {
 		document.getElementById("backbutton").style.display = 'none';
 	}
+}
+
+/*
+ * Add the user email and search term to the database
+ */
+function updateUserSearchDB(searchTerm) {
+	var userProfile;
+	if (userProfile = getUser()) {
+	      $.ajax({
+	          method: "GET",
+	          url: 'ajax.php?action=logSearchTerm&searchTerm='+searchTerm+'&id='+userProfile.getId()+'&email='+userProfile.getEmail()
+	      })
+	      .done(function (msg) {
+	          console.log("Attempted DB update : " + msg);
+	      }); 
+	}
+}
+
+/*
+ * Get signed-in Google user
+ */
+function getUser() {
+  var user = auth2.currentUser.get();
+  var profile = user.getBasicProfile();
+  if (profile) {
+	  return profile;
+  } else {
+	  return false;
+  }
 }

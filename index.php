@@ -51,7 +51,7 @@ HTML;
   <meta charset="UTF-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="google-signin-client_id" content="380282622225-rv86npt8t1n41etqti5a65a2mdtoig6c.apps.googleusercontent.com">
+  <meta name="google-signin-client_id" content="1067716944598-u8oj6j87j4ho6lm726au2ap3spf5d508.apps.googleusercontent.com">
   <title>LeaCaG</title>
   <script src="https://apis.google.com/js/platform.js" async defer></script>
   <link href="css/bootstrap.min.css" rel="stylesheet"/>
@@ -129,6 +129,9 @@ HTML;
   <script src="js/jquery-3.1.1.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
   <script src="../lexicopia/lexicopia-web/code/js/lexicopia-entries.js"></script>
+  <script>
+	var auth2, id_token = null;	//need to be defined before leacag.js is loaded
+  </script>
   <script src="js/leacag.js"></script>
   <script type="text/javascript">
     $(function() { //close the dropdown when a navbar link is clicked (mobile)
@@ -149,25 +152,28 @@ HTML;
 
       $.ajax({
           method: "GET",
-          url: 'http://localhost/~stephenbarrett/leacag/ajax.php?action=email&user='+profile.getEmail()
+          url: 'ajax.php?action=email&user='+profile.getEmail()
       })
-          .done(function (msg) {
-              console.log("AJAX called : " + msg);
-          });
-   /*
-      var id_token = googleUser.getAuthResponse().id_token;
+      .done(function (msg) {
+          console.log("AJAX called : " + msg);
+      }); 
+       
+ 	//User ID authentication via HTTPS with Google Token ID
+ 	//Requires PHP 5.5.9
+      id_token = googleUser.getAuthResponse().id_token;
       var xhr = new XMLHttpRequest();
-      xhr.open('GET', 'http://localhost/~stephenbarrett/leacag/ajax.php?action=email&user='+profile.getEmail());
+      xhr.open('POST', 'https://dasg.ac.uk/leacag/ajax.php', true);
       xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
       xhr.onload = function() {
-        console.log('Email sent. Trace: ' + xhr.responseText);
+       	console.log('Signed in as: ' + xhr.responseText);
       };
-   //   xhr.send('idtoken' + id_token);
-   */
+      xhr.send('idtoken='+id_token);
+  
+      auth2 = gapi.auth2.getAuthInstance();
     }
+  
 
     function signOut() {
-      var auth2 = gapi.auth2.getAuthInstance();
       auth2.signOut().then(function () {
         console.log('User signed out.');
       });
