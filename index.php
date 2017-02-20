@@ -57,6 +57,7 @@ HTML;
   <link href="css/bootstrap.min.css" rel="stylesheet"/>
   <link href="../lexicopia/lexicopia-web/code/css/lexicopia-entries.css" rel="stylesheet"/>
   <link href="css/leacag.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 </head>
 <body>
   <div class="container">
@@ -93,7 +94,16 @@ HTML;
                   <li id="gdToEnToggle"><a href="#" title="Search for an English word">Beurla</a></li>
                   <li id="aboutLeacag"><a href="#" title="About LeaCaG">fios</a></li>
                   <li id="randomEntry"><a href="#" title="Random entry">iongnadh</a></li>
-                  <li><div class="g-signin2" data-onsuccess="onSignIn">Sign In</div></li>
+                  <li id="loginButtons">
+                      <div class="g-signin2" data-onsuccess="onSignIn">Sign In</div>
+                      <div class="signOut">
+                          <div class="googleIcon">
+                              <img src="images/btn_google.png" width="28" height="28">
+                          </div>
+                          <a href="#" id="signOutLink">Sign Out</a>
+                      </div>
+                  </li>
+
                 </ul>
               </div>
             </div>
@@ -115,6 +125,10 @@ HTML;
       </div>
     </div>
     <div class="row">
+      <div class="col-md-12 loggedInStatus"> <!-- displays the logged-in name -->
+      </div>
+    </div>
+    <div class="row">
       <div class="col-md-12">
         <div id="content-div-entry">
           <p><strong>Fàilte gu siostam briathrachais LeaCaG!</strong></p>
@@ -124,7 +138,6 @@ HTML;
         </div>
       </div>
     </div>
-    <a href="#" onclick="javascript:signOut();">Sign Out</a>
   </div>
   <script src="js/jquery-3.1.1.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
@@ -138,6 +151,25 @@ HTML;
       $('.navbar-collapse a').on('click', function(){
         $(".navbar-collapse").collapse('hide');
       });
+      $('#signOutLink').on('click', function () {
+          gapi.auth2.getAuthInstance().disconnect();
+          console.log('User signed out.');
+          //hide the sign-out button
+          $('.signOut').hide();
+          //hide logged-in status and show the sign-in button
+          $('.loggedInStatus').hide();
+          $('.g-signin2').html('Sign In');  //TODO: fix the 'Sign In' not displaying correctly
+          $('.g-signin2').show();
+
+
+          /*auth2.signOut().then(function () {
+              console.log('User signed out.');
+              //hide the sign-out button
+              $('.signOut').hide();
+              //show the sign-in button
+              $('.g-signin2').show();
+          });*/
+      });
     });
     var lang = 'gd';
     var entryhistory = [];
@@ -150,13 +182,16 @@ HTML;
       console.log('Image URL: ' + profile.getImageUrl());
       console.log('Email: ' + profile.getEmail());
 
+  /*
+        Disable the AJAX call for local development for the moment
+
       $.ajax({
           method: "GET",
           url: 'ajax.php?action=email&user='+profile.getEmail()
       })
       .done(function (msg) {
           console.log("AJAX called : " + msg);
-      }); 
+      });
        
  	//User ID authentication via HTTPS with Google Token ID
  	//Requires PHP 5.5.9
@@ -168,16 +203,28 @@ HTML;
        	console.log('Signed in as: ' + xhr.responseText);
       };
       xhr.send('idtoken='+id_token);
+  */
   
       auth2 = gapi.auth2.getAuthInstance();
+
+      //Update the button to sign out
+      $('.g-signin2').hide();
+      $('.signOut').show();
+      //Show the signed-in message
+      var loggedInMsg = 'Signed-in as ' + profile.getName();
+      $('.loggedInStatus').html(loggedInMsg).show();
+
     }
   
 
-    function signOut() {
+/*    function signOut() {
       auth2.signOut().then(function () {
         console.log('User signed out.');
+        //show the sign-in button
+        $('.g-signin2').html('Sign In').show();
+        $('.loggedInStatus').hide();
       });
-    }
+    }*/
   </script>
 </body>
 </html>

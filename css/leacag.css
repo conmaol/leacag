@@ -135,3 +135,44 @@ overriding bootstrap CSS
 .navbar-form {
     box-shadow: 0 0 0 rgba(255, 255, 255, 0.1) inset, 0 0 0 rgba(255, 255, 255, 0.1);
 }
+
+/*
+google sign in/out
+ */
+#loginButtons {
+    background-color: white;
+    height: 36px;
+    width: 120px;
+}
+
+.googleIcon {
+    float: left;
+    margin: 3px 8px;
+}
+
+.signOut {
+    display: none;
+}
+
+#signOutLink {
+    display: inline-block;
+    margin-left: 10px;
+    color: #666;
+    font-size: 9pt;
+    font-family: 'Roboto', sans-serif;
+    line-height: 34px;
+}
+
+.g-signedInAs {
+    display: none;
+}
+
+.loggedInStatus {
+    display: none;
+    float: right;
+    margin-top: -50px;
+    text-align: right;
+    font-family: 'Roboto', sans-serif;
+    font-size: 10pt;
+    color: #666;
+}
