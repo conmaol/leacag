@@ -42,11 +42,15 @@ HTML;
     echo "<h1>User name: " . $user->name . "</h1>";
 }
 */
+session_start();
+
+//test code
+setcookie('userid', "314444242");
+//
 ?>
 
-
 <!DOCTYPE html>
-<html lang="gd">
+<html lang="gd" xmlns="http://www.w3.org/1999/html">
 <head>
   <meta charset="UTF-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -92,7 +96,6 @@ HTML;
                   <li id="backbutton"><a href="#">air ais</a></li>
                   <li id="enToGdToggle"><a href="#" title="Search for a Gaelic word">Gàidhlig</a></li>
                   <li id="gdToEnToggle"><a href="#" title="Search for an English word">Beurla</a></li>
-                  <li id="aboutLeacag"><a href="#" title="About LeaCaG">fios</a></li>
                   <li id="randomEntry"><a href="#" title="Random entry">iongnadh</a></li>
                   <li id="loginButtons">
                       <div class="g-signin2" data-onsuccess="onSignIn">Sign In</div>
@@ -100,7 +103,7 @@ HTML;
                           <div class="googleIcon">
                               <img src="images/btn_google.png" width="28" height="28">
                           </div>
-                          <a href="#" id="signOutLink">Sign Out</a>
+                          <a href="#" id="signOutLink" class="loginLink">Sign Out</a>
                       </div>
                   </li>
 
@@ -120,30 +123,102 @@ HTML;
     </div>
     <div class="row">
       <div class="col-md-12">
+        <div id="backbutton">
+          <a href="#" id="backlink">&lt; AIR AIS&nbsp;</a>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
         <div id="gaelicEquivalentsList">
         </div>
       </div>
     </div>
     <div class="row">
-      <div class="col-md-12 loggedInStatus"> <!-- displays the logged-in name -->
+      <div class="col-md-6"><button id="formLink">Submit an entry</button>
       </div>
+      <div class="col-md-6 loggedInStatus">    <!-- displays the logged-in name -->
+      </div>
+    </div>
+    <div id="formContainer">
+      <form>
+          <p>
+              Gaelic form:
+              <input type="text" name="gaelic-form"/>
+          </p>
+          <p>
+              Part-of-speech:
+              <select name="pos">
+                  <option>noun</option>
+                  <option>adjective</option>
+                  <option>verb</option>
+                  <option>other</option>
+              </select>
+          </p>
+          <p>
+              English translation:
+              <input type="text" name="english-translation"/>
+          </p>
+          <p>
+              Notes:
+              <textarea name="notes"></textarea>
+          </p>
+          <p>
+              <button id="cancelSubmission">cancel</button>
+              <input type="submit"/>
+          </p>
+      </form>
     </div>
     <div class="row">
       <div class="col-md-12">
-        <div id="content-div-entry">
-          <p><strong>Fàilte gu siostam briathrachais LeaCaG!</strong></p>
-          <p>Chì sibh bocsa teacsa aig ceann na duilleige seo, air an làimh chlì. Cuiribh a-steach na ciad litrichean dhen fhacal a tha sibh a' sireadh, agus taghaibh fear de na molaidhean.</p>
-          <p class="englishTranslation">Welcome to the LeaCaG Gaelic terminology system!</p>
-          <p class="englishTranslation">You will see a textbox at the top-left of this page. Type in the first few letters of the word you are looking for, and then choose one of the suggestions that appear.</p>
-        </div>
+          <div id="content-div-entry">
+              <p><strong>Fàilte gu co-ionad briathrachais LEACAG!</strong></p>
+              <p>Chì sibh bocsa teacsa aig ceann na duilleige seo, air an làimh chlì. Cuiribh a-steach na ciad litrichean den fhacal a tha sibh a' sireadh, agus taghaibh fear de na molaidhean.</p>
+              <p class="englishTranslation">Welcome to the LEACAG Gaelic terminology hub!</p>
+              <p class="englishTranslation">You will see a textbox at the top-left of this page. Type in the first few letters of the word you are looking for, and then choose one of the suggestions that appear.</p>
+              <hr/>
+              <p>
+                  Seo co-ionad air-loidhne a bhios a' cuideachadh daoine briathrachas feumail Gàidhlig a lorg agus a sgaoileadh.
+                  Chaidh a innleachadh le Mark McConville, a tha ag obair ann an sgioba rannsachaidh DASG (Dachaidh
+                  airson Stòras na Gàidhlig) aig Oilthigh Ghlaschu, fo stiùireadh an Àrd-ollamh Roibeard Ó Maolalaigh, agus
+                  le taic coimpiùtarachd bho Stephen Barrett.
+              </p>
+              <p>
+                  Is e toradh pròiseict LEACAG (Leasachadh Corpais na Gàidhlig) a tha anns a' ghoireas seo. Tha LEACAG air a mhaoineachadh le
+                  Bòrd na Gàidhlig agus MG Alba.
+              </p>
+              <p>
+                  Airson tuilleadh fiosrachaidh, nach cuir sibh post dealain thugainn? Mark.McConville@glasgow.ac.uk.
+              </p>
+              <p class="englishTranslation">
+                  This is an online hub for finding and distributing useful Gaelic terminology. It has been developed by Mark McConville, a member of the
+                  DASG (Digital Archive of Scottish Gaelic) research team at Glasgow
+                  University, under the leadership of Professor Roibeard Ó Maolalaigh, and with systems development support from Stephen Barrett.
+              </p>
+              <p class="englishTranslation">
+                  This resource is an output of the LEACAG (Gaelic Corpus Development) project, funded by Bòrd na Gàidhlig and MG Alba.
+              </p>
+              <p class="englishTranslation">
+                  If you have any questions, you can email the editor: Mark.McConville@glasgow.ac.uk
+              </p>
+              <p>
+                  <a href="http://dasg.ac.uk/" title="DASG" target="_blank"><img src="http://dasg.ac.uk/images/logo.png" height="70px" alt="DASG"/></a>
+                  <a href="http://www.glasgow.ac.uk/" title="Glasgow University" target="_blank"><img src="http://www.gla.ac.uk/media/media_446862_en.png" height="70px" alt="Glasgow University"/></a>
+                  <a href="http://www.gaidhlig.org.uk/" title="Bòrd na Gàidhlig" target="_blank"><img src="http://www.gaidhlig.org.uk/bord/wp-content/themes/bng/images/logo.png" height="70px" alt="Bòrd na Gàidhlig"/></a>
+                  <a href="http://mgalba.com/" title="MG Alba" target="_blank"><img src="http://mgalba.com/images/logo-new-80x67.png" height="70px" alt="MG Alba"/></a>
+                  <a href="http://www.soillse.ac.uk/" title="Soillse" target="_blank"><img src="http://www.soillse.ac.uk/wp-content/themes/soillse/images/logo.png" height="70px" alt="Soillse"/></a>
+              </p>
+          </div>
       </div>
     </div>
   </div>
   <script src="js/jquery-3.1.1.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
+  <script src="js/js.cookie.js"></script>
+  <script src="js/jquery.bpopup.min.js"</script>
   <script src="../lexicopia/lexicopia-web/code/js/lexicopia-entries.js"></script>
   <script>
-	var auth2, id_token = null;	//need to be defined before leacag.js is loaded
+	var id_token = null;	//need to be defined before leacag.js is loaded
   </script>
   <script src="js/leacag.js"></script>
   <script type="text/javascript">
@@ -151,29 +226,26 @@ HTML;
       $('.navbar-collapse a').on('click', function(){
         $(".navbar-collapse").collapse('hide');
       });
+      /*
+        Sign out code
+      */
       $('#signOutLink').on('click', function () {
           gapi.auth2.getAuthInstance().disconnect();
-          console.log('User signed out.');
-          //hide the sign-out button
+          console.log('User signed out.');  //debug code only
           $('.signOut').hide();
-          //hide logged-in status and show the sign-in button
-          $('.loggedInStatus').hide();
-          $('.g-signin2').html('Sign In');  //TODO: fix the 'Sign In' not displaying correctly
+          $('#formLink').hide();
+          $('.abcRioButtonContents').show();
           $('.g-signin2').show();
-
-
-          /*auth2.signOut().then(function () {
-              console.log('User signed out.');
-              //hide the sign-out button
-              $('.signOut').hide();
-              //show the sign-in button
-              $('.g-signin2').show();
-          });*/
+          $('.abcRioButtonContents > span').eq(1).hide();   //hide the 'Signed In' text
+          $('.abcRioButtonContents > span').eq(0).show();   //show the 'Sign In' text
+          $('.loggedInStatus').hide();  //hide logged-in status
       });
     });
+
     var lang = 'gd';
     var entryhistory = [];
     $('#englishSearchField').focus();
+    var bpopup;     //to store and handle the modal popup
 
     function onSignIn(googleUser) {
       var profile = googleUser.getBasicProfile();
@@ -207,24 +279,31 @@ HTML;
   
       auth2 = gapi.auth2.getAuthInstance();
 
-      //Update the button to sign out
+      //Update the button to display "Sign Out" option
       $('.g-signin2').hide();
+      $('#signOutLink').show();
       $('.signOut').show();
       //Show the signed-in message
       var loggedInMsg = 'Signed-in as ' + profile.getName();
       $('.loggedInStatus').html(loggedInMsg).show();
 
-    }
-  
+      /*
+        Form submission code
+       */
+      //show the form link if logged-in
+      if (Cookies.get("userid")) {
+        $('#formLink').show();
+        $('#formLink').on('click', function () {
+          bpopup = $('#formContainer').bPopup({
+              modal: true
+          });
+        });
+        $('#cancelSubmission').on('click', function () {
+          bpopup.close();
+        });
+      }
 
-/*    function signOut() {
-      auth2.signOut().then(function () {
-        console.log('User signed out.');
-        //show the sign-in button
-        $('.g-signin2').html('Sign In').show();
-        $('.loggedInStatus').hide();
-      });
-    }*/
+    }
   </script>
 </body>
 </html>

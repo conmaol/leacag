@@ -7,6 +7,7 @@ header('Access-Control-Allow-Origin: http://dasg.ac.uk');
  * Time: 12:40
  */
 
+session_start();
 ini_set("display_errors", 1);
 
 require_once '../includes/include.php';
@@ -26,6 +27,8 @@ if (isset($_POST["idtoken"])) {
 	$payload = $client->verifyIdToken($id_token);
 	if ($payload) {
 		$userid = $payload['sub'];
+		$_SESSION["userid"] = $userid;
+		$_COOKIE["userid"] = $userid;
 		echo "User verified : {$userid}";
 	} else {
 		echo "Not verified";

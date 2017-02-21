@@ -1,6 +1,7 @@
 var listIndex;		//the position of the cursor within the suggested list
 var suggestedTerms;	//the array of suggested result objects loaded via AJAX
 var minChars = 3;
+var auth2;
 
 $('#englishSearchField').on({
 	keyup: function(e) {
@@ -237,6 +238,9 @@ function updateUserSearchDB(searchTerm) {
  * Get signed-in Google user
  */
 function getUser() {
+  if (!auth2) {
+    return false;
+  }
   var user = auth2.currentUser.get();
   var profile = user.getBasicProfile();
   if (profile) {

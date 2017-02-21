@@ -150,17 +150,18 @@ google sign in/out
     margin: 3px 8px;
 }
 
-.signOut {
+#signOutLink, .signOut {
     display: none;
 }
 
-#signOutLink {
+a.loginLink {
     display: inline-block;
     margin-left: 10px;
     color: #666;
     font-size: 9pt;
     font-family: 'Roboto', sans-serif;
     line-height: 34px;
+    text-decoration: none;
 }
 
 .g-signedInAs {
@@ -175,4 +176,19 @@ google sign in/out
     font-family: 'Roboto', sans-serif;
     font-size: 10pt;
     color: #666;
+}
+
+/*
+form
+ */
+#formLink {
+    display: none;
+}
+
+#formContainer {
+    display:none;
+    width: 30em;
+    padding: 20px;
+    background-color: white;
+    border: 2px solid #996633;
 }
