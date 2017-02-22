@@ -10,37 +10,22 @@ header('Access-Control-Allow-Origin: http://dasg.ac.uk');
 session_start();
 ini_set("display_errors", 1);
 
-require_once '../includes/include.php';
-
 /*
- * Code to authenticate user id 
- * Requires PHP 5.5.9!
+ * commented out for development
  */
+//require_once '../includes/include.php';
+
 require_once 'vendor/autoload.php';
 
-
-if (isset($_POST["idtoken"])) {
-
-	// Get $id_token via HTTPS POST.
-	$id_token = $_POST["idtoken"];
-	$client = new Google_Client(['client_id' => '1067716944598-u8oj6j87j4ho6lm726au2ap3spf5d508.apps.googleusercontent.com']);	
-	$payload = $client->verifyIdToken($id_token);
-	if ($payload) {
-		$userid = $payload['sub'];
-		$_SESSION["userid"] = $userid;
-		$_COOKIE["userid"] = $userid;
-		echo "User verified : {$userid}";
-	} else {
-		echo "Not verified";
-	}
-}
-
-switch ($_GET["action"]) {
+switch ($_REQUEST["action"]) {
   case "email":
   	//debug
   		echo "Email turned off for development";
   		break;
   	//
+      /*
+       * TODO: update the email code to use DASG Email class?
+       */
     $message = $_GET["user"] . " signed in on LeaCaG";
     $headers = "From: stephen.barrett@glasgow.ac.uk\r\nReply-To: stephen.barrett@glasgow.ac.uk";
     echo "Attempting email...";
@@ -62,4 +47,38 @@ switch ($_GET["action"]) {
   		echo $e->getMessage();
   	}
   	break;
+  case "authId":
+    $id_token = $_POST["idtoken"];
+    $client = new Google_Client(['client_id' => '1067716944598-u8oj6j87j4ho6lm726au2ap3spf5d508.apps.googleusercontent.com']);
+    $payload = $client->verifyIdToken($id_token);
+    if ($payload) {
+      $userid = $payload['sub'];
+      $_SESSION["userid"] = $userid;
+      $_COOKIE["userid"] = $userid;
+      echo "User verified : {$userid}";
+    } else {
+      echo "Not verified";
+    }
+    break;
+  case "processForm":
+    /*
+     * TODO: update the email code to use DASG Email class?
+     */
+    $message = "User " . $_POST["userEmail"] . ", ID: " . $_POST["userID"] . "submitted the following:\n";
+    $message = <<<text
+      User {$_POST["userEmail"]} (ID: {$_POST["userID"]} submitted the following:\n
+      Gaelic Form: {$_POST["gaelic-form"]}\n
+      Part of Speech: {$_POST["pos"]}\n
+      English Translation: {$_POST["english-translation"]}\n
+      Notes:  {$_POST["notes"]}
+text;
+    $headers = "From: stephen.barrett@glasgow.ac.uk\r\nReply-To: stephen.barrett@glasgow.ac.uk";
+    echo "Attempting email...";
+    $sent = mail("mail@steviebarrett.com", "LeaCaG Form Submission", $message, $headers);
+    if ($sent) {
+      echo " Email sent.";
+    } else {
+      echo " The email could not be sent.";
+    }
+    break;
 }

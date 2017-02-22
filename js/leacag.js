@@ -22,7 +22,12 @@ $('#englishSearchField').on({
 					//assemble the suggested items list
 					$('#suggestions').append($('<li>' + v.en + '</li>'));
 				});
-				$("#suggestions").show();
+                if ($('#suggestions li').length === 0) {    //there were no results for this search
+                    $('#noResults').show();
+                } else {
+                    $('#noResults').hide();
+                    $("#suggestions").show();
+                }
 				$('#suggestions li').on('click', function () {
 					$(this).addClass('chosen');
 					chooseSelectedTerm($(this).html(),'en');
@@ -37,6 +42,25 @@ $('#englishSearchField').on({
 		if (e.which == 38 || e.which == 40 || e.which == 13) {
 			e.preventDefault();
 		}
+		/*
+		    some test code for alternate 'enter' key behaviour
+		    : if a search term is in the suggestion list hitting enter will take the user to the entry
+		    : only works for English right now
+		 */
+		if (e.which == 13) {
+		    var search = $('#englishSearchField').val();
+		    $('#suggestions').each(function () {
+                $(this).find('li').each(function () {
+                    if (search === $(this).text()) {
+                        $(this).addClass('chosen');
+                        chooseSelectedTerm($(this), 'en');
+                    }
+                });
+            });
+        }
+        /*
+            //end alternate 'enter' key code
+         */
 	},
 	click: function() {     
 		$(this).val("");	//clear the search field for a new query
@@ -106,7 +130,7 @@ $('#randomEntry').on("click", function() {
  * @param arrayIdx: the position of the selected word within the file's array
  */
 function chooseSelectedTerm(term, lang) {
-	updateUserSearchDB(term);
+	updateUserSearchDB(term);           //records the search term in the server DB
 	$('#englishSearchField').val("");
     $('#gaelicSearchField').val("");
 	$('#suggestions').hide();

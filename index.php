@@ -47,6 +47,7 @@ session_start();
 //test code
 setcookie('userid', "314444242");
 //
+
 ?>
 
 <!DOCTYPE html>
@@ -116,6 +117,7 @@ setcookie('userid', "314444242");
     <div class="row">
       <div class="col-md-12">
         <div>
+          <span id="noResults">-- There are no results for this query --</span>
           <ul id="suggestions">
           </ul>
         </div>
@@ -141,7 +143,7 @@ setcookie('userid', "314444242");
       </div>
     </div>
     <div id="formContainer">
-      <form>
+      <form id="userForm" onsubmit="return processForm();">
           <p>
               Gaelic form:
               <input type="text" name="gaelic-form"/>
@@ -164,10 +166,18 @@ setcookie('userid', "314444242");
               <textarea name="notes"></textarea>
           </p>
           <p>
-              <button id="cancelSubmission">cancel</button>
+              <input type="hidden" name="userEmail" id="userEmail"/>
+              <input type="hidden" name="userID" id="userID"/>
+              <input type="hidden" name="action" value="processForm"/>
+              <button class="popupClose">cancel</button>
               <input type="submit"/>
           </p>
       </form>
+      <!-- thank you message on form submission -->
+      <div id="submitThanks">
+          <h2>Mòran taing!</h2>
+          <button type="button" class="popupClose">close</button>
+      </div>
     </div>
     <div class="row">
       <div class="col-md-12">
@@ -229,6 +239,8 @@ setcookie('userid', "314444242");
       /*
         Sign out code
       */
+      $('#signOutLink').hide();
+      $('.signOut').hide();
       $('#signOutLink').on('click', function () {
           gapi.auth2.getAuthInstance().disconnect();
           console.log('User signed out.');  //debug code only
@@ -240,19 +252,24 @@ setcookie('userid', "314444242");
           $('.abcRioButtonContents > span').eq(0).show();   //show the 'Sign In' text
           $('.loggedInStatus').hide();  //hide logged-in status
       });
+      $('')
     });
 
     var lang = 'gd';
     var entryhistory = [];
     $('#englishSearchField').focus();
     var bpopup;     //to store and handle the modal popup
+    $('.popupClose').on('click', function () {  //close the popup on click
+        bpopup.close();
+        return false;
+    });
 
     function onSignIn(googleUser) {
       var profile = googleUser.getBasicProfile();
       console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-      console.log('Name: ' + profile.getName());
-      console.log('Image URL: ' + profile.getImageUrl());
-      console.log('Email: ' + profile.getEmail());
+      //add user info to form fields
+      $('#userEmail').val(profile.getEmail());
+      $('#userID').val(profile.getId());
 
   /*
         Disable the AJAX call for local development for the moment
@@ -274,7 +291,7 @@ setcookie('userid', "314444242");
       xhr.onload = function() {
        	console.log('Signed in as: ' + xhr.responseText);
       };
-      xhr.send('idtoken='+id_token);
+      xhr.send('action=authId&idtoken='+id_token);
   */
   
       auth2 = gapi.auth2.getAuthInstance();
@@ -286,23 +303,32 @@ setcookie('userid', "314444242");
       //Show the signed-in message
       var loggedInMsg = 'Signed-in as ' + profile.getName();
       $('.loggedInStatus').html(loggedInMsg).show();
+    }
 
-      /*
-        Form submission code
-       */
-      //show the form link if logged-in
-      if (Cookies.get("userid")) {
+    /*
+     Form submission code
+     */
+    //show the form link if logged-in
+    if (Cookies.get("userid")) {
         $('#formLink').show();
         $('#formLink').on('click', function () {
-          bpopup = $('#formContainer').bPopup({
-              modal: true
-          });
+            bpopup = $('#formContainer').bPopup({
+                modal: true
+            });
+            $('#submitThanks').hide();
+            $('#userForm').show();
         });
-        $('#cancelSubmission').on('click', function () {
-          bpopup.close();
+    }
+    
+    function processForm() {
+        var formData = $('#userForm').serialize();
+        $.post('ajax.php', formData, function (data) {
+            console.log(data);
         });
-      }
-
+        //display a thank you message
+        $('#userForm').hide();
+        $('#submitThanks').show();
+        return false;
     }
   </script>
 </body>
