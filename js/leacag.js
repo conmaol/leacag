@@ -20,15 +20,15 @@ $('#englishSearchField').on({
 				suggestedTerms = data.results;	//save the results for later use
 				$.each(data.results, function(k, v) {
 					//assemble the suggested items list
-					$('#suggestions').append($('<li>' + v.en + '</li>'));
+					$('#suggestions').append($('<option>' + v.en + '</option>'));
 				});
-                if ($('#suggestions li').length === 0) {    //there were no results for this search
+                if ($('#suggestions option').length === 0) {    //there were no results for this search
                     $('#noResults').show();
                 } else {
                     $('#noResults').hide();
                     $("#suggestions").show();
                 }
-				$('#suggestions li').on('click', function () {
+				$('#suggestions option').on('click', function () {
 					$(this).addClass('chosen');
 					chooseSelectedTerm($(this).html(),'en');
 				})
@@ -43,9 +43,8 @@ $('#englishSearchField').on({
 			e.preventDefault();
 		}
 		/*
-		    some test code for alternate 'enter' key behaviour
+		    code for alternate 'enter' key behaviour
 		    : if a search term is in the suggestion list hitting enter will take the user to the entry
-		    : only works for English right now
 		 */
 		if (e.which == 13) {
 		    var search = $('#englishSearchField').val();
@@ -74,26 +73,29 @@ function navigateList(e, m, lang) {
 			listIndex = 0;
 		}
 		m = true;
+        $('#suggestions option').eq(listIndex).show();
 	}
 	else if (e.which == 40) {   //Down arrow
-		listIndex++;
-		if (listIndex > $('#suggestions li').length - 1) {
-			listIndex = $('#suggestions li').length - 1;
-		}
-		m = true;
+        if (listIndex > $('#suggestions option').length - 2) {  //stop at the final item
+            listIndex = $('#suggestions option').length - 1;
+        } else {
+            listIndex++;
+            m = true;
+            $('#suggestions option.chosen').hide();
+        }
 	}
 	if (m) {
-		$('#suggestions li.chosen').removeClass('chosen');
-		$('#suggestions li').eq(listIndex).addClass('chosen');
+		$('#suggestions option.chosen').removeClass('chosen');
+		$('#suggestions option').eq(listIndex).addClass('chosen');
 	} else if (e.which == 27) {     //ESC key
 		$('#suggestions').hide();
 	} else if (e.which == 13) {  	//Enter key
 		var n = $('.chosen').index();
 		if (n != -1) { // some list item is selected
-            var selectedItem = $('li.chosen');
+            var selectedItem = $('option.chosen');
             chooseSelectedTerm(selectedItem.html(),lang);
 		}
-	}	
+	}
 	return m;
 }
 
@@ -112,6 +114,7 @@ $(document).mouseup(function(e) {
 });
 
 $('#randomEntry').on("click", function() {
+    $('#noResults').hide();
 	$('#englishSearchField').val("");
 	$('#gaelicSearchField').val("");
 	$('#gaelicEquivalentsList').html("");
@@ -208,10 +211,10 @@ $('#gaelicSearchField').on({
 				suggestedTerms = data.results;	//save the results for later use
 				$.each(data.results, function(k, v) {
 					//assemble the suggested items list
-					$('#suggestions').append($('<li>' + v.word + '</li>'));
+					$('#suggestions').append($('<option>' + v.word + '</option>'));
 				});
 				$("#suggestions").show();
-				$('#suggestions li').on('click', function () {
+				$('#suggestions option').on('click', function () {
 					$(this).addClass('chosen');
 					chooseSelectedTerm($(this).html(), 'gd'); // this needs to be done later
 				})
@@ -225,6 +228,24 @@ $('#gaelicSearchField').on({
 		if (e.which == 38 || e.which == 40 || e.which == 13) {
 			e.preventDefault();
 		}
+        /*
+         'enter' key behaviour
+         : if a search term is in the suggestion list hitting enter will take the user to the entry
+         */
+        if (e.which == 13) {
+            var search = $('#gaelicSearchField').val();
+            $('#suggestions').each(function () {
+                $(this).find('option').each(function () {
+                    if (search === $(this).text()) {
+                        $(this).addClass('chosen');
+                        chooseSelectedTerm($(this), 'gd');
+                    }
+                });
+            });
+        }
+        /*
+         //end alternate 'enter' key code
+         */
 	},
 	click: function() {
 		$(this).val("");	//clear the search field for a new query
@@ -240,6 +261,18 @@ function updateContent(id) {
 	else {
 		document.getElementById("backbutton").style.display = 'none';
 	}
+}
+
+function showEnglish() {
+    $('.en-span').show();
+    $('#en-plus').hide();
+    $('#en-minus').show();
+}
+
+function hideEnglish() {
+    $('.en-span').hide();
+    $('#en-plus').show();
+    $('#en-minus').hide();
 }
 
 /*

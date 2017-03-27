@@ -43,11 +43,6 @@ HTML;
 }
 */
 session_start();
-
-//test code
-setcookie('userid', "314444242");
-//
-
 ?>
 
 <!DOCTYPE html>
@@ -78,7 +73,7 @@ setcookie('userid', "314444242");
                   <span class="icon-bar"></span>
                 </button>
                 <form class="navbar-form navbar-left" role="search" id="englishSearchForm">
-                  <div class="form-group mainSearchBox">
+                    <div class="form-group mainSearchBox"><h1>LEACAG</h1>
                     <span class="glyphicon glyphicon-search"></span>
                     <input type="search" id="englishSearchField" placeholder="Beurla" autocomplete="off"/>
                     <!-- <a id="enToGdToggle" href="#">Gàidhlig?</a> -->
@@ -107,7 +102,6 @@ setcookie('userid', "314444242");
                           <a href="#" id="signOutLink" class="loginLink">Sign Out</a>
                       </div>
                   </li>
-
                 </ul>
               </div>
             </div>
@@ -118,7 +112,7 @@ setcookie('userid', "314444242");
       <div class="col-md-12">
         <div>
           <span id="noResults">-- There are no results for this query --</span>
-          <ul id="suggestions">
+          <ul id="suggestions" size="10" tabindex="0">
           </ul>
         </div>
       </div>
@@ -145,8 +139,12 @@ setcookie('userid', "314444242");
     <div id="formContainer">
       <form id="userForm" onsubmit="return processForm();">
           <p>
-              Gaelic form:
-              <input type="text" name="gaelic-form"/>
+              English term:
+              <input type="text" class="formField" name="en"/>
+          </p>
+          <p>
+              Gaelic term:
+              <input type="text" class="formField" name="gd"/>
           </p>
           <p>
               Part-of-speech:
@@ -158,12 +156,8 @@ setcookie('userid', "314444242");
               </select>
           </p>
           <p>
-              English translation:
-              <input type="text" name="english-translation"/>
-          </p>
-          <p>
-              Notes:
-              <textarea name="notes"></textarea>
+              Notes:<br/>
+              <textarea name="notes" id="formNotesField" class="formField"></textarea>
           </p>
           <p>
               <input type="hidden" name="userEmail" id="userEmail"/>
@@ -242,6 +236,7 @@ setcookie('userid', "314444242");
       $('#signOutLink').hide();
       $('.signOut').hide();
       $('#signOutLink').on('click', function () {
+          Cookies.remove('userEmail');
           gapi.auth2.getAuthInstance().disconnect();
           console.log('User signed out.');  //debug code only
           $('.signOut').hide();
@@ -271,9 +266,6 @@ setcookie('userid', "314444242");
       $('#userEmail').val(profile.getEmail());
       $('#userID').val(profile.getId());
 
-  /*
-        Disable the AJAX call for local development for the moment
-
       $.ajax({
           method: "GET",
           url: 'ajax.php?action=email&user='+profile.getEmail()
@@ -281,7 +273,7 @@ setcookie('userid', "314444242");
       .done(function (msg) {
           console.log("AJAX called : " + msg);
       });
-       
+  /*
  	//User ID authentication via HTTPS with Google Token ID
  	//Requires PHP 5.5.9
       id_token = googleUser.getAuthResponse().id_token;
@@ -309,7 +301,7 @@ setcookie('userid', "314444242");
      Form submission code
      */
     //show the form link if logged-in
-    if (Cookies.get("userid")) {
+    if (Cookies.get("userEmail")) {
         $('#formLink').show();
         $('#formLink').on('click', function () {
             bpopup = $('#formContainer').bPopup({

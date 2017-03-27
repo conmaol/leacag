@@ -9,11 +9,12 @@ header('Access-Control-Allow-Origin: http://dasg.ac.uk');
 
 session_start();
 ini_set("display_errors", 1);
+date_default_timezone_set("Europe/London");
 
 /*
  * commented out for development
  */
-//require_once '../includes/include.php';
+require_once '../includes/include.php';
 
 require_once 'vendor/autoload.php';
 
@@ -21,20 +22,35 @@ switch ($_REQUEST["action"]) {
   case "email":
   	//debug
   		echo "Email turned off for development";
-  		break;
-  	//
-      /*
-       * TODO: update the email code to use DASG Email class?
-       */
-    $message = $_GET["user"] . " signed in on LeaCaG";
-    $headers = "From: stephen.barrett@glasgow.ac.uk\r\nReply-To: stephen.barrett@glasgow.ac.uk";
+  	/*
+    $to       = "mail@steviebarrett.com";
+    $message  = $_GET["user"] . " signed in on LeaCaG";
+    $subject  = "LeaCaG sign-in";
+    $from     = "stephen.barrett@glasgow.ac.uk";
+    $email    = new Email($to, $message, $subject, $from);
     echo "Attempting email...";
-    $sent = mail("mail@steviebarrett.com", "LeaCaG sign-in", $message, $headers);
-    if ($sent) {
+    if ($email->send()) {
       echo " Email sent.";
     } else {
       echo " The email could not be sent.";
     }
+    */
+    //check if user already exists in system
+    $dbh = DB::getDatabaseHandle(DB_NAME);
+    $sth = $dbh->prepare("SELECT firstLogin FROM leacag_user WHERE email = :email");
+    $sth->execute(array(":email"=>$_GET["user"]));
+    $row = $sth->fetch();
+    if (!empty($row[0])) {
+      //user exists so just update the lastLogin
+      $timestamp = date('Y-m-d H:i:s', time());
+      $sth = $dbh->prepare("UPDATE leacag_user SET lastLogin = '{$timestamp}' WHERE email = :email");
+      $sth->execute(array(":email"=>$_GET["user"]));
+    } else {
+      //new user, create a new DB entry
+      $sth = $dbh->prepare("INSERT INTO leacag_user (email) VALUES (:email)");
+      $sth->execute(array(":email"=>$_GET["user"]));
+    }
+    setcookie('userEmail', $_GET["user"]);
     break;
   case "logSearchTerm":
   	//add the data to the leacag_userActivity table
@@ -61,24 +77,12 @@ switch ($_REQUEST["action"]) {
     }
     break;
   case "processForm":
-    /*
-     * TODO: update the email code to use DASG Email class?
-     */
-    $message = "User " . $_POST["userEmail"] . ", ID: " . $_POST["userID"] . "submitted the following:\n";
-    $message = <<<text
-      User {$_POST["userEmail"]} (ID: {$_POST["userID"]} submitted the following:\n
-      Gaelic Form: {$_POST["gaelic-form"]}\n
-      Part of Speech: {$_POST["pos"]}\n
-      English Translation: {$_POST["english-translation"]}\n
-      Notes:  {$_POST["notes"]}
-text;
-    $headers = "From: stephen.barrett@glasgow.ac.uk\r\nReply-To: stephen.barrett@glasgow.ac.uk";
-    echo "Attempting email...";
-    $sent = mail("mail@steviebarrett.com", "LeaCaG Form Submission", $message, $headers);
-    if ($sent) {
-      echo " Email sent.";
+    $dbh = DB::getDatabaseHandle(DB_NAME);
+    $sth = $dbh->prepare("INSERT INTO leacag_formSubmission (email, en, gd, pos, notes) VALUES (:email, :en, :gd, :pos, :notes)");
+    if ($sth->execute(array(":email"=>$_POST["userEmail"], ":en"=>$_POST["en"], ":gd"=>$_POST["gd"], ":pos"=>$_POST["pos"], ":notes"=>$_POST["notes"]))) {
+      echo "Form data added to DB...";
     } else {
-      echo " The email could not be sent.";
+      echo "There was a problem saving the form data";
     }
     break;
 }
