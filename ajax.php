@@ -48,7 +48,7 @@ switch ($_REQUEST["action"]) {
     } else {
       //new user, create a new DB entry
       $sth = $dbh->prepare("INSERT INTO leacag_user (email, firstLogin) VALUES (:email, :firstLogin)");
-      $sth->execute(array(":email"=>$_GET["user"], "firstLogin"=>date('Y-m-d H:i:s', now())));
+      $sth->execute(array(":email"=>$_GET["user"], "firstLogin"=>date('Y-m-d H:i:s', time())));
     }
     setcookie('userEmail', $_GET["user"]);
     break;
