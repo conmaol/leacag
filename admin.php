@@ -70,7 +70,7 @@ if ($_GET["action"] === "editUser") {
           <td>{$row["firstLogin"]}</td>
         </tr>
         <tr>     
-          <td>Email:</td>
+          <td>Last Login:</td>
           <td>{$row["lastLogin"]}</td>
         </tr>        
       </tbody>
