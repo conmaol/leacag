@@ -20,15 +20,15 @@ $('#englishSearchField').on({
 				suggestedTerms = data.results;	//save the results for later use
 				$.each(data.results, function(k, v) {
 					//assemble the suggested items list
-					$('#suggestions').append($('<option>' + v.en + '</option>'));
+					$('#suggestions').append($('<li>' + v.en + '</li>'));
 				});
-                if ($('#suggestions option').length === 0) {    //there were no results for this search
+                if ($('#suggestions li').length === 0) {    //there were no results for this search
                     $('#noResults').show();
                 } else {
                     $('#noResults').hide();
                     $("#suggestions").show();
                 }
-				$('#suggestions option').on('click', function () {
+				$('#suggestions li').on('click', function () {
 					$(this).addClass('chosen');
 					chooseSelectedTerm($(this).html(),'en');
 				})
@@ -73,20 +73,20 @@ function navigateList(e, m, lang) {
 			listIndex = 0;
 		}
 		m = true;
-        $('#suggestions option').eq(listIndex).show();
+        $('#suggestions li').eq(listIndex).show();
 	}
 	else if (e.which == 40) {   //Down arrow
-        if (listIndex > $('#suggestions option').length - 2) {  //stop at the final item
-            listIndex = $('#suggestions option').length - 1;
+        if (listIndex > $('#suggestions li').length - 2) {  //stop at the final item
+            listIndex = $('#suggestions li').length - 1;
         } else {
             listIndex++;
             m = true;
-            $('#suggestions option.chosen').hide();
+            $('#suggestions li.chosen').hide();
         }
 	}
 	if (m) {
-		$('#suggestions option.chosen').removeClass('chosen');
-		$('#suggestions option').eq(listIndex).addClass('chosen');
+		$('#suggestions li.chosen').removeClass('chosen');
+		$('#suggestions li').eq(listIndex).addClass('chosen');
 	} else if (e.which == 27) {     //ESC key
 		$('#suggestions').hide();
 	} else if (e.which == 13) {  	//Enter key
@@ -211,10 +211,10 @@ $('#gaelicSearchField').on({
 				suggestedTerms = data.results;	//save the results for later use
 				$.each(data.results, function(k, v) {
 					//assemble the suggested items list
-					$('#suggestions').append($('<option>' + v.word + '</option>'));
+					$('#suggestions').append($('<li>' + v.word + '</li>'));
 				});
 				$("#suggestions").show();
-				$('#suggestions option').on('click', function () {
+				$('#suggestions li').on('click', function () {
 					$(this).addClass('chosen');
 					chooseSelectedTerm($(this).html(), 'gd'); // this needs to be done later
 				})
@@ -235,7 +235,7 @@ $('#gaelicSearchField').on({
         if (e.which == 13) {
             var search = $('#gaelicSearchField').val();
             $('#suggestions').each(function () {
-                $(this).find('option').each(function () {
+                $(this).find('li').each(function () {
                     if (search === $(this).text()) {
                         $(this).addClass('chosen');
                         chooseSelectedTerm($(this), 'gd');

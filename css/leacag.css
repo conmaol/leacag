@@ -30,16 +30,16 @@ h1 {
     margin: 0;
     padding: 0;
     border: 1px solid black;
-    z-index: 1;
+    z-index: 999;
     height:10em;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
-#suggestions option {
+#suggestions li {
     padding: 5px;
 }
 
-#suggestions option:hover {
+#suggestions li:hover {
     cursor: pointer;
 }
 

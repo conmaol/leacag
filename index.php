@@ -112,7 +112,7 @@ session_start();
       <div class="col-md-12">
         <div>
           <span id="noResults">-- There are no results for this query --</span>
-          <ul id="suggestions" size="10" tabindex="0">
+          <ul id="suggestions" tabindex="0">
           </ul>
         </div>
       </div>
