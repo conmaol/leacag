@@ -81,6 +81,12 @@ a#backlink:hover {
     text-decoration: underline;
 }
 
+
+h1 > a:link, h1 > a:visited {
+    color: white;
+    text-decoration: none;
+}
+
 #gaelicSearchForm {
     display: none;
 }
@@ -253,4 +259,11 @@ table.tablesorter thead tr .headerSortDown {
 }
 table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {
     background-color: #8dbdd8;
+}
+
+/*
+    Admin
+ */
+.tablesorter tr.tableRowHighlight td {
+    background-color: #ffcccc;
 }

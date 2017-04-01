@@ -49,7 +49,43 @@ if ($_GET["action"] === "editUser") {
     $selected = ($row["accessLevel"] == $i) ? "selected" : "";
     $accessLevelOptions .= "\n<option value=\"{$i}\" {$selected}>{$i}</option>";
   }
+  //assemble the search history
+  $sth = $dbh->prepare("SELECT searchTerm, failed, language, timestamp FROM leacag_userActivity WHERE email = :email");
+  $sth->execute(array(":email" => $_GET["user"]));
+  $searchHistoryHtml = "";
+  while ($searchRow = $sth->fetch()) {
+    $failed = ($searchRow["failed"] == 1) ? "yes" : "no";
+    $tableRowStyle = ($failed === "yes") ? 'class="tableRowHighlight"' : '';
+    $searchHistoryHtml .= <<<HTML
+      <tr {$tableRowStyle}>
+        <td>{$searchRow["searchTerm"]}</td>
+        <td>{$failed}</td>
+        <td>{$searchRow["language"]}</td>
+        <td>{$searchRow["timestamp"]}</td>
+      </tr>
+HTML;
+  }
+  //assemble the submission history
+  $sth = $dbh->prepare("SELECT en, gd, pos, notes, timestamp FROM leacag_formSubmission WHERE email = :email");
+  $sth->execute(array(":email" => $_GET["user"]));
+  $submissionHtml = $noSubMessage = "";
+  if ($sth->rowCount() == 0) {
+    $noSubMessage = "<p>There are no submissions from this user</p>";
+  } else {
+      while ($subRow = $sth->fetch()) {
+          $submissionHtml .= <<<HTML
+            <tr>
+              <td>{$subRow["en"]}</td>
+              <td>{$subRow["gd"]}</td>
+              <td>{$subRow["pos"]}</td>
+              <td>{$subRow["notes"]}</td>
+              <td>{$subRow["timestamp"]}</td>
+            </tr>
+HTML;
+      }
+  }
   $editUserHtml = <<<HTML
+  <h2>User Information:</h2>
   <form name="userForm">
     <table>
       <tbody>   
@@ -77,10 +113,40 @@ if ($_GET["action"] === "editUser") {
     </table>
     <input type="hidden" name="email" value="{$row["email"]}"/>
     <input type="submit" value="save"/>
-    <p>
-      <a href="admin.php"><< Back to Admin Home</a>
-    </p>
   </form>
+  <h2>User Search History</h2>
+  <table name="searchHistory" id="searchHistory" class="tablesorter">
+    <thead>
+      <tr>
+        <th>Term</th>
+        <th>Failed</th>
+        <th>Language</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      {$searchHistoryHtml}
+    </tbody>
+  </table>
+  <h2>User Submission History</h2>
+  {$noSubMessage}
+  <table name="submissionHistory" id="submissionHistory" class="tablesorter">
+    <thead>
+      <tr>
+        <th>English</th>
+        <th>Gaelic</th>
+        <th>POS</th>
+        <th>Notes</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      {$submissionHtml}
+    </tbody>
+  </table>
+  <p>
+    <a href="admin.php"><< Back to Admin Home</a>
+  </p>
 HTML;
 }
 
@@ -149,6 +215,8 @@ HTML;
 <script>
   $(function () {
       $('#users').tablesorter();
+      $('#searchHistory').tablesorter();
+      $('#submissionHistory').tablesorter();
   })
 </script>
 </html>

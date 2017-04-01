@@ -11,6 +11,8 @@ session_start();
 ini_set("display_errors", 1);
 date_default_timezone_set("Europe/London");
 
+define("ADMIN_ACCESS_LEVEL", 5);;
+
 /*
  * commented out for development
  */
@@ -56,9 +58,9 @@ switch ($_REQUEST["action"]) {
   	//add the data to the leacag_userActivity table
   	try {
   		$dbh = DB::getDatabaseHandle(DB_NAME);
-  		$sth = $dbh->prepare("INSERT INTO leacag_userActivity (googleId, email, searchTerm) VALUES (:id, :email, :searchTerm)");
-  		$sth->execute(array(":id"=>$_GET["id"], ":email"=>$_GET["email"], ":searchTerm"=>$_GET["searchTerm"]));
-		echo "Database updated";  			
+  		$sth = $dbh->prepare("INSERT INTO leacag_userActivity (googleId, email, failed, language, searchTerm) VALUES (:id, :email, :failed, :language, :searchTerm)");
+  		$sth->execute(array(":id"=>$_GET["id"], ":email"=>$_GET["email"], ":failed"=>$_GET["failed"], ":language"=>$_GET["language"], ":searchTerm"=>$_GET["searchTerm"]));
+		echo "Database updated";
   	} catch (PDOException $e) {
   		echo $e->getMessage();
   	}
@@ -85,4 +87,13 @@ switch ($_REQUEST["action"]) {
       echo "There was a problem saving the form data";
     }
     break;
+  case "checkAdmin":
+    $dbh = DB::getDatabaseHandle(DB_NAME);
+    $sth = $dbh->prepare("SELECT accessLevel FROM leacag_user WHERE email = :email");
+    $sth->execute(array(":email"=>$_COOKIE["userEmail"]));
+    $row = $sth->fetch();
+    $result = array("isAdmin" => $row[0] == ADMIN_ACCESS_LEVEL);
+    echo json_encode($result);
+    break;
 }
+

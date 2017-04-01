@@ -73,7 +73,7 @@ session_start();
                   <span class="icon-bar"></span>
                 </button>
                 <form class="navbar-form navbar-left" role="search" id="englishSearchForm">
-                    <div class="form-group mainSearchBox"><h1>LEACAG</h1>
+                    <div class="form-group mainSearchBox"><h1><a href="index.php">LEACAG</a></h1>
                     <span class="glyphicon glyphicon-search"></span>
                     <input type="search" id="englishSearchField" placeholder="Beurla" autocomplete="off"/>
                     <!-- <a id="enToGdToggle" href="#">Gàidhlig?</a> -->
@@ -89,7 +89,6 @@ session_start();
               </div>
               <div class="collapse navbar-collapse navbar-right" id="navbar-collapse">
                 <ul class="nav navbar-nav">
-                  <li id="backbutton"><a href="#">air ais</a></li>
                   <li id="enToGdToggle"><a href="#" title="Search for a Gaelic word">Gàidhlig</a></li>
                   <li id="gdToEnToggle"><a href="#" title="Search for an English word">Beurla</a></li>
                   <li id="randomEntry"><a href="#" title="Random entry">iongnadh</a></li>
@@ -294,7 +293,15 @@ session_start();
       $('.signOut').show();
       //Show the signed-in message
       var loggedInMsg = 'Signed-in as ' + profile.getName();
-      $('.loggedInStatus').html(loggedInMsg).show();
+      //check for admin status
+      $.getJSON("ajax.php?action=checkAdmin", function(data) {
+          if (data.isAdmin) {
+              loggedInMsg += '&nbsp;&nbsp;<a href="admin.php">> admin</a>';
+          }
+      })
+      .done(function() {
+          $('.loggedInStatus').html(loggedInMsg).show();
+      });
     }
 
     /*
@@ -325,3 +332,4 @@ session_start();
   </script>
 </body>
 </html>
+

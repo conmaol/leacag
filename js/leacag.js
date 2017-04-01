@@ -6,10 +6,34 @@ var auth2;
 $('#englishSearchField').on({
 	keyup: function(e) {
 		var m = false;
-		if (e.which == 38 || e.which == 40 || e.which == 13 || e.which == 27) {
+		if (e.which == 38 || e.which == 40 || e.which == 27) {
 			m = navigateList(e, m, 'en');
 			return;
 		}
+        /*
+         code for alternate 'enter' key behaviour
+         : if a search term is in the suggestion list hitting enter will take the user to the entry
+         */
+
+        if (e.which == 13) {                                    //user is selecting from the suggested items list
+            if ($('.chosen').length > 0 ) {
+                m = navigateList(e, m, 'en');
+            } else {                                            //user is entering a search term directly
+                var search = $('#englishSearchField').val();
+                $('#suggestions').each(function () {
+                    $(this).find('li').each(function () {
+                        if (search === $(this).html()) {
+                            $(this).addClass('chosen');
+                            chooseSelectedTerm($(this).html(), 'en');
+                            return false;
+                        }
+                    });
+                });
+            }
+        }
+        /*
+         //end alternate 'enter' key code
+         */
 		$('#suggestions').empty(); //clear any previous selections
 		listIndex = -1;
 		$('.chosen').removeClass('chosen');
@@ -23,7 +47,9 @@ $('#englishSearchField').on({
 					$('#suggestions').append($('<li>' + v.en + '</li>'));
 				});
                 if ($('#suggestions li').length === 0) {    //there were no results for this search
+                    $("#suggestions").hide();
                     $('#noResults').show();
+                    updateUserSearchDB(searchString, 1, 'en');    //log the failed search
                 } else {
                     $('#noResults').hide();
                     $("#suggestions").show();
@@ -42,24 +68,6 @@ $('#englishSearchField').on({
 		if (e.which == 38 || e.which == 40 || e.which == 13) {
 			e.preventDefault();
 		}
-		/*
-		    code for alternate 'enter' key behaviour
-		    : if a search term is in the suggestion list hitting enter will take the user to the entry
-		 */
-		if (e.which == 13) {
-		    var search = $('#englishSearchField').val();
-		    $('#suggestions').each(function () {
-                $(this).find('li').each(function () {
-                    if (search === $(this).text()) {
-                        $(this).addClass('chosen');
-                        chooseSelectedTerm($(this), 'en');
-                    }
-                });
-            });
-        }
-        /*
-            //end alternate 'enter' key code
-         */
 	},
 	click: function() {     
 		$(this).val("");	//clear the search field for a new query
@@ -92,7 +100,7 @@ function navigateList(e, m, lang) {
 	} else if (e.which == 13) {  	//Enter key
 		var n = $('.chosen').index();
 		if (n != -1) { // some list item is selected
-            var selectedItem = $('option.chosen');
+            var selectedItem = $('li.chosen');
             chooseSelectedTerm(selectedItem.html(),lang);
 		}
 	}
@@ -133,7 +141,7 @@ $('#randomEntry').on("click", function() {
  * @param arrayIdx: the position of the selected word within the file's array
  */
 function chooseSelectedTerm(term, lang) {
-	updateUserSearchDB(term);           //records the search term in the server DB
+	updateUserSearchDB(term, 0, lang);           //records the search as successful in the server DB
 	$('#englishSearchField').val("");
     $('#gaelicSearchField').val("");
 	$('#suggestions').hide();
@@ -197,10 +205,33 @@ $('#backbutton').on("click", function() {
 $('#gaelicSearchField').on({
 	keyup: function (e) {
 		var m = false;
-		if (e.which == 38 || e.which == 40 || e.which == 13 || e.which == 27) {
+		if (e.which == 38 || e.which == 40 || e.which == 27) {
 			m = navigateList(e, m, 'gd');
 			return;
 		}
+        /*
+         code for alternate 'enter' key behaviour
+         : if a search term is in the suggestion list hitting enter will take the user to the entry
+         */
+        if (e.which == 13) {                                    //user is selecting from the suggested items list
+            if ($('.chosen').length > 0 ) {
+                m = navigateList(e, m, 'gd');
+            } else {                                            //user is entering a search term directly
+                var search = $('#gaelicSearchField').val();
+                $('#suggestions').each(function () {
+                    $(this).find('li').each(function () {
+                        if (search === $(this).html()) {
+                            $(this).addClass('chosen');
+                            chooseSelectedTerm($(this).html(), 'gd');
+                            return false;
+                        }
+                    });
+                });
+            }
+        }
+        /*
+         //end alternate 'enter' key code
+         */
 		$('#suggestions').empty(); //clear any previous selections
 		listIndex = -1;
 		$('.chosen').removeClass('chosen');
@@ -213,7 +244,14 @@ $('#gaelicSearchField').on({
 					//assemble the suggested items list
 					$('#suggestions').append($('<li>' + v.word + '</li>'));
 				});
-				$("#suggestions").show();
+                if ($('#suggestions li').length === 0) {    //there were no results for this search
+                    $("#suggestions").hide();
+                    $('#noResults').show();
+                    updateUserSearchDB(searchString, 1, 'gd');    //log the failed search
+                } else {
+                    $('#noResults').hide();
+                    $("#suggestions").show();
+                }
 				$('#suggestions li').on('click', function () {
 					$(this).addClass('chosen');
 					chooseSelectedTerm($(this).html(), 'gd'); // this needs to be done later
@@ -228,24 +266,6 @@ $('#gaelicSearchField').on({
 		if (e.which == 38 || e.which == 40 || e.which == 13) {
 			e.preventDefault();
 		}
-        /*
-         'enter' key behaviour
-         : if a search term is in the suggestion list hitting enter will take the user to the entry
-         */
-        if (e.which == 13) {
-            var search = $('#gaelicSearchField').val();
-            $('#suggestions').each(function () {
-                $(this).find('li').each(function () {
-                    if (search === $(this).text()) {
-                        $(this).addClass('chosen');
-                        chooseSelectedTerm($(this), 'gd');
-                    }
-                });
-            });
-        }
-        /*
-         //end alternate 'enter' key code
-         */
 	},
 	click: function() {
 		$(this).val("");	//clear the search field for a new query
@@ -278,12 +298,12 @@ function hideEnglish() {
 /*
  * Add the user email and search term to the database
  */
-function updateUserSearchDB(searchTerm) {
+function updateUserSearchDB(searchTerm, failed, language) {
 	var userProfile;
 	if (userProfile = getUser()) {
 	      $.ajax({
 	          method: "GET",
-	          url: 'ajax.php?action=logSearchTerm&searchTerm='+searchTerm+'&id='+userProfile.getId()+'&email='+userProfile.getEmail()
+	          url: 'ajax.php?action=logSearchTerm&searchTerm='+searchTerm+'&failed='+failed+'&language='+language+'&id='+userProfile.getId()+'&email='+userProfile.getEmail()
 	      })
 	      .done(function (msg) {
 	          console.log("Attempted DB update : " + msg);
@@ -306,3 +326,4 @@ function getUser() {
 	  return false;
   }
 }
+
