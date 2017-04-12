@@ -60,6 +60,7 @@ header("Expires: 0"); // Proxies.
   <title>LeaCaG</title>
   <script src="https://apis.google.com/js/platform.js" async defer></script>
   <link href="css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet"/>
   <link href="../lexicopia/lexicopia-web/code/css/lexicopia-entries.css" rel="stylesheet"/>
   <link href="css/leacag.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
@@ -223,10 +224,31 @@ header("Expires: 0"); // Proxies.
   </script>
   <script src="js/leacag.js"></script>
   <script type="text/javascript">
-    $(function() { //close the dropdown when a navbar link is clicked (mobile)
+
+    $(function() {
+
+      //close the dropdown when a navbar link is clicked (mobile)
       $('.navbar-collapse a').on('click', function(){
         $(".navbar-collapse").collapse('hide');
       });
+
+        $( "#englishSearchField" ).autocomplete({
+            source: "php/leacag.php?action=getEnglish",
+            minLength: 3,
+            select: function( event, ui ) {
+                $(ui.item.id).addClass('chosen');
+                chooseSelectedTerm(ui.item.value, 'en');
+            }
+        });
+
+        $( "#gaelicSearchField" ).autocomplete({
+            source: "php/leacag.php?action=getGaelic",
+            minLength: 3,
+            select: function( event, ui ) {
+                log( "Selected: " + ui.item.value + " aka " + ui.item.id );
+            }
+        });
+
       /*
         Sign out code
       */
@@ -326,6 +348,7 @@ header("Expires: 0"); // Proxies.
         $('#submitThanks').show();
         return false;
     }
+
   </script>
 </body>
 </html>

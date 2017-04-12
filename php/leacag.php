@@ -5,12 +5,12 @@ $action = $_GET["action"];
 switch ($action) {
 	
 	case "getEnglish":
-		$query = $_GET["q"];
+		$query = $_GET["term"];
 		echo getEnglish($query);
 		break;
 
 	case "getGaelic":
-		$query = $_GET["q"];
+		$query = $_GET["term"];
 		echo getGaelic($query);
 		break;
 
@@ -25,10 +25,10 @@ function getEnglish($q) {
 	$json = json_decode($englishIndex, true);
 	foreach ($json["english_index"] as $item) {
 		if (strtolower(substr($item["en"], 0, strlen($q))) == strtolower($q)) {
-			$results[] = $item;
+			$results[] = array("id"=>$item["gds"][0], "value"=>$item["en"], "label"=>$item["en"]);
 		}
 	}
-	return json_encode(array("results"=>$results));
+	return json_encode($results);
 }
 
 function getGaelic($q) {
@@ -39,10 +39,10 @@ function getGaelic($q) {
 	$pattern = "/^" . $aiQ . ".*/ui";
 	foreach ($json["target_index"] as $item) {
 		if (preg_match($pattern, $item["word"])) {
-			$results[] = $item;
+      $results[] = array("id"=>$item["id"], "value"=>$item["word"], "label"=>$item["word"]);
 		}
 	}
-	return json_encode(array("results"=>$results));
+	return json_encode($results);
 }
 
 function getRandom() {

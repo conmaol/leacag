@@ -273,3 +273,10 @@ table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSo
 .tablesorter tr.tableRowHighlight td {
     background-color: #ffcccc;
 }
+
+.ui-autocomplete {
+    z-index: 10000;
+    max-height: 400px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}

@@ -3,17 +3,17 @@ var suggestedTerms;	//the array of suggested result objects loaded via AJAX
 var minChars = 3;
 var auth2;
 
-$('#englishSearchField').on({
+/*$('#englishSearchField').on({
 	keyup: function(e) {
 		var m = false;
 		if (e.which == 38 || e.which == 40 || e.which == 27) {
 			m = navigateList(e, m, 'en');
 			return;
 		}
-        /*
+        /!*
          code for alternate 'enter' key behaviour
          : if a search term is in the suggestion list hitting enter will take the user to the entry
-         */
+         *!/
 
         if (e.which == 13) {                                    //user is selecting from the suggested items list
             if ($('.chosen').length > 0 ) {
@@ -31,9 +31,9 @@ $('#englishSearchField').on({
                 });
             }
         }
-        /*
+        /!*
          //end alternate 'enter' key code
-         */
+         *!/
 		$('#suggestions').empty(); //clear any previous selections
 		listIndex = -1;
 		$('.chosen').removeClass('chosen');
@@ -73,7 +73,7 @@ $('#englishSearchField').on({
 	click: function() {     
 		$(this).val("");	//clear the search field for a new query
 	}
-});
+});*/
 
 function navigateList(e, m, lang) {
 	if (e.which == 38) {    	//Up arrow
@@ -204,17 +204,17 @@ $('#backbutton').on("click", function() {
 	return false;
 });
 
-$('#gaelicSearchField').on({
+/*$('#gaelicSearchField').on({
 	keyup: function (e) {
 		var m = false;
 		if (e.which == 38 || e.which == 40 || e.which == 27) {
 			m = navigateList(e, m, 'gd');
 			return;
 		}
-        /*
+        /!*
          code for alternate 'enter' key behaviour
          : if a search term is in the suggestion list hitting enter will take the user to the entry
-         */
+         *!/
         if (e.which == 13) {                                    //user is selecting from the suggested items list
             if ($('.chosen').length > 0 ) {
                 m = navigateList(e, m, 'gd');
@@ -231,9 +231,9 @@ $('#gaelicSearchField').on({
                 });
             }
         }
-        /*
+        /!*
          //end alternate 'enter' key code
-         */
+         *!/
 		$('#suggestions').empty(); //clear any previous selections
 		listIndex = -1;
 		$('.chosen').removeClass('chosen');
@@ -272,7 +272,7 @@ $('#gaelicSearchField').on({
 	click: function() {
 		$(this).val("");	//clear the search field for a new query
 	}
-});
+});*/
 
 function updateContent(id) {
 	// update the content panel when a new lexical entry is selected
