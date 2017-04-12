@@ -30,9 +30,16 @@ h1 {
     margin: 0;
     padding: 0;
     border: 1px solid black;
-    z-index: 999;
+    z-index: 99999;
     height:10em;
     overflow-y: auto;
+}
+
+@media screen and (max-width: 768px) {  /* for phone screen */
+    #suggestions, #noResults {
+        top:100px;
+        left:2px;
+    }
 }
 
 #suggestions li {
@@ -185,7 +192,6 @@ a.loginLink {
 .loggedInStatus {
     display: none;
     float: right;
-    margin-top: -50px;
     text-align: right;
     font-family: 'Roboto', sans-serif;
     font-size: 10pt;

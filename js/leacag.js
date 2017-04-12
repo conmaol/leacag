@@ -22,9 +22,9 @@ $('#englishSearchField').on({
                 var search = $('#englishSearchField').val();
                 $('#suggestions').each(function () {
                     $(this).find('li').each(function () {
-                        if (search === $(this).html()) {
+                        if (search.toLowerCase() == $(this).text()) {
                             $(this).addClass('chosen');
-                            chooseSelectedTerm($(this).html(), 'en');
+                            chooseSelectedTerm($(this).text(), 'en');
                             return false;
                         }
                     });
@@ -46,7 +46,7 @@ $('#englishSearchField').on({
 					//assemble the suggested items list
 					$('#suggestions').append($('<li>' + v.en + '</li>'));
 				});
-                if ($('#suggestions li').length === 0) {    //there were no results for this search
+                if ($('#suggestions li').length == 0) {    //there were no results for this search
                     $("#suggestions").hide();
                     $('#noResults').show();
                     updateUserSearchDB(searchString, 1, 'en');    //log the failed search
@@ -62,6 +62,7 @@ $('#englishSearchField').on({
 		}
 		else {
 			$("#suggestions").hide(); // hide when backspace is pressed and just one character in field
+            $("#noResults").hide();
 		}
     },
 	keydown: function(e) {
@@ -97,6 +98,7 @@ function navigateList(e, m, lang) {
 		$('#suggestions li').eq(listIndex).addClass('chosen');
 	} else if (e.which == 27) {     //ESC key
 		$('#suggestions').hide();
+        $('#noResults').hide();
 	} else if (e.which == 13) {  	//Enter key
 		var n = $('.chosen').index();
 		if (n != -1) { // some list item is selected
@@ -220,7 +222,7 @@ $('#gaelicSearchField').on({
                 var search = $('#gaelicSearchField').val();
                 $('#suggestions').each(function () {
                     $(this).find('li').each(function () {
-                        if (search === $(this).html()) {
+                        if (search.toLowerCase() == $(this).html()) {
                             $(this).addClass('chosen');
                             chooseSelectedTerm($(this).html(), 'gd');
                             return false;
@@ -276,10 +278,12 @@ function updateContent(id) {
 	// update the content panel when a new lexical entry is selected
 	$('#content-div-entry').load("../lexicopia/lexicopia-entries/" + lang + "/html/" + id + ".html");
 	if (entryhistory.length > 1) {
-		document.getElementById("backbutton").style.display = 'block';
+		//document.getElementById("backbutton").style.display = 'block';
+		$('#backbutton').show();
 	}
 	else {
-		document.getElementById("backbutton").style.display = 'none';
+		//document.getElementById("backbutton").style.display = 'none';
+		$('#backbutton').hide();
 	}
 }
 
@@ -299,16 +303,14 @@ function hideEnglish() {
  * Add the user email and search term to the database
  */
 function updateUserSearchDB(searchTerm, failed, language) {
-	var userProfile;
-	if (userProfile = getUser()) {
-	      $.ajax({
-	          method: "GET",
-	          url: 'ajax.php?action=logSearchTerm&searchTerm='+searchTerm+'&failed='+failed+'&language='+language+'&id='+userProfile.getId()+'&email='+userProfile.getEmail()
-	      })
-	      .done(function (msg) {
-	          console.log("Attempted DB update : " + msg);
-	      }); 
-	}
+	var userProfile = getUser();
+    $.ajax({
+      method: "GET",
+      url: 'ajax.php?action=logSearchTerm&searchTerm='+searchTerm+'&failed='+failed+'&language='+language+'&id='+userProfile.getId()+'&email='+userProfile.getEmail()
+    })
+    .done(function (msg) {
+      console.log("Attempted DB update : " + msg);
+    });
 }
 
 /*

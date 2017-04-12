@@ -43,6 +43,11 @@ HTML;
 }
 */
 session_start();
+
+header("Cache-Control: no-cache, no-store, must-revalidate"); // HTTP 1.1.
+header("Pragma: no-cache"); // HTTP 1.0.
+header("Expires: 0"); // Proxies.
+
 ?>
 
 <!DOCTYPE html>
@@ -91,7 +96,7 @@ session_start();
                 <ul class="nav navbar-nav">
                   <li id="enToGdToggle"><a href="#" title="Search for a Gaelic word">Gàidhlig</a></li>
                   <li id="gdToEnToggle"><a href="#" title="Search for an English word">Beurla</a></li>
-                  <li id="randomEntry"><a href="#" title="Random entry">iongnadh</a></li>
+                  <li id="formLink"><a href="#" title="submit an entry">Submit an entry</a></li>
                   <li id="loginButtons">
                       <div class="g-signin2" data-onsuccess="onSignIn">Sign In</div>
                       <div class="signOut">
@@ -101,6 +106,7 @@ session_start();
                           <a href="#" id="signOutLink" class="loginLink">Sign Out</a>
                       </div>
                   </li>
+                    <!--<li id="randomEntry"><a href="#" title="Random entry">iongnadh</a></li>-->
                 </ul>
               </div>
             </div>
@@ -118,21 +124,12 @@ session_start();
     </div>
     <div class="row">
       <div class="col-md-12">
-        <div id="backbutton">
-          <a href="#" id="backlink">&lt; AIR AIS&nbsp;</a>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-12">
         <div id="gaelicEquivalentsList">
         </div>
       </div>
     </div>
     <div class="row">
-      <div class="col-md-6"><button id="formLink">Submit an entry</button>
-      </div>
-      <div class="col-md-6 loggedInStatus">    <!-- displays the logged-in name -->
+      <div class="col-md-6 col-sm-12 loggedInStatus">    <!-- displays the logged-in name -->
       </div>
     </div>
     <div id="formContainer">
@@ -207,7 +204,7 @@ session_start();
               <p>
                   <a href="http://dasg.ac.uk/" title="DASG" target="_blank"><img src="http://dasg.ac.uk/images/logo.png" height="70px" alt="DASG"/></a>
                   <a href="http://www.glasgow.ac.uk/" title="Glasgow University" target="_blank"><img src="http://www.gla.ac.uk/media/media_446862_en.png" height="70px" alt="Glasgow University"/></a>
-                  <a href="http://www.gaidhlig.org.uk/" title="Bòrd na Gàidhlig" target="_blank"><img src="http://www.gaidhlig.org.uk/bord/wp-content/themes/bng/images/logo.png" height="70px" alt="Bòrd na Gàidhlig"/></a>
+                  <a href="http://www.gaidhlig.org.uk/" title="Bòrd na Gàidhlig" target="_blank"><img src="http://www.gaidhlig.scot/wp-content/uploads/2016/11/logo_bng.png" height="70px" alt="Bòrd na Gàidhlig"/></a>
                   <a href="http://mgalba.com/" title="MG Alba" target="_blank"><img src="http://mgalba.com/images/logo-new-80x67.png" height="70px" alt="MG Alba"/></a>
                   <a href="http://www.soillse.ac.uk/" title="Soillse" target="_blank"><img src="http://www.soillse.ac.uk/wp-content/themes/soillse/images/logo.png" height="70px" alt="Soillse"/></a>
               </p>
@@ -216,6 +213,7 @@ session_start();
     </div>
   </div>
   <script src="js/jquery-3.1.1.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"</script>
   <script src="js/bootstrap.min.js"></script>
   <script src="js/js.cookie.js"></script>
   <script src="js/jquery.bpopup.min.js"</script>
@@ -246,7 +244,6 @@ session_start();
           $('.abcRioButtonContents > span').eq(0).show();   //show the 'Sign In' text
           $('.loggedInStatus').hide();  //hide logged-in status
       });
-      $('')
     });
 
     var lang = 'gd';
@@ -310,7 +307,7 @@ session_start();
     //show the form link if logged-in
     if (Cookies.get("userEmail")) {
         $('#formLink').show();
-        $('#formLink').on('click', function () {
+        $('#formLink a').on('click', function () {
             bpopup = $('#formContainer').bPopup({
                 modal: true
             });
