@@ -199,6 +199,10 @@ HTML;
   <h1>LEACAG Admin</h1>
 
   <?php
+    echo <<<HTML
+        <a href="index.php">< Back to site</a>
+HTML;
+
     echo $userUpdatedMsg;
 
     switch($_GET["action"]) {

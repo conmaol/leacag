@@ -175,7 +175,8 @@ function chooseSelectedTerm(term, lang) {
 }
 
 $('#enToGdToggle').on("click", function() {
-	$('#suggestions').hide();
+    resetPage();
+    $('#suggestions').hide();
 	$('#englishSearchField').val("");
 	$('#gaelicEquivalentsList').empty();
 	$('#mainContent').empty();
@@ -188,7 +189,8 @@ $('#enToGdToggle').on("click", function() {
 });
 
 $('#gdToEnToggle').on("click", function() {
-	$('#suggestions').hide();
+    resetPage();
+    $('#suggestions').hide();
 	$('#gaelicSearchField').val("");
 	$("#englishSearchForm").show();
 	$("#gaelicSearchForm").hide();
@@ -198,6 +200,11 @@ $('#gdToEnToggle').on("click", function() {
 	$('#englishSearchField').focus();
 	return false;
 });
+
+function resetPage() {
+    $('#lexicalText').hide();
+    $('#homePageText').show();
+}
 
 $('#backbutton').on("click", function() {
 	goBack();
@@ -276,7 +283,9 @@ $('#gaelicSearchField').on({
 
 function updateContent(id) {
 	// update the content panel when a new lexical entry is selected
-	$('#content-div-entry').load("../lexicopia/lexicopia-entries/" + lang + "/html/" + id + ".html");
+    $('#homePageText').hide();
+	$('#lexicalText').load("../lexicopia/lexicopia-entries/" + lang + "/html/" + id + ".html");
+	$('#lexicalText').show();
 	if (entryhistory.length > 1) {
 		//document.getElementById("backbutton").style.display = 'block';
 		$('#backbutton').show();
@@ -304,6 +313,9 @@ function hideEnglish() {
  */
 function updateUserSearchDB(searchTerm, failed, language) {
 	var userProfile = getUser();
+    if (!userProfile) {
+	    return false;           //no user logged in
+    }
     $.ajax({
       method: "GET",
       url: 'ajax.php?action=logSearchTerm&searchTerm='+searchTerm+'&failed='+failed+'&language='+language+'&id='+userProfile.getId()+'&email='+userProfile.getEmail()

@@ -77,8 +77,9 @@ header("Expires: 0"); // Proxies.
                   <span class="icon-bar"></span>
                   <span class="icon-bar"></span>
                 </button>
+                  <h1 class="navbar-left"><a href="index.php">LEACAG</a></h1>
                 <form class="navbar-form navbar-left" role="search" id="englishSearchForm">
-                    <div class="form-group mainSearchBox"><h1><a href="index.php">LEACAG</a></h1>
+                    <div class="form-group mainSearchBox">
                     <span class="glyphicon glyphicon-search"></span>
                     <input type="search" id="englishSearchField" placeholder="Beurla" autocomplete="off"/>
                     <!-- <a id="enToGdToggle" href="#">Gàidhlig?</a> -->
@@ -96,7 +97,7 @@ header("Expires: 0"); // Proxies.
                 <ul class="nav navbar-nav">
                   <li id="enToGdToggle"><a href="#" title="Search for a Gaelic word">Gàidhlig</a></li>
                   <li id="gdToEnToggle"><a href="#" title="Search for an English word">Beurla</a></li>
-                  <li id="formLink"><a href="#" title="submit an entry">Submit an entry</a></li>
+                  <li id="formLink"><a href="#" title="Contribute an entry">moladh</a></li>
                   <li id="loginButtons">
                       <div class="g-signin2" data-onsuccess="onSignIn">Sign In</div>
                       <div class="signOut">
@@ -172,6 +173,8 @@ header("Expires: 0"); // Proxies.
     <div class="row">
       <div class="col-md-12">
           <div id="content-div-entry">
+              <span id="lexicalText"></span>
+              <span id="homePageText">
               <p><strong>Fàilte gu co-ionad briathrachais LEACAG!</strong></p>
               <p>Chì sibh bocsa teacsa aig ceann na duilleige seo, air an làimh chlì. Cuiribh a-steach na ciad litrichean den fhacal a tha sibh a' sireadh, agus taghaibh fear de na molaidhean.</p>
               <p class="englishTranslation">Welcome to the LEACAG Gaelic terminology hub!</p>
@@ -208,12 +211,12 @@ header("Expires: 0"); // Proxies.
                   <a href="http://mgalba.com/" title="MG Alba" target="_blank"><img src="http://mgalba.com/images/logo-new-80x67.png" height="70px" alt="MG Alba"/></a>
                   <a href="http://www.soillse.ac.uk/" title="Soillse" target="_blank"><img src="http://www.soillse.ac.uk/wp-content/themes/soillse/images/logo.png" height="70px" alt="Soillse"/></a>
               </p>
+              </span>
           </div>
       </div>
     </div>
   </div>
   <script src="js/jquery-3.1.1.min.js"></script>
-  <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"</script>
   <script src="js/bootstrap.min.js"></script>
   <script src="js/js.cookie.js"></script>
   <script src="js/jquery.bpopup.min.js"</script>
@@ -264,7 +267,7 @@ header("Expires: 0"); // Proxies.
 
       $.ajax({
           method: "GET",
-          url: 'ajax.php?action=email&user='+profile.getEmail()
+          url: 'ajax.php?action=email&user='+profile.getEmail()+'&name='+profile.getName()
       })
       .done(function (msg) {
           console.log("AJAX called : " + msg);
@@ -289,7 +292,7 @@ header("Expires: 0"); // Proxies.
       $('#signOutLink').show();
       $('.signOut').show();
       //Show the signed-in message
-      var loggedInMsg = 'Signed-in as ' + profile.getName();
+      var loggedInMsg = 'Signed in as ' + profile.getName();
       //check for admin status
       $.getJSON("ajax.php?action=checkAdmin", function(data) {
           if (data.isAdmin) {
@@ -304,17 +307,22 @@ header("Expires: 0"); // Proxies.
     /*
      Form submission code
      */
-    //show the form link if logged-in
-    if (Cookies.get("userEmail")) {
-        $('#formLink').show();
-        $('#formLink a').on('click', function () {
-            bpopup = $('#formContainer').bPopup({
-                modal: true
-            });
-            $('#submitThanks').hide();
-            $('#userForm').show();
+    //show the form link if user is submitter
+ /*   if (Cookies.get("userEmail")) {
+        //check for submitter status
+        $.getJSON("ajax.php?action=checkSubmitter", function(data) {
+            if (data.isSubmitter) {
+                $('#formLink').show();
+                $('#formLink a').on('click', function () {
+                    bpopup = $('#formContainer').bPopup({
+                        modal: true
+                    });
+                    $('#submitThanks').hide();
+                    $('#userForm').show();
+                });
+            }
         });
-    }
+    }*/
     
     function processForm() {
         var formData = $('#userForm').serialize();
