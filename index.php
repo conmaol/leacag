@@ -272,7 +272,8 @@ header("Expires: 0"); // Proxies.
       .done(function (msg) {
           console.log("AJAX called : " + msg);
       });
-  /*
+
+      /*
  	//User ID authentication via HTTPS with Google Token ID
  	//Requires PHP 5.5.9
       id_token = googleUser.getAuthResponse().id_token;
