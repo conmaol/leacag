@@ -159,7 +159,7 @@ function chooseSelectedTerm(term, lang) {
                     $('#gaelicEquivalentsList').append(', ');
                 }
             }
-            $('#content-div-entry').empty();
+            $('#content-div-entry').hide();
         }
         else {
 			entryhistory.push(gds[0].id);
@@ -284,6 +284,7 @@ $('#gaelicSearchField').on({
 function updateContent(id) {
 	// update the content panel when a new lexical entry is selected
     $('#homePageText').hide();
+    $('#content-div-entry').show();
 	$('#lexicalText').load("../lexicopia/lexicopia-web/code/php/generatelexicalentry.php?lang=" + lang + "&id=" + id);
 	$('#lexicalText').show();
 	if (entryhistory.length > 1) {
