@@ -284,7 +284,7 @@ $('#gaelicSearchField').on({
 function updateContent(id) {
 	// update the content panel when a new lexical entry is selected
     $('#homePageText').hide();
-	$('#lexicalText').load("../lexicopia/lexicopia-entries/" + lang + "/html/" + id + ".html");
+	$('#lexicalText').load("../lexicopia/lexicopia-web/code/php/generatelexicalentry.php?lang=" + lang + "&id=" + id);
 	$('#lexicalText').show();
 	if (entryhistory.length > 1) {
 		//document.getElementById("backbutton").style.display = 'block';
