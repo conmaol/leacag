@@ -83,11 +83,15 @@ a#backlink:hover {
     text-decoration: underline;
 }
 
-
 h1 > a:link, h1 > a:visited {
     color: white;
     text-decoration: none;
 }
+
+a.leacag-link {
+    color: #35979c;
+}
+
 
 #gaelicSearchForm {
     display: none;
