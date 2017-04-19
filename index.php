@@ -124,7 +124,7 @@ header("Expires: 0"); // Proxies.
       </div>
     </div>
     <div class="row">
-      <div class="col-md-6 col-sm-12 loggedInStatus">    <!-- displays the logged-in name -->
+      <div class="col-md-6 col-xs-12 loggedInStatus">    <!-- displays the logged-in name -->
       </div>
     </div>
     <div class="row">

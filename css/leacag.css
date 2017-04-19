@@ -37,13 +37,6 @@ h1 {
     overflow-x: hidden;
 }
 
-@media screen and (max-width: 768px) {  /* for phone screen */
-    #suggestions, #noResults {
-        top:100px;
-        left:2px;
-    }
-}
-
 #suggestions li {
     padding: 5px;
 }
@@ -274,4 +267,18 @@ table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSo
  */
 .tablesorter tr.tableRowHighlight td {
     background-color: #ffcccc;
+}
+
+/*
+    phone screen
+ */
+@media screen and (max-width: 768px) {  /* for phone screen */
+    #suggestions, #noResults {
+        top:100px;
+        left:2px;
+    }
+
+    .loggedInStatus {
+        margin-top: 30px;
+    }
 }
