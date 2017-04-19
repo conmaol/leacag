@@ -124,13 +124,13 @@ header("Expires: 0"); // Proxies.
       </div>
     </div>
     <div class="row">
-      <div class="col-md-12">
-        <div id="gaelicEquivalentsList">
-        </div>
+      <div class="col-md-6 col-sm-12 loggedInStatus">    <!-- displays the logged-in name -->
       </div>
     </div>
     <div class="row">
-      <div class="col-md-6 col-sm-12 loggedInStatus">    <!-- displays the logged-in name -->
+      <div class="col-md-12">
+        <div id="gaelicEquivalentsList">
+        </div>
       </div>
     </div>
     <div id="formContainer">
@@ -222,7 +222,7 @@ header("Expires: 0"); // Proxies.
   <script src="js/jquery.bpopup.min.js"</script>
   <script src="../lexicopia/lexicopia-web/code/js/lexicopia-entries.js"></script>
   <script>
-	var id_token = null;	//need to be defined before leacag.js is loaded
+	var id_token = null;	//needs to be defined before leacag.js is loaded
   </script>
   <script src="js/leacag.js"></script>
   <script type="text/javascript">
@@ -309,7 +309,7 @@ header("Expires: 0"); // Proxies.
      Form submission code
      */
     //show the form link if user is submitter
- /*   if (Cookies.get("userEmail")) {
+    if (Cookies.get("userEmail")) {
         //check for submitter status
         $.getJSON("ajax.php?action=checkSubmitter", function(data) {
             if (data.isSubmitter) {
@@ -323,7 +323,7 @@ header("Expires: 0"); // Proxies.
                 });
             }
         });
-    }*/
+    }
     
     function processForm() {
         var formData = $('#userForm').serialize();
