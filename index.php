@@ -95,6 +95,7 @@ header("Expires: 0"); // Proxies.
               </div>
               <div class="collapse navbar-collapse navbar-right" id="navbar-collapse">
                 <ul class="nav navbar-nav">
+                  <li id="randomEntry"><a href="#" title="Random entry">iongnadh</a></li>
                   <li id="enToGdToggle"><a href="#" title="Search for a Gaelic word">Gàidhlig</a></li>
                   <li id="gdToEnToggle"><a href="#" title="Search for an English word">Beurla</a></li>
                   <li id="formLink"><a href="#" title="Contribute an entry">moladh</a></li>
@@ -107,7 +108,6 @@ header("Expires: 0"); // Proxies.
                           <a href="#" id="signOutLink" class="loginLink">Sign Out</a>
                       </div>
                   </li>
-                    <!--<li id="randomEntry"><a href="#" title="Random entry">iongnadh</a></li>-->
                 </ul>
               </div>
             </div>
@@ -271,6 +271,23 @@ header("Expires: 0"); // Proxies.
       })
       .done(function (msg) {
           console.log("AJAX called : " + msg);
+          auth2 = gapi.auth2.getAuthInstance();
+
+          //Update the button to display "Sign Out" option
+          $('.g-signin2').hide();
+          $('#signOutLink').show();
+          $('.signOut').show();
+          //Show the signed-in message
+          var loggedInMsg = 'Signed in as ' + profile.getName();
+          //check for admin status
+          $.getJSON("ajax.php?action=checkAdmin", function(data) {
+              if (data.isAdmin) {
+                  loggedInMsg += '&nbsp;&nbsp;<a href="admin.php">> admin</a>';
+              }
+          })
+              .done(function() {
+                  $('.loggedInStatus').html(loggedInMsg).show();
+          });
       });
 
       /*
@@ -285,24 +302,6 @@ header("Expires: 0"); // Proxies.
       };
       xhr.send('action=authId&idtoken='+id_token);
   */
-  
-      auth2 = gapi.auth2.getAuthInstance();
-
-      //Update the button to display "Sign Out" option
-      $('.g-signin2').hide();
-      $('#signOutLink').show();
-      $('.signOut').show();
-      //Show the signed-in message
-      var loggedInMsg = 'Signed in as ' + profile.getName();
-      //check for admin status
-      $.getJSON("ajax.php?action=checkAdmin", function(data) {
-          if (data.isAdmin) {
-              loggedInMsg += '&nbsp;&nbsp;<a href="admin.php">> admin</a>';
-          }
-      })
-      .done(function() {
-          $('.loggedInStatus').html(loggedInMsg).show();
-      });
     }
 
     /*

@@ -12,7 +12,7 @@ ini_set("display_errors", 1);
 date_default_timezone_set("Europe/London");
 
 define("ADMIN_ACCESS_LEVEL", 5);
-define("SUBMIT_ACCESS_LEVEL"  , 2);
+define("SUBMIT_ACCESS_LEVEL", 2);
 
 /*
  * commented out for development
