@@ -282,7 +282,7 @@ header("Expires: 0"); // Proxies.
           //check for admin status
           $.getJSON("ajax.php?action=checkAdmin", function(data) {
               if (data.isAdmin) {
-                  loggedInMsg += '&nbsp;&nbsp;<a class="leacag-link" href="admin.php">> admin</a>';
+                  loggedInMsg += '&nbsp;&nbsp;<a class="admin-link" href="admin.php">> admin</a>';
               }
           })
               .done(function() {
