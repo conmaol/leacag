@@ -20,12 +20,12 @@ switch ($action) {
 }
 
 function getEnglish($q) {
-	$englishIndex = file_get_contents("../../lexicopia/lexicopia-entries/gd/english-index.json");
+	$englishIndex = file_get_contents("../../lexicopia/lexicopia-cache/gd/english-index.json");
 	$results = array();
 	$json = json_decode($englishIndex, true);
 	foreach ($json["english_index"] as $item) {
 		if (strtolower(substr($item["en"], 0, strlen($q))) == strtolower($q)) {
-			$results[] = array("id"=>$item["gds"][0], "value"=>$item["en"], "label"=>$item["en"]);
+			$results[] = array("id"=>$item["gds"][0], "value"=>$item["en"], "label"=>$item["en"], "item"=>$item);
 		}
 	}
 	return json_encode($results);
@@ -33,20 +33,20 @@ function getEnglish($q) {
 
 function getGaelic($q) {
 	$aiQ = getAccentInsensitive($q);
-	$gaelicIndex = file_get_contents("../../lexicopia/lexicopia-entries/gd/target-index.json");
+	$gaelicIndex = file_get_contents("../../lexicopia/lexicopia-cache/gd/target-index.json");
 	$results = array();
 	$json = json_decode($gaelicIndex, true);
 	$pattern = "/^" . $aiQ . ".*/ui";
 	foreach ($json["target_index"] as $item) {
 		if (preg_match($pattern, $item["word"])) {
-      $results[] = array("id"=>$item["id"], "value"=>$item["word"], "label"=>$item["word"]);
+      $results[] = array("id"=>$item["id"], "value"=>$item["word"], "label"=>$item["word"], "item"=>$item);
 		}
 	}
 	return json_encode($results);
 }
 
 function getRandom() {
-    $gaelicIndex = file_get_contents("../../lexicopia/lexicopia-entries/gd/target-index.json");
+    $gaelicIndex = file_get_contents("../../lexicopia/lexicopia-cache/gd/target-index.json");
   	$json = json_decode($gaelicIndex, true);
 	$randomKey = array_rand($json["target_index"]);
   	$randomEntry = $json["target_index"][$randomKey];

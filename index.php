@@ -214,16 +214,16 @@ header("Expires: 0"); // Proxies.
     </div>
   </div>
   <script src="js/jquery-3.1.1.min.js"></script>
-  <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"</script>
+  <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"</script>         <!-- whole library - change to downloaded subset later -->
   <script src="js/bootstrap.min.js"></script>
   <script src="js/js.cookie.js"></script>
   <script src="js/jquery.bpopup.min.js"</script>
   <script src="../lexicopia/lexicopia-web/code/js/lexicopia-entries.js"></script>
   <script>
-	var id_token = null;	//need to be defined before leacag.js is loaded
+	var id_token = null;	//need to be defined before leacag.js is loaded - SO move into leacag.js??
   </script>
   <script src="js/leacag.js"></script>
-  <script type="text/javascript">
+  <script type="text/javascript">   <!-- move to leacag.js -->
 
     $(function() {
 
@@ -233,19 +233,32 @@ header("Expires: 0"); // Proxies.
       });
 
         $( "#englishSearchField" ).autocomplete({
+            response: function (event, ui) {
+                if (ui.content.length === 0) {
+                  $('#noResults').show();
+                } else {
+                  $('#noResults').hide();
+                };
+            },
             source: "php/leacag.php?action=getEnglish",
             minLength: 3,
             select: function( event, ui ) {
-                $(ui.item.id).addClass('chosen');
-                chooseSelectedTerm(ui.item.value, 'en');
+                chooseSelectedTerm(ui.item, 'en');
             }
         });
 
         $( "#gaelicSearchField" ).autocomplete({
+            response: function (event, ui) {
+                if (ui.content.length === 0) {
+                    $('#noResults').show();
+                } else {
+                    $('#noResults').hide();
+                };
+            },
             source: "php/leacag.php?action=getGaelic",
             minLength: 3,
             select: function( event, ui ) {
-                log( "Selected: " + ui.item.value + " aka " + ui.item.id );
+                chooseSelectedTerm(ui.item, 'gd');
             }
         });
 
