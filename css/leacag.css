@@ -15,18 +15,26 @@ body {
     padding-top: 100px;
 }
 
-#suggestions {
+h1 {
+    color: white;
+    display: inline;
+    margin-top: 0px;
+}
+
+#suggestions, #noResults {
     position:fixed;
     left:40px;
-    top:70px;
+    top:75px;
     background-color: white;
     width:21em;
     display: none;
-    list-style: none;
     margin: 0;
     padding: 0;
     border: 1px solid black;
-    z-index: 1;
+    z-index: 99999;
+    max-height: 20em;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 #suggestions li {
@@ -74,6 +82,16 @@ a#backlink:visited {
 a#backlink:hover {
     text-decoration: underline;
 }
+
+h1 > a:link, h1 > a:visited {
+    color: white;
+    text-decoration: none;
+}
+
+a.leacag-link, a.admin-link {
+    color: #35979c;
+}
+
 
 #gaelicSearchForm {
     display: none;
@@ -134,4 +152,137 @@ overriding bootstrap CSS
 
 .navbar-form {
     box-shadow: 0 0 0 rgba(255, 255, 255, 0.1) inset, 0 0 0 rgba(255, 255, 255, 0.1);
+}
+
+/*
+google sign in/out
+ */
+#loginButtons {
+    background-color: white;
+    height: 36px;
+    width: 120px;
+}
+
+.googleIcon {
+    float: left;
+    margin: 3px 8px;
+}
+
+#signOutLink, .signOut {
+    display: block;
+    width: 120px;
+    height: 34px;
+}
+
+a.loginLink {
+    display: block;
+    margin-left: 10px;
+    color: #666;
+    font-size: 9pt;
+    font-family: 'Roboto', sans-serif;
+    line-height: 34px;
+    text-decoration: none;
+}
+
+.g-signedInAs {
+    display: none;
+}
+
+.loggedInStatus {
+    display: none;
+    float: right;
+    text-align: right;
+    font-family: 'Roboto', sans-serif;
+    font-size: 10pt;
+    color: #666;
+}
+
+/*
+form
+ */
+#formLink {
+    display: none;
+}
+
+#formContainer {
+    display:none;
+    width: 20em;
+    padding: 20px;
+    background-color: white;
+    border: 2px solid #996633;
+}
+
+.formField {
+    width: 16em;
+}
+
+#formNotesField {
+    height: 6em;
+}
+
+#submitThanks {
+    display: none;
+}
+
+/*
+    Tablesorter
+*/
+table.tablesorter {
+    font-family: "Helvetica Neue",Helvetica,sans-serif;
+    background-color: #CDCDCD;
+    margin:10px 0pt 15px;
+    font-size: 8pt;
+    width: 100%;
+    text-align: left;
+}
+table.tablesorter thead tr th, table.tablesorter tfoot tr th {
+    background-color: #e6EEEE;
+    border: 1px solid #FFF;
+    font-size: 8pt;
+    padding: 4px;
+}
+table.tablesorter thead tr .header {
+    background-image: url(../../images/bg.gif);
+    background-repeat: no-repeat;
+    background-position: center right;
+    cursor: pointer;
+}
+table.tablesorter tbody td {
+    color: #3D3D3D;
+    padding: 4px;
+    background-color: #FFF;
+    vertical-align: top;
+}
+table.tablesorter tbody tr.odd td {
+    background-color:#F0F0F6;
+}
+table.tablesorter thead tr .headerSortUp {
+    background-image: url(../../images/asc.gif);
+}
+table.tablesorter thead tr .headerSortDown {
+    background-image: url(../../images/desc.gif);
+}
+table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {
+    background-color: #8dbdd8;
+}
+
+/*
+    Admin
+ */
+.tablesorter tr.tableRowHighlight td {
+    background-color: #ffcccc;
+}
+
+/*
+    phone screen
+ */
+@media screen and (max-width: 768px) {  /* for phone screen */
+    #suggestions, #noResults {
+        top:100px;
+        left:2px;
+    }
+
+    .loggedInStatus {
+        margin-top: 30px;
+    }
 }

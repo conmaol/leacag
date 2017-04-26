@@ -1,14 +1,39 @@
 var listIndex;		//the position of the cursor within the suggested list
 var suggestedTerms;	//the array of suggested result objects loaded via AJAX
-var minChars = 2;
+var minChars = 3;
+var auth2;
 
 $('#englishSearchField').on({
 	keyup: function(e) {
 		var m = false;
-		if (e.which == 38 || e.which == 40 || e.which == 13 || e.which == 27) {
+		if (e.which == 38 || e.which == 40 || e.which == 27) {
 			m = navigateList(e, m, 'en');
 			return;
 		}
+        /*
+         code for alternate 'enter' key behaviour
+         : if a search term is in the suggestion list hitting enter will take the user to the entry
+         */
+
+        if (e.which == 13) {                                    //user is selecting from the suggested items list
+            if ($('.chosen').length > 0 ) {
+                m = navigateList(e, m, 'en');
+            } else {                                            //user is entering a search term directly
+                var search = $('#englishSearchField').val();
+                $('#suggestions').each(function () {
+                    $(this).find('li').each(function () {
+                        if (search.toLowerCase() == $(this).text()) {
+                            $(this).addClass('chosen');
+                            chooseSelectedTerm($(this).text(), 'en');
+                            return false;
+                        }
+                    });
+                });
+            }
+        }
+        /*
+         //end alternate 'enter' key code
+         */
 		$('#suggestions').empty(); //clear any previous selections
 		listIndex = -1;
 		$('.chosen').removeClass('chosen');
@@ -21,7 +46,14 @@ $('#englishSearchField').on({
 					//assemble the suggested items list
 					$('#suggestions').append($('<li>' + v.en + '</li>'));
 				});
-				$("#suggestions").show();
+                if ($('#suggestions li').length == 0) {    //there were no results for this search
+                    $("#suggestions").hide();
+                    $('#noResults').show();
+                    updateUserSearchDB(searchString, 1, 'en');    //log the failed search
+                } else {
+                    $('#noResults').hide();
+                    $("#suggestions").show();
+                }
 				$('#suggestions li').on('click', function () {
 					$(this).addClass('chosen');
 					chooseSelectedTerm($(this).html(),'en');
@@ -30,6 +62,7 @@ $('#englishSearchField').on({
 		}
 		else {
 			$("#suggestions").hide(); // hide when backspace is pressed and just one character in field
+            $("#noResults").hide();
 		}
     },
 	keydown: function(e) {
@@ -49,26 +82,30 @@ function navigateList(e, m, lang) {
 			listIndex = 0;
 		}
 		m = true;
+        $('#suggestions li').eq(listIndex).show();
 	}
 	else if (e.which == 40) {   //Down arrow
-		listIndex++;
-		if (listIndex > $('#suggestions li').length - 1) {
-			listIndex = $('#suggestions li').length - 1;
-		}
-		m = true;
+        if (listIndex > $('#suggestions li').length - 2) {  //stop at the final item
+            listIndex = $('#suggestions li').length - 1;
+        } else {
+            listIndex++;
+            m = true;
+            $('#suggestions li.chosen').hide();
+        }
 	}
 	if (m) {
 		$('#suggestions li.chosen').removeClass('chosen');
 		$('#suggestions li').eq(listIndex).addClass('chosen');
 	} else if (e.which == 27) {     //ESC key
 		$('#suggestions').hide();
+        $('#noResults').hide();
 	} else if (e.which == 13) {  	//Enter key
 		var n = $('.chosen').index();
 		if (n != -1) { // some list item is selected
             var selectedItem = $('li.chosen');
             chooseSelectedTerm(selectedItem.html(),lang);
 		}
-	}	
+	}
 	return m;
 }
 
@@ -87,6 +124,7 @@ $(document).mouseup(function(e) {
 });
 
 $('#randomEntry').on("click", function() {
+    $('#noResults').hide();
 	$('#englishSearchField').val("");
 	$('#gaelicSearchField').val("");
 	$('#gaelicEquivalentsList').html("");
@@ -105,6 +143,7 @@ $('#randomEntry').on("click", function() {
  * @param arrayIdx: the position of the selected word within the file's array
  */
 function chooseSelectedTerm(term, lang) {
+	updateUserSearchDB(term, 0, lang);           //records the search as successful in the server DB
 	$('#englishSearchField').val("");
     $('#gaelicSearchField').val("");
 	$('#suggestions').hide();
@@ -120,7 +159,7 @@ function chooseSelectedTerm(term, lang) {
                     $('#gaelicEquivalentsList').append(', ');
                 }
             }
-            $('#content-div-entry').empty();
+            $('#content-div-entry').hide();
         }
         else {
 			entryhistory.push(gds[0].id);
@@ -136,7 +175,8 @@ function chooseSelectedTerm(term, lang) {
 }
 
 $('#enToGdToggle').on("click", function() {
-	$('#suggestions').hide();
+    resetPage();
+    $('#suggestions').hide();
 	$('#englishSearchField').val("");
 	$('#gaelicEquivalentsList').empty();
 	$('#mainContent').empty();
@@ -149,7 +189,8 @@ $('#enToGdToggle').on("click", function() {
 });
 
 $('#gdToEnToggle').on("click", function() {
-	$('#suggestions').hide();
+    resetPage();
+    $('#suggestions').hide();
 	$('#gaelicSearchField').val("");
 	$("#englishSearchForm").show();
 	$("#gaelicSearchForm").hide();
@@ -160,6 +201,11 @@ $('#gdToEnToggle').on("click", function() {
 	return false;
 });
 
+function resetPage() {
+    $('#lexicalText').hide();
+    $('#homePageText').show();
+}
+
 $('#backbutton').on("click", function() {
 	goBack();
 	return false;
@@ -168,10 +214,33 @@ $('#backbutton').on("click", function() {
 $('#gaelicSearchField').on({
 	keyup: function (e) {
 		var m = false;
-		if (e.which == 38 || e.which == 40 || e.which == 13 || e.which == 27) {
+		if (e.which == 38 || e.which == 40 || e.which == 27) {
 			m = navigateList(e, m, 'gd');
 			return;
 		}
+        /*
+         code for alternate 'enter' key behaviour
+         : if a search term is in the suggestion list hitting enter will take the user to the entry
+         */
+        if (e.which == 13) {                                    //user is selecting from the suggested items list
+            if ($('.chosen').length > 0 ) {
+                m = navigateList(e, m, 'gd');
+            } else {                                            //user is entering a search term directly
+                var search = $('#gaelicSearchField').val();
+                $('#suggestions').each(function () {
+                    $(this).find('li').each(function () {
+                        if (search.toLowerCase() == $(this).html()) {
+                            $(this).addClass('chosen');
+                            chooseSelectedTerm($(this).html(), 'gd');
+                            return false;
+                        }
+                    });
+                });
+            }
+        }
+        /*
+         //end alternate 'enter' key code
+         */
 		$('#suggestions').empty(); //clear any previous selections
 		listIndex = -1;
 		$('.chosen').removeClass('chosen');
@@ -184,7 +253,14 @@ $('#gaelicSearchField').on({
 					//assemble the suggested items list
 					$('#suggestions').append($('<li>' + v.word + '</li>'));
 				});
-				$("#suggestions").show();
+                if ($('#suggestions li').length === 0) {    //there were no results for this search
+                    $("#suggestions").hide();
+                    $('#noResults').show();
+                    updateUserSearchDB(searchString, 1, 'gd');    //log the failed search
+                } else {
+                    $('#noResults').hide();
+                    $("#suggestions").show();
+                }
 				$('#suggestions li').on('click', function () {
 					$(this).addClass('chosen');
 					chooseSelectedTerm($(this).html(), 'gd'); // this needs to be done later
@@ -207,11 +283,62 @@ $('#gaelicSearchField').on({
 
 function updateContent(id) {
 	// update the content panel when a new lexical entry is selected
-	$('#content-div-entry').load("../lexicopia/lexicopia-entries/" + lang + "/html/" + id + ".html");
+    $('#homePageText').hide();
+    $('#content-div-entry').show();
+	$('#lexicalText').load("../lexicopia/lexicopia-web/code/php/generatelexicalentry.php?lang=" + lang + "&id=" + id);
+	$('#lexicalText').show();
 	if (entryhistory.length > 1) {
-		document.getElementById("backbutton").style.display = 'block';
+		//document.getElementById("backbutton").style.display = 'block';
+		$('#backbutton').show();
 	}
 	else {
-		document.getElementById("backbutton").style.display = 'none';
+		//document.getElementById("backbutton").style.display = 'none';
+		$('#backbutton').hide();
 	}
 }
+
+function showEnglish() {
+    $('.en-span').show();
+    $('#en-plus').hide();
+    $('#en-minus').show();
+}
+
+function hideEnglish() {
+    $('.en-span').hide();
+    $('#en-plus').show();
+    $('#en-minus').hide();
+}
+
+/*
+ * Add the user email and search term to the database
+ */
+function updateUserSearchDB(searchTerm, failed, language) {
+	var userProfile = getUser();
+    if (!userProfile) {
+	    return false;           //no user logged in
+    }
+    $.ajax({
+      method: "GET",
+      url: 'ajax.php?action=logSearchTerm&searchTerm='+searchTerm+'&failed='+failed+'&language='+language+'&id='+userProfile.getId()+'&email='+userProfile.getEmail()
+    })
+    .done(function (msg) {
+      console.log("Attempted DB update : " + msg);
+    });
+}
+
+/*
+ * Get signed-in Google user
+ */
+function getUser() {
+  if (!auth2) {
+    return false;
+  }
+  var user = auth2.currentUser.get();
+  var profile = user.getBasicProfile();
+  if (profile) {
+	  return profile;
+  } else {
+	  return false;
+  }
+}
+
