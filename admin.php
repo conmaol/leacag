@@ -230,25 +230,7 @@ HTML;
 
 </body>
 
-<script>
-  $(function () {
-      $('#searchHistory').hide();
-      $('#submissionHistory').hide();
-      $('#hideSearchHistory').hide();
-      $('#hideSubmissionHistory').hide();
-      $('.toggleSearchHistory').on('click', function() {
-          $('.displaySearchHistory').toggle();
-      });
-      $('.toggleSubmissionHistory').on('click', function() {
-          $('.displaySubmissionHistory').toggle();
-      });
-
-
-      $('#users').tablesorter();
-      $('#searchHistory').tablesorter( {sortList: [[3,1]]} );       //sort by date in reverse order
-      $('#submissionHistory').tablesorter( {sortList: [[4,1]]} );    //sort by date in reverse order
-  })
-</script>
+<script src="js/admin.js"></script>
 </html>
 
 

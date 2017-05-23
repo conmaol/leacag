@@ -11,8 +11,11 @@ session_start();
 ini_set("display_errors", 1);
 date_default_timezone_set("Europe/London");
 
-define("ADMIN_ACCESS_LEVEL", 5);
-define("SUBMIT_ACCESS_LEVEL", 2);
+define("ADMIN_ACCESS_LEVEL", 5);    //move to sitewide include file?
+define("SUBMIT_ACCESS_LEVEL", 2);   //move to sitewide include file?
+define("USERFILE_PATH", "../lexicopia/lexicopia-xml/gd/terminology/user-generated.xml");  //move to sitewide include file?
+define("ENGLISH_INDEX_PATH", "../lexicopia/lexicopia-cache/gd/english-index.json");       //move to sitewide include file?
+define("TARGET_INDEX_PATH", "../lexicopia/lexicopia-cache/gd/target-index.json");         //move to sitewide include file?
 
 /*
  * commented out for development
@@ -84,6 +87,19 @@ switch ($_REQUEST["action"]) {
     $sth = $dbh->prepare("INSERT INTO leacag_formSubmission (email, en, gd, pos, notes) VALUES (:email, :en, :gd, :pos, :notes)");
     if ($sth->execute(array(":email"=>$_POST["userEmail"], ":en"=>$_POST["en"], ":gd"=>$_POST["gd"], ":pos"=>$_POST["pos"], ":notes"=>$_POST["notes"]))) {
       echo "Form data added to DB...";
+      //write the XML
+      $xml = getEntryXml($_POST);
+      file_put_contents(USERFILE_PATH, $xml.PHP_EOL, FILE_APPEND | LOCK_EX);
+      //write the Target JSON
+      $targetFile = file_get_contents(TARGET_INDEX_PATH);
+      $targetJson = json_decode($targetFile, true);
+      array_push($targetJson["target_index"], getTargetEntry($_POST));
+      file_put_contents(TARGET_INDEX_PATH, json_encode($targetJson), LOCK_EX);
+      //write the English JSON
+      $englishFile = file_get_contents(ENGLISH_INDEX_PATH);
+      $englishJson = json_decode($englishFile, true);
+      array_push($englishJson["english_index"], getEnglishEntry($_POST));
+      file_put_contents(ENGLISH_INDEX_PATH, json_encode($englishJson), LOCK_EX);
     } else {
       echo "There was a problem saving the form data";
     }
@@ -104,5 +120,28 @@ switch ($_REQUEST["action"]) {
     $result = array("isSubmitter" => $row[0] >= SUBMIT_ACCESS_LEVEL);
     echo json_encode($result);
     break;
+}
+
+function getEnglishEntry($fields) {
+  $entry = array("en" => $fields["en"], "gds" => array(array("id" => "...")));  //change ID from ellipsis
+  return $entry;
+}
+
+function getTargetEntry($fields) {
+  $entry = array("word" => $fields["gd"], "id" => "...", "en" => $fields["en"]);  //change ID from ellipsis
+  return $entry;
+}
+
+function getEntryXml($fields) {
+  $timestamp = time();
+  $xml = <<<XML
+    <sign id="test123">
+        <form>{$fields["gd"]}</form>
+        <syntax ref="{$fields["pos"]}"/>
+        <trans lang="en">{$fields["en"]}</trans>
+        <note>Contributed by user {$fields["userEmail"]} at {$timestamp}</note>
+    </sign>
+XML;
+  return $xml;
 }
 
