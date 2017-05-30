@@ -23,6 +23,7 @@ $('#englishSearchField').on({
     },
     click: function() {
         $(this).val("");	//clear the search field for a new query
+        $(this).attr('placeholder', 'Beurla');
         $('#noResults').hide();
     }
 });
@@ -49,6 +50,7 @@ $('#gaelicSearchField').on({
     },
     click: function() {
         $(this).val("");	//clear the search field for a new query
+        $(this).attr('placeholder', 'Gàidhlig');
         $('#noResults').hide();
     }
 });
@@ -110,6 +112,7 @@ $('#enToGdToggle').on("click", function() {
     $(this).hide();
     $("#gaelicSearchForm").show();
     $("#gdToEnToggle").show();
+    $('#gaelicSearchField').attr('placeholder', 'Gàidhlig');
     $('#gaelicSearchField').focus();
     return false;
 });
@@ -123,6 +126,8 @@ $('#gdToEnToggle').on("click", function() {
     $("#enToGdToggle").show();
     $('#mainContent').empty();
     $('#englishSearchField').focus();
+    $('#englishSearchField').attr('placeholder', 'Beurla');
+
     return false;
 });
 
@@ -142,6 +147,8 @@ function updateContent(id) {
         //document.getElementById("backbutton").style.display = 'none';
         $('#backbutton').hide();
     }
+    $('#englishSearchField').attr('placeholder', '');
+    $('#gaelicSearchField').attr('placeholder', '');
 }
 
 function showEnglish() {
