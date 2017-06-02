@@ -60,6 +60,7 @@ header("Expires: 0"); // Proxies.
   <title>LeaCaG</title>
   <script src="https://apis.google.com/js/platform.js" async defer></script>
   <link href="css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet"/>
   <link href="../lexicopia/lexicopia-web/code/css/lexicopia-entries.css" rel="stylesheet"/>
   <link href="css/leacag.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
@@ -119,7 +120,6 @@ header("Expires: 0"); // Proxies.
         <div>
           <span id="noResults">-- There are no results for this query --</span>
           <ul id="suggestions" tabindex="0">
-          </ul>
         </div>
       </div>
     </div>
@@ -218,6 +218,7 @@ header("Expires: 0"); // Proxies.
   </div>
   <script src="js/jquery-3.1.1.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>         <!-- whole library - change to downloaded subset later -->
   <script src="js/js.cookie.js"></script>
   <script src="js/jquery.bpopup.min.js"</script>
   <script src="../lexicopia/lexicopia-web/code/js/lexicopia-entries.js"></script>
@@ -226,51 +227,99 @@ header("Expires: 0"); // Proxies.
   </script>
   <script src="js/leacag.js"></script>
   <script type="text/javascript">
-    $(function() { //close the dropdown when a navbar link is clicked (mobile)
-      $('.navbar-collapse a').on('click', function(){
-        $(".navbar-collapse").collapse('hide');
-      });
-      /*
-        Sign out code
-      */
-      $('#signOutLink').hide();
-      $('.signOut').hide();
-      $('#signOutLink').on('click', function () {
-          Cookies.remove('userEmail');
-          gapi.auth2.getAuthInstance().disconnect();
-          console.log('User signed out.');  //debug code only
+
+      $(function() {
+
+          //close the dropdown when a navbar link is clicked (mobile)
+          $('.navbar-collapse a').on('click', function(){
+              $(".navbar-collapse").collapse('hide');
+          });
+
+          $( "#englishSearchField" ).autocomplete({
+              response: function (event, ui) {
+                  if (ui.content.length === 0) {
+                      $('#noResults').show();
+                  } else {
+                      $('#noResults').hide();
+                  };
+              },
+              source: "php/leacag.php?action=getEnglish",
+              minLength: 3,
+              select: function( event, ui ) {
+                  chooseSelectedTerm(ui.item, 'en');
+              }
+          });
+
+          $( "#gaelicSearchField" ).autocomplete({
+              response: function (event, ui) {
+                  if (ui.content.length === 0) {
+                      $('#noResults').show();
+                  } else {
+                      $('#noResults').hide();
+                  };
+              },
+              source: "php/leacag.php?action=getGaelic",
+              minLength: 3,
+              select: function( event, ui ) {
+                  chooseSelectedTerm(ui.item, 'gd');
+              }
+          });
+
+          /*
+           Sign out code
+           */
+          $('#signOutLink').hide();
           $('.signOut').hide();
-          $('#formLink').hide();
-          $('.abcRioButtonContents').show();
-          $('.g-signin2').show();
-          $('.abcRioButtonContents > span').eq(1).hide();   //hide the 'Signed In' text
-          $('.abcRioButtonContents > span').eq(0).show();   //show the 'Sign In' text
-          $('.loggedInStatus').hide();  //hide logged-in status
+          $('#signOutLink').on('click', function () {
+              Cookies.remove('userEmail');
+              gapi.auth2.getAuthInstance().disconnect();
+              console.log('User signed out.');  //debug code only
+              $('.signOut').hide();
+              $('#formLink').hide();
+              $('.abcRioButtonContents').show();
+              $('.g-signin2').show();
+              $('.abcRioButtonContents > span').eq(1).hide();   //hide the 'Signed In' text
+              $('.abcRioButtonContents > span').eq(0).show();   //show the 'Sign In' text
+              $('.loggedInStatus').hide();  //hide logged-in status
+          });
       });
-    });
 
-    var lang = 'gd';
-    var entryhistory = [];
-    $('#englishSearchField').focus();
-    var bpopup;     //to store and handle the modal popup
-    $('.popupClose').on('click', function () {  //close the popup on click
-        bpopup.close();
-        return false;
-    });
+      var lang = 'gd';
+      var entryhistory = [];
+      $('#englishSearchField').focus();
+      var bpopup;     //to store and handle the modal popup
+      $('.popupClose').on('click', function () {  //close the popup on click
+          bpopup.close();
+          return false;
+      });
 
-    function onSignIn(googleUser) {
-      var profile = googleUser.getBasicProfile();
-      console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-      //add user info to form fields
-      $('#userEmail').val(profile.getEmail());
-      $('#userID').val(profile.getId());
+      function onSignIn(googleUser) {
+          var profile = googleUser.getBasicProfile();
+          console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+          //add user info to form fields
+          $('#userEmail').val(profile.getEmail());
+          $('#userID').val(profile.getId());
 
-      $.ajax({
-          method: "GET",
-          url: 'ajax.php?action=email&user='+profile.getEmail()+'&name='+profile.getName()
-      })
-      .done(function (msg) {
-          console.log("AJAX called : " + msg);
+          $.ajax({
+              method: "GET",
+              url: 'ajax.php?action=email&user='+profile.getEmail()
+          })
+              .done(function (msg) {
+                  console.log("AJAX called : " + msg);
+              });
+          /*
+           //User ID authentication via HTTPS with Google Token ID
+           //Requires PHP 5.5.9
+           id_token = googleUser.getAuthResponse().id_token;
+           var xhr = new XMLHttpRequest();
+           xhr.open('POST', 'https://dasg.ac.uk/leacag/ajax.php', true);
+           xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+           xhr.onload = function() {
+           console.log('Signed in as: ' + xhr.responseText);
+           };
+           xhr.send('action=authId&idtoken='+id_token);
+           */
+
           auth2 = gapi.auth2.getAuthInstance();
 
           //Update the button to display "Sign Out" option
@@ -278,62 +327,44 @@ header("Expires: 0"); // Proxies.
           $('#signOutLink').show();
           $('.signOut').show();
           //Show the signed-in message
-          var loggedInMsg = 'Signed in as ' + profile.getName();
+          var loggedInMsg = 'Signed-in as ' + profile.getName();
           //check for admin status
           $.getJSON("ajax.php?action=checkAdmin", function(data) {
               if (data.isAdmin) {
-                  loggedInMsg += '&nbsp;&nbsp;<a class="admin-link" href="admin.php">> admin</a>';
+                  loggedInMsg += '&nbsp;&nbsp;<a href="admin.php">> admin</a>';
               }
           })
               .done(function() {
                   $('.loggedInStatus').html(loggedInMsg).show();
-          });
-      });
+              });
+      }
 
       /*
- 	//User ID authentication via HTTPS with Google Token ID
- 	//Requires PHP 5.5.9
-      id_token = googleUser.getAuthResponse().id_token;
-      var xhr = new XMLHttpRequest();
-      xhr.open('POST', 'https://dasg.ac.uk/leacag/ajax.php', true);
-      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-      xhr.onload = function() {
-       	console.log('Signed in as: ' + xhr.responseText);
-      };
-      xhr.send('action=authId&idtoken='+id_token);
-  */
-    }
+       Form submission code
+       */
+      //show the form link if logged-in
+      if (Cookies.get("userEmail")) {
+          $('#formLink').show();
+          $('#formLink a').on('click', function () {
+              bpopup = $('#formContainer').bPopup({
+                  modal: true
+              });
+              $('#submitThanks').hide();
+              $('#userForm').show();
+          });
+      }
 
-    /*
-     Form submission code
-     */
-    //show the form link if user is submitter
-    if (Cookies.get("userEmail")) {
-        //check for submitter status
-        $.getJSON("ajax.php?action=checkSubmitter", function(data) {
-            if (data.isSubmitter) {
-                $('#formLink').show();
-                $('#formLink a').on('click', function () {
-                    bpopup = $('#formContainer').bPopup({
-                        modal: true
-                    });
-                    $('#submitThanks').hide();
-                    $('#userForm').show();
-                });
-            }
-        });
-    }
-    
-    function processForm() {
-        var formData = $('#userForm').serialize();
-        $.post('ajax.php', formData, function (data) {
-            console.log(data);
-        });
-        //display a thank you message
-        $('#userForm').hide();
-        $('#submitThanks').show();
-        return false;
-    }
+      function processForm() {
+          var formData = $('#userForm').serialize();
+          $.post('ajax.php', formData, function (data) {
+              console.log(data);
+          });
+          //display a thank you message
+          $('#userForm').hide();
+          $('#submitThanks').show();
+          return false;
+      }
+
   </script>
 </body>
 </html>

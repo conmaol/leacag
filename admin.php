@@ -115,7 +115,9 @@ HTML;
     <input type="submit" value="save"/>
   </form>
   <h2>User Search History</h2>
-  <table name="searchHistory" id="searchHistory" class="tablesorter">
+  <span id="showSearchHistory" class="displaySearchHistory"><a href="#" class="toggleSearchHistory">Show History</a></span>
+  <span id="hideSearchHistory" class="displaySearchHistory"><a href="#" class="toggleSearchHistory">Hide History</a></span>
+  <table name="searchHistory" id="searchHistory" class="tablesorter displaySearchHistory">
     <thead>
       <tr>
         <th>Term</th>
@@ -130,7 +132,14 @@ HTML;
   </table>
   <h2>User Submission History</h2>
   {$noSubMessage}
-  <table name="submissionHistory" id="submissionHistory" class="tablesorter">
+HTML;
+}
+
+if ($noSubMessage === "") {     //only write the table if it has entries
+    $editUserHtml .= <<<HTML
+  <span id="showSubmissionHistory" class="displaySubmissionHistory"><a href="#" class="toggleSubmissionHistory">Show History</a></span>
+  <span id="hideSubmissionHistory" class="displaySubmissionHistory"><a href="#" class="toggleSubmissionHistory">Hide History</a></span>
+  <table name="submissionHistory" id="submissionHistory" class="tablesorter displaySubmissionHistory">
     <thead>
       <tr>
         <th>English</th>
@@ -144,11 +153,15 @@ HTML;
       {$submissionHtml}
     </tbody>
   </table>
+HTML;
+}
+
+$editUserHtml .= <<<HTML
   <p>
     <a href="admin.php"><< Back to Admin Home</a>
   </p>
 HTML;
-}
+
 
 //get all users
 $users = array();
@@ -170,6 +183,7 @@ foreach ($users as $user) {
 HTML;
 }
 $userTableHtml = <<<HTML
+ <a href="index.php">< Back to site</a>
  <table id="users" class="tablesorter">
     <thead>
       <tr>
@@ -199,9 +213,9 @@ HTML;
   <h1>LEACAG Admin</h1>
 
   <?php
-    echo <<<HTML
-        <a href="index.php">< Back to site</a>
-HTML;
+//    echo <<<HTML
+//        <a href="index.php">< Back to site</a>
+//HTML;
 
     echo $userUpdatedMsg;
 
@@ -216,13 +230,7 @@ HTML;
 
 </body>
 
-<script>
-  $(function () {
-      $('#users').tablesorter();
-      $('#searchHistory').tablesorter();
-      $('#submissionHistory').tablesorter();
-  })
-</script>
+<script src="js/admin.js"></script>
 </html>
 
 

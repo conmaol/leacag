@@ -286,3 +286,13 @@ table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSo
         margin-top: 30px;
     }
 }
+
+/*
+    jQUery UI autocomplete
+ */
+.ui-autocomplete {
+    z-index: 10000;
+    max-height: 400px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
