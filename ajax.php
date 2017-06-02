@@ -102,7 +102,7 @@ switch ($_REQUEST["action"]) {
       $englishJson = json_decode($englishFile, true);
       array_push($englishJson["english_index"], getEnglishEntry($_POST, $id));
       file_put_contents(ENGLISH_INDEX_PATH, json_encode($englishJson), LOCK_EX);
-      $to       = "mail@steviebarrett.com";             //update this to Mark's email for live site
+      $to       = "mark.mcconville@glasgow.ac.uk";
       $message  = "A LEACAG user has submitted a new form entry.";
       $subject  = "LEACAG Form Submission";
       $from     = "stephen.barrett@glasgow.ac.uk";
