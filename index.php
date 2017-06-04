@@ -153,6 +153,14 @@ header("Expires: 0"); // Proxies.
               </select>
           </p>
           <p>
+              Related Forms:<br/>
+              <textarea name="related" id="relatedNotesField" class="formField"></textarea>
+          </p>
+          <p>
+              Source:<br/>
+              <textarea name="source" id="sourceNotesField" class="formField"></textarea>
+          </p>
+          <p>
               Notes:<br/>
               <textarea name="notes" id="formNotesField" class="formField"></textarea>
           </p>

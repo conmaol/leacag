@@ -84,14 +84,15 @@ switch ($_REQUEST["action"]) {
     break;
   case "processForm":
     $dbh = DB::getDatabaseHandle(DB_NAME);
-    $sth = $dbh->prepare("INSERT INTO leacag_formSubmission (email, en, gd, pos, notes) VALUES (:email, :en, :gd, :pos, :notes)");
-    if ($sth->execute(array(":email"=>$_POST["userEmail"], ":en"=>$_POST["en"], ":gd"=>$_POST["gd"], ":pos"=>$_POST["pos"], ":notes"=>$_POST["notes"]))) {
+    $sth = $dbh->prepare("INSERT INTO leacag_formSubmission (email, en, gd, pos, related, source, notes) VALUES (:email, :en, :gd, :pos, :notes)");
+    if ($sth->execute(array(":email"=>$_POST["userEmail"], ":en"=>$_POST["en"], ":gd"=>$_POST["gd"], ":pos"=>$_POST["pos"], ":related"=>$_POST["related"], ":source"=>$_POST["source"],  ":notes"=>$_POST["notes"]))) {
       echo "Form data added to DB...";
       //assign the ID
       $id = $_POST["gd"] . '-' . time();
       //write the XML
-      $xml = getEntryXml($_POST, $id);
-      file_put_contents(USERFILE_PATH, $xml.PHP_EOL, FILE_APPEND | LOCK_EX);
+      $lexicon = simplexml_load_file(USERFILE_PATH);
+      $lexicon = getEntryXml($lexicon, $_POST, $id);
+      $lexicon->asXml(USERFILE_PATH);
       //write the Target JSON
       $targetFile = file_get_contents(TARGET_INDEX_PATH);
       $targetJson = json_decode($targetFile, true);
@@ -103,7 +104,7 @@ switch ($_REQUEST["action"]) {
       array_push($englishJson["english_index"], getEnglishEntry($_POST, $id));
       file_put_contents(ENGLISH_INDEX_PATH, json_encode($englishJson), LOCK_EX);
       $to       = "mark.mcconville@glasgow.ac.uk";
-      $message  = "A LEACAG user has submitted a new form entry.";
+      $message  = getFormEmailText($_POST);
       $subject  = "LEACAG Form Submission";
       $from     = "stephen.barrett@glasgow.ac.uk";
       $email    = new Email($to, $subject, $message, $from);
@@ -145,16 +146,31 @@ function getTargetEntry($fields, $id) {
   return $entry;
 }
 
-function getEntryXml($fields, $id) {
+function getEntryXml($element, $fields, $id) {
   $timestamp = time();
-  $xml = <<<XML
-    <sign id="{$id}">
-        <form>{$fields["gd"]}</form>
-        <syntax ref="{$fields["pos"]}"/>
-        <trans lang="en">{$fields["en"]}</trans>
-        <note>Contributed by user {$fields["userEmail"]} at {$timestamp}</note>
-    </sign>
-XML;
-  return $xml;
+  $sign = $element->addChild("sign");
+  $sign->addAttribute('id', $id);
+  $sign->addChild('form', $fields["gd"]);
+  $sign->addChild('syntax');
+  $sign->syntax->addAttribute('ref', $fields["pos"]);
+  $sign->addChild('trans', $fields["en"]);
+  $sign->trans->addAttribute('lang', 'en');
+  $sign->addChild('note', $fields["related"]);
+  $sign->addChild('note', $fields["source"]);
+  $noteText = "Contributed by user {$fields["userEmail"]} at {$timestamp}";
+  $sign->addChild('note', $noteText);
+  return $element;
 }
 
+function getFormEmailText($fields) {
+  $text = <<<TEXT
+User {$fields["userEmail"]} submitted the following entry to LEACAG:<br/>
+- English Term: {$fields["en"]}<br/> 
+- Gaelic Term: {$fields["gd"]}<br/>
+- Part of Speech: {$fields["pos"]}<br/>
+- Related Forms: {$fields["related"]}<br/>
+- Source: {$fields["source"]}<br/>
+- Notes: {$fields["notes"]}
+TEXT;
+  return $text;
+}
