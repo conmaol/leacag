@@ -104,6 +104,7 @@ switch ($_REQUEST["action"]) {
       array_push($englishJson["english_index"], getEnglishEntry($_POST, $id));
       file_put_contents(ENGLISH_INDEX_PATH, json_encode($englishJson), LOCK_EX);
       $to       = "mark.mcconville@glasgow.ac.uk";
+      $to = "mail@steviebarrett.com";
       $message  = getFormEmailText($_POST);
       $subject  = "LEACAG Form Submission";
       $from     = "stephen.barrett@glasgow.ac.uk";
