@@ -360,6 +360,8 @@ header("Expires: 0"); // Proxies.
               $('#submitThanks').hide();
               $('#userForm').show();
           });
+      } else {
+          $('#formLink').hide();
       }
 
       function processForm() {
@@ -369,6 +371,7 @@ header("Expires: 0"); // Proxies.
           });
           //display a thank you message
           $('#userForm').hide();
+          $('#userForm').trigger('reset');
           $('#submitThanks').show();
           return false;
       }

@@ -11,7 +11,7 @@ $('#englishSearchField').on({
                     updateUserSearchDB(search, 1, 'en');    //log a failed search
                 } else {    //there is a result
                     $('#englishSearchField').autocomplete('close');
-                    chooseSelectedTerm(data[0], 'en');
+                 //   chooseSelectedTerm(data[0], 'en');                //TODO: delete if no weird behaviour on test
                 }
             });
         }
@@ -38,7 +38,7 @@ $('#gaelicSearchField').on({
                     updateUserSearchDB(search, 1, 'gd');    //log a failed search
                 } else {    //there is a result
                     $('#gaelicSearchField').autocomplete('close');
-                    chooseSelectedTerm(data[0], 'gd');
+                //    chooseSelectedTerm(data[0], 'gd');            //TODO: delete if no weird behaviour on test
                 }
             });
         }
@@ -168,13 +168,19 @@ function hideEnglish() {
  */
 function updateUserSearchDB(searchTerm, failed, language) {
     var userProfile = getUser();
+    var userId = "anonymous";
+    var userEmail = "anonymous";
+    if (userProfile !== false) {    //user logged-in
+        userId = userProfile.getId();
+        userEmail = userProfile.getEmail();
+    }
     $.ajax({
         method: "GET",
-        url: 'ajax.php?action=logSearchTerm&searchTerm='+searchTerm+'&failed='+failed+'&language='+language+'&id='+userProfile.getId()+'&email='+userProfile.getEmail()
+        url: 'ajax.php?action=logSearchTerm&searchTerm='+searchTerm+'&failed='+failed+'&language='+language+'&id='+userId+'&email='+userEmail
     })
-        .done(function (msg) {
-            console.log("Attempted DB update : " + msg);
-        });
+    .done(function (msg) {
+        console.log("Attempted DB update : " + msg);
+    });
 }
 
 /*

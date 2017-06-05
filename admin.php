@@ -13,6 +13,7 @@ date_default_timezone_set("Europe/London");
 require_once '../includes/include.php';
 
 //initialise variables
+$editUserHtml = $submissionHtml = $noSubMessage = "";
 define("ADMIN_ACCESS_LEVEL", 5);
 if (!isset($_GET["action"])) {
   $_GET["action"] = "";
