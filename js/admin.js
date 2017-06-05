@@ -19,6 +19,6 @@ $(function () {
 
     $('#users').tablesorter();
     $('#searchHistory').tablesorter( {sortList: [[3,1]]} );       //sort by date in reverse order
-    $('#submissionHistory').tablesorter( {sortList: [[4,1]]} );    //sort by date in reverse order
+    $('#submissionHistory').tablesorter( {sortList: [[6,1]]} );    //sort by date in reverse order
 })
 

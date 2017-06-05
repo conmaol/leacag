@@ -66,7 +66,7 @@ if ($_GET["action"] === "editUser") {
 HTML;
   }
   //assemble the submission history
-  $sth = $dbh->prepare("SELECT en, gd, pos, notes, timestamp FROM leacag_formSubmission WHERE email = :email");
+  $sth = $dbh->prepare("SELECT en, gd, pos, related, source, notes, timestamp FROM leacag_formSubmission WHERE email = :email");
   $sth->execute(array(":email" => $_GET["user"]));
   $submissionHtml = $noSubMessage = "";
   if ($sth->rowCount() == 0) {
@@ -78,6 +78,9 @@ HTML;
               <td>{$subRow["en"]}</td>
               <td>{$subRow["gd"]}</td>
               <td>{$subRow["pos"]}</td>
+              <td>related</td>
+              <!--td>{$subRow["related"]}</td-->
+              <td>{$subRow["source"]}</td>
               <td>{$subRow["notes"]}</td>
               <td>{$subRow["timestamp"]}</td>
             </tr>
@@ -145,6 +148,8 @@ if ($noSubMessage === "") {     //only write the table if it has entries
         <th>English</th>
         <th>Gaelic</th>
         <th>POS</th>
+        <th>Related Forms</th>
+        <th>Source</th>
         <th>Notes</th>
         <th>Date</th>
       </tr>
