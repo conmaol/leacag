@@ -84,8 +84,9 @@ switch ($_REQUEST["action"]) {
     break;
   case "processForm":
     $dbh = DB::getDatabaseHandle(DB_NAME);
-    $sth = $dbh->prepare("INSERT INTO leacag_formSubmission (email, en, gd, pos, related, source, notes) VALUES (:email, :en, :gd, :related, :source, :pos, :notes)");
-    if ($sth->execute(array(":email"=>$_POST["userEmail"], ":en"=>$_POST["en"], ":gd"=>$_POST["gd"], ":pos"=>$_POST["pos"], ":related"=>$_POST["related"], ":source"=>$_POST["source"],  ":notes"=>$_POST["notes"]))) {
+    $sth = $dbh->prepare("INSERT INTO leacag_formSubmission (email, en, gd, pos, related, source, notes) VALUES (:email, :en, :gd, :pos, :related, :source, :notes)");
+    if ($sth->execute(array(":email"=>$_POST["userEmail"], ":en"=>$_POST["en"], ":gd"=>$_POST["gd"],
+        ":pos"=>$_POST["pos"], ":related"=>$_POST["related"], ":source"=>$_POST["source"],  ":notes"=>$_POST["notes"]))) {
       echo "Form data added to DB...";
       //assign the ID
       $id = $_POST["gd"] . '-' . time();

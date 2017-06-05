@@ -78,8 +78,7 @@ HTML;
               <td>{$subRow["en"]}</td>
               <td>{$subRow["gd"]}</td>
               <td>{$subRow["pos"]}</td>
-              <td>related</td>
-              <!--td>{$subRow["related"]}</td-->
+              <td>{$subRow["related"]}</td>
               <td>{$subRow["source"]}</td>
               <td>{$subRow["notes"]}</td>
               <td>{$subRow["timestamp"]}</td>
