@@ -6,15 +6,11 @@
  * Time: 19:59
  */
 
-session_start();
-ini_set("display_errors", 1);
-date_default_timezone_set("Europe/London");
-
 require_once '../includes/include.php';
+require_once 'include.php';
 
 //initialise variables
 $editUserHtml = $submissionHtml = $noSubMessage = "";
-define("ADMIN_ACCESS_LEVEL", 5);
 if (!isset($_GET["action"])) {
   $_GET["action"] = "";
 }
@@ -24,10 +20,12 @@ $dbh = DB::getDatabaseHandle(DB_NAME);
 $sth = $dbh->prepare("SELECT accessLevel FROM leacag_user WHERE email = :email");
 $sth->execute(array(":email"=>$_COOKIE["userEmail"]));
 $row = $sth->fetch();
+$userAccessLevel = (int)$row[0];
+
 /*
  * TODO: Make this error message more user friendly
  */
-if ($row[0] != ADMIN_ACCESS_LEVEL) {
+if ($userAccessLevel < EDITOR_ACCESS_LEVEL) {
   die ('You are not authorised to view this page');
 }
 
@@ -41,15 +39,32 @@ if (isset($_GET["accessLevel"])) {
 
 //assemble the edit user HTML
 $userFormHtml = "";
+
+/*
+ * Write the access level options
+ */
 if ($_GET["action"] === "editUser") {
   $sth = $dbh->prepare("SELECT email, accessLevel, firstLogin, lastLogin  FROM leacag_user WHERE email = :email");
   $sth->execute(array(":email" => $_GET["user"]));
   $row = $sth->fetch();
-  $accessLevelOptions = "";
-  for ($i=0; $i<=ADMIN_ACCESS_LEVEL; $i++) {
-    $selected = ($row["accessLevel"] == $i) ? "selected" : "";
-    $accessLevelOptions .= "\n<option value=\"{$i}\" {$selected}>{$i}</option>";
+  if ($row["accessLevel"] == 0 || $row["accessLevel"] > $userAccessLevel) {   //anonymous cannot be promoted OR is higher level than user
+      $accessLevelOptions = $accessLabels[$row["accessLevel"]];
+  } else {
+    $accessLevelOptions = "<select id=\"accessLevel\" name=\"accessLevel\">";
+    foreach ($accessLabels as $i => $label) {
+      if ($i == 0) {
+        continue;                      //cannot demote to anonymous status
+      }
+      if ($i >= $userAccessLevel) {
+        break;                        //do not show levels equal to or above this user's access level
+      }
+      $selected = ($row["accessLevel"] == $i) ? "selected" : "";
+      $accessLevelOptions .= "\n<option value=\"{$i}\" {$selected}>{$label}</option>";
+
+    }
+    $accessLevelOptions .= "</select>";
   }
+
   //assemble the search history
   $sth = $dbh->prepare("SELECT searchTerm, failed, language, timestamp FROM leacag_userActivity WHERE email = :email");
   $sth->execute(array(":email" => $_GET["user"]));
@@ -99,9 +114,7 @@ HTML;
         <tr>     
           <td>Access Level:</td>
           <td>
-            <select id="accessLevel" name="accessLevel">
-                {$accessLevelOptions}
-            </select>
+            {$accessLevelOptions}
           </td>
         </tr>
         <tr>     
@@ -181,7 +194,7 @@ foreach ($users as $user) {
   $tableHtml .= <<<HTML
     <tr>
         <td><a href="?action=editUser&user={$user["email"]}">{$user["email"]}</a></td>
-        <td>{$user["accessLevel"]}</td>
+        <td>{$accessLabels[$user["accessLevel"]]}</td>
         <td>{$user["firstLogin"]}</td>
         <td>{$user["lastLogin"]}</td>
     </tr>

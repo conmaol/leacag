@@ -198,7 +198,7 @@ a.loginLink {
 }
 
 /*
-form
+    user entry form
  */
 #formLink {
     display: none;
@@ -222,6 +222,28 @@ form
 
 #submitThanks {
     display: none;
+}
+
+#editThanks {
+    display: none;
+}
+
+/*
+    edit entry form
+*/
+#editEntryLink {
+    margin-top: 10px;
+    display: none;
+    float: right;
+    font-size: 10pt;
+}
+
+#editFormContainer {
+    display: none;
+    width: 20em;
+    padding: 20px;
+    background-color: white;
+    border: 2px solid #996633;
 }
 
 /*

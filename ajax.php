@@ -7,40 +7,12 @@ header('Access-Control-Allow-Origin: http://dasg.ac.uk');
  * Time: 12:40
  */
 
-session_start();
-ini_set("display_errors", 1);
-date_default_timezone_set("Europe/London");
-
-define("ADMIN_ACCESS_LEVEL", 5);    //move to sitewide include file?
-define("SUBMIT_ACCESS_LEVEL", 2);   //move to sitewide include file?
-define("USERFILE_PATH", "../lexicopia/lexicopia-xml/gd/terminology/user-generated.xml");  //move to sitewide include file?
-define("ENGLISH_INDEX_PATH", "../lexicopia/lexicopia-cache/gd/english-index.json");       //move to sitewide include file?
-define("TARGET_INDEX_PATH", "../lexicopia/lexicopia-cache/gd/target-index.json");         //move to sitewide include file?
-
-/*
- * commented out for development
- */
 require_once '../includes/include.php';
-
+require_once 'include.php';
 require_once 'vendor/autoload.php';
 
 switch ($_REQUEST["action"]) {
-  case "email":
-  	//debug
-  		echo "Email turned off for development";
-  	/*
-    $to       = "mail@steviebarrett.com";
-    $message  = $_GET["user"] . " signed in on LeaCaG";
-    $subject  = "LeaCaG sign-in";
-    $from     = "stephen.barrett@glasgow.ac.uk";
-    $email    = new Email($to, $message, $subject, $from);
-    echo "Attempting email...";
-    if ($email->send()) {
-      echo " Email sent.";
-    } else {
-      echo " The email could not be sent.";
-    }
-    */
+  case "login":
     //check if user already exists in system
     $dbh = DB::getDatabaseHandle(DB_NAME);
     $sth = $dbh->prepare("SELECT firstLogin FROM leacag_user WHERE email = :email");
@@ -56,8 +28,12 @@ switch ($_REQUEST["action"]) {
       $sth = $dbh->prepare("INSERT INTO leacag_user (email, name, firstLogin) VALUES (:email, :name, :firstLogin)");
       $sth->execute(array(":email"=>$_GET["user"], ":name"=>$_GET["name"], "firstLogin"=>date('Y-m-d H:i:s', time())));
     }
-    setcookie('userEmail', $_GET["user"]);
+    setcookie('userEmail', $_GET["user"], time()+14000); //userEmail cookie expires within 4 hours
+    $_SESSION["email"] = $_GET["user"];
     break;
+  case "logout":
+    setcookie("userEmail", "", time()-3600);  //delete the cookie
+    unset($_SESSION["email"]);
   case "logSearchTerm":
   	//add the data to the leacag_userActivity table
   	try {
@@ -89,7 +65,8 @@ switch ($_REQUEST["action"]) {
         ":pos"=>$_POST["pos"], ":related"=>$_POST["related"], ":source"=>$_POST["source"],  ":notes"=>$_POST["notes"]))) {
       echo "Form data added to DB...";
       //assign the ID
-      $id = $_POST["gd"] . '-' . time();
+      $id = str_replace(" ", "_", $_POST["gd"]);
+      $id = $id . '-' . time();
       //write the XML
       $lexicon = simplexml_load_file(USERFILE_PATH);
       $lexicon = getEntryXml($lexicon, $_POST, $id);
@@ -122,18 +99,51 @@ switch ($_REQUEST["action"]) {
   case "checkAdmin":
     $dbh = DB::getDatabaseHandle(DB_NAME);
     $sth = $dbh->prepare("SELECT accessLevel FROM leacag_user WHERE email = :email");
-    $sth->execute(array(":email"=>$_COOKIE["userEmail"]));
+    $sth->execute(array(":email"=>$_SESSION["email"]));
     $row = $sth->fetch();
-    $result = array("isAdmin" => $row[0] == ADMIN_ACCESS_LEVEL);
+    $result = array("isAdmin" => $row[0] >= EDITOR_ACCESS_LEVEL);
     echo json_encode($result);
     break;
   case "checkSubmitter":
     $dbh = DB::getDatabaseHandle(DB_NAME);
     $sth = $dbh->prepare("SELECT accessLevel FROM leacag_user WHERE email = :email");
-    $sth->execute(array(":email"=>$_COOKIE["userEmail"]));
+    $sth->execute(array(":email"=>$_SESSION["email"]));
     $row = $sth->fetch();
     $result = array("isSubmitter" => $row[0] >= SUBMIT_ACCESS_LEVEL);
     echo json_encode($result);
+    break;
+  case "checkEditor":
+    $result = checkEditor();
+    echo json_encode($result);
+    break;
+  case "updateHeadword":
+    $result = checkEditor();
+    if ($result["isEditor"]) {
+      $id = $_GET["id"];
+      $form = str_replace(" ", "_", $_GET["form"]);
+      $cmd = exec('php ../lexicopia/lexicopia-web/code/php/setheadword.php gd ' . $id . ' '  . $form .' 2>&1', $output, $return_var);
+      echo $cmd; print_r($output); echo $return_var;
+      //update the English JSON file
+      $englishFile = file_get_contents(ENGLISH_INDEX_PATH);
+      $englishJson = json_decode($englishFile);
+      foreach ($englishJson->english_index as $entry) {
+        foreach ($entry->gds as $gds) {
+          if ($gds->id == $id) {
+            $gds->form = $_GET["form"];
+          }
+        }
+      }
+      file_put_contents(ENGLISH_INDEX_PATH, json_encode($englishJson), LOCK_EX);
+      //update the Target JSON file
+      $targetFile = file_get_contents(TARGET_INDEX_PATH);
+      $targetJson = json_decode($targetFile);
+      foreach ($targetJson->target_index as $entry) {
+        if ($entry->id == $id) {
+          $entry->word = $_GET["form"];
+        }
+      }
+      file_put_contents(TARGET_INDEX_PATH, json_encode($targetJson), LOCK_EX);
+    }
     break;
 }
 
@@ -174,4 +184,13 @@ User {$fields["userEmail"]} submitted the following entry to LEACAG:<br/>
 - Notes: {$fields["notes"]}
 TEXT;
   return $text;
+}
+
+function checkEditor() {
+  $dbh = DB::getDatabaseHandle(DB_NAME);
+  $sth = $dbh->prepare("SELECT accessLevel FROM leacag_user WHERE email = :email");
+  $sth->execute(array(":email"=>$_SESSION["email"]));
+  $row = $sth->fetch();
+  $result = array("isEditor" => $row[0] >= EDITOR_ACCESS_LEVEL);
+  return $result;
 }

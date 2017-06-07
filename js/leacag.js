@@ -1,17 +1,17 @@
-var auth2;
 var minChars = 3;
+var lexicopiaId = null;
 
 $('#englishSearchField').on({
     keyup: function (e) {
         var search = $('#englishSearchField').val();
         if (e.which === 13 && search.length >= minChars) {  //handle the submission of a query with return key
             $.getJSON("php/leacag.php?action=getEnglish&term=" + search, function (data) {
-                if (data.length === 0 || data[0].value !== search.toLowerCase()) {    //no matching results
+                if (data.length === 0 || data[0].value.toLowerCase() !== search.toLowerCase()) {    //no matching results
                     $('#noResults').show();
                     updateUserSearchDB(search, 1, 'en');    //log a failed search
                 } else {    //there is a result
                     $('#englishSearchField').autocomplete('close');
-                 //   chooseSelectedTerm(data[0], 'en');                //TODO: delete if no weird behaviour on test
+                    chooseSelectedTerm(data[0], 'en');
                 }
             });
         }
@@ -33,12 +33,12 @@ $('#gaelicSearchField').on({
         var search = $('#gaelicSearchField').val();
         if (e.which === 13 && search.length >= minChars) {  //handle the submission of a query with return key
             $.getJSON("php/leacag.php?action=getGaelic&term=" + search, function (data) {
-                if (data.length === 0 || data[0].value !== search.toLowerCase()) {    //no matching results
+                if (data.length === 0 || data[0].value.toLowerCase() !== search.toLowerCase()) {    //no matching results
                     $('#noResults').show();
                     updateUserSearchDB(search, 1, 'gd');    //log a failed search
                 } else {    //there is a result
                     $('#gaelicSearchField').autocomplete('close');
-                //    chooseSelectedTerm(data[0], 'gd');            //TODO: delete if no weird behaviour on test
+                    chooseSelectedTerm(data[0], 'gd');
                 }
             });
         }
@@ -114,6 +114,7 @@ $('#enToGdToggle').on("click", function() {
     $("#gdToEnToggle").show();
     $('#gaelicSearchField').attr('placeholder', 'Gàidhlig');
     $('#gaelicSearchField').focus();
+    $('#editEntryLink').hide();
     return false;
 });
 
@@ -127,7 +128,7 @@ $('#gdToEnToggle').on("click", function() {
     $('#mainContent').empty();
     $('#englishSearchField').focus();
     $('#englishSearchField').attr('placeholder', 'Beurla');
-
+    $('#editEntryLink').hide();
     return false;
 });
 
@@ -139,6 +140,13 @@ $('#backbutton').on("click", function() {
 function updateContent(id) {
     // update the content panel when a new lexical entry is selected
     $('#content-div-entry').load("../lexicopia/lexicopia-web/code/php/generatelexicalentry.php?lang=" + lang + "&id=" + id);
+    //check for editor status and show edit link
+    $.getJSON("ajax.php?action=checkEditor", function(data) {
+        if (data.isEditor) {
+            $('#editEntryLink').show();
+        }
+    })
+    lexicopiaId = id;
     if (entryhistory.length > 1) {
         //document.getElementById("backbutton").style.display = 'block';
         $('#backbutton').show();
@@ -199,3 +207,55 @@ function getUser() {
     }
 }
 
+/*
+ Form submission code
+ */
+//show the form if logged-in
+if (Cookies.get("userEmail")) {
+    $('#formLink a').on('click', function () {
+        bpopup = $('#formContainer').bPopup({
+            modal: true
+        });
+        $('#submitThanks').hide();
+        $('#userForm').show();
+    });
+    $('#editEntryLink').on('click', function () {
+        bpopup = $('#editFormContainer').bPopup({
+            modal: true
+        });
+        $('#editThanks').hide();
+        $('#editHeadword').val($('.lexicopia-headword').html());
+        $('#editEntryForm').show();
+    });
+} else {
+    $('#formLink').hide();
+    $('#editEntryLink').hide();
+}
+
+/*
+    Process data submitted by contributors for new entry
+ */
+function processForm() {
+    var formData = $('#userForm').serialize();
+    $.post('ajax.php', formData, function (data) {
+        console.log(data);
+    });
+    //display a thank you message
+    $('#userForm').hide();
+    $('#userForm').trigger('reset');
+    $('#submitThanks').show();
+    return false;
+}
+
+/*
+    Process data submitted by editor to update an entry
+ */
+function submitEdit() {
+    var newHeadword = $('#editHeadword').val();
+    $('.lexicopia-headword').html(newHeadword);
+    $.ajax('ajax.php?action=updateHeadword&id='+lexicopiaId+'&form='+newHeadword);
+    $('#editEntryForm').hide();
+    $('#editEntryForm').trigger('reset');
+    $('#editThanks').show();
+    return false;
+}

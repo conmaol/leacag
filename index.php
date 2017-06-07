@@ -136,40 +136,40 @@ header("Expires: 0"); // Proxies.
     <div id="formContainer">
       <form id="userForm" onsubmit="return processForm();">
           <p>
-              English term:
+              Briathar Beurla:
               <input type="text" class="formField" name="en"/>
           </p>
           <p>
-              Gaelic term:
+              Briathar Gàidhlig:
               <input type="text" class="formField" name="gd"/>
           </p>
           <p>
-              Part-of-speech:
+              Mìr-cainnte:
               <select name="pos">
-                  <option>noun</option>
-                  <option>adjective</option>
-                  <option>verb</option>
-                  <option>other</option>
+                  <option>ainmear</option>
+                  <option>buadhair</option>
+                  <option>gnìomhair</option>
+                  <option>eile</option>
               </select>
           </p>
           <p>
-              Related Forms:<br/>
+              Cruthan Co-cheangailte:<br/>
               <textarea name="related" id="relatedNotesField" class="formField"></textarea>
           </p>
           <p>
-              Source:<br/>
+              Tùs:<br/>
               <textarea name="source" id="sourceNotesField" class="formField"></textarea>
           </p>
           <p>
-              Notes:<br/>
+              Nòtaichean:<br/>
               <textarea name="notes" id="formNotesField" class="formField"></textarea>
           </p>
           <p>
               <input type="hidden" name="userEmail" id="userEmail"/>
               <input type="hidden" name="userID" id="userID"/>
               <input type="hidden" name="action" value="processForm"/>
-              <button class="popupClose">cancel</button>
-              <input type="submit"/>
+              <button class="popupClose">cuir às</button>
+              <input type="submit" value="cuir a-steach"/>
           </p>
       </form>
       <!-- thank you message on form submission -->
@@ -221,6 +221,28 @@ header("Expires: 0"); // Proxies.
               </p>
               </span>
           </div>
+          <div id="editEntryLink">
+              <a href="#" id="editEntryButton">Deasaich an innteart seo</a>
+              <div id="editFormContainer">
+                  <form id="editEntryForm" onsubmit="return submitEdit();">
+                      <h3>
+                          Ceann-fhacal
+                      </h3>
+                      <p>
+                          <input type="text" id="editHeadword" class="formField" value=""/>
+                      </p>
+                      <p>
+                          <input type="hidden" name="action" value="editEntry"/>
+                          <button class="popupClose">cuir às</button>
+                          <input type="submit" value="cuir a-steach"/>
+                      </p>
+                  </form>
+                  <div id="editThanks">
+                      <h2>Mòran taing!</h2>
+                      <button type="button" class="popupClose">close</button>
+                  </div>
+              </div>
+          </div>
       </div>
     </div>
   </div>
@@ -232,6 +254,7 @@ header("Expires: 0"); // Proxies.
   <script src="../lexicopia/lexicopia-web/code/js/lexicopia-entries.js"></script>
   <script>
 	var id_token = null;	//needs to be defined before leacag.js is loaded
+    var auth2;
   </script>
   <script src="js/leacag.js"></script>
   <script type="text/javascript">
@@ -278,10 +301,8 @@ header("Expires: 0"); // Proxies.
            */
           $('#signOutLink').hide();
           $('.signOut').hide();
+          $('#formLink').hide();
           $('#signOutLink').on('click', function () {
-              Cookies.remove('userEmail');
-              gapi.auth2.getAuthInstance().disconnect();
-              console.log('User signed out.');  //debug code only
               $('.signOut').hide();
               $('#formLink').hide();
               $('.abcRioButtonContents').show();
@@ -289,6 +310,11 @@ header("Expires: 0"); // Proxies.
               $('.abcRioButtonContents > span').eq(1).hide();   //hide the 'Signed In' text
               $('.abcRioButtonContents > span').eq(0).show();   //show the 'Sign In' text
               $('.loggedInStatus').hide();  //hide logged-in status
+              $('#editEntryLink').hide();
+              Cookies.remove('userEmail');
+              $.ajax('ajax.php?action=logout');
+              gapi.auth2.getAuthInstance().disconnect();
+              console.log('User signed out.');  //debug code only
           });
       });
 
@@ -310,24 +336,23 @@ header("Expires: 0"); // Proxies.
 
           $.ajax({
               method: "GET",
-              url: 'ajax.php?action=email&user='+profile.getEmail()
+              url: 'ajax.php?action=login&user='+profile.getEmail()
           })
               .done(function (msg) {
                   console.log("AJAX called : " + msg);
               });
-          /*
+/*
            //User ID authentication via HTTPS with Google Token ID
            //Requires PHP 5.5.9
            id_token = googleUser.getAuthResponse().id_token;
            var xhr = new XMLHttpRequest();
-           xhr.open('POST', 'https://dasg.ac.uk/leacag/ajax.php', true);
+           xhr.open('POST', 'ajax.php', true);
            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
            xhr.onload = function() {
            console.log('Signed in as: ' + xhr.responseText);
            };
            xhr.send('action=authId&idtoken='+id_token);
-           */
-
+*/
           auth2 = gapi.auth2.getAuthInstance();
 
           //Update the button to display "Sign Out" option
@@ -335,45 +360,29 @@ header("Expires: 0"); // Proxies.
           $('#signOutLink').show();
           $('.signOut').show();
           //Show the signed-in message
-          var loggedInMsg = 'Signed-in as ' + profile.getName();
+          var loggedInMsg = 'Air a chlàradh a-steach mar ' + profile.getName();
+
           //check for admin status
           $.getJSON("ajax.php?action=checkAdmin", function(data) {
               if (data.isAdmin) {
-                  loggedInMsg += '&nbsp;&nbsp;<a href="admin.php">> admin</a>';
+                  loggedInMsg += '&nbsp;&nbsp;<a href="admin.php">> rianaire</a>';
               }
           })
               .done(function() {
                   $('.loggedInStatus').html(loggedInMsg).show();
               });
-      }
-
-      /*
-       Form submission code
-       */
-      //show the form link if logged-in
-      if (Cookies.get("userEmail")) {
-          $('#formLink').show();
-          $('#formLink a').on('click', function () {
-              bpopup = $('#formContainer').bPopup({
-                  modal: true
-              });
-              $('#submitThanks').hide();
-              $('#userForm').show();
+          //check for submitter status
+          $.getJSON("ajax.php?action=checkSubmitter", function(data) {
+              if (data.isSubmitter) {
+                  $('#formLink').show();
+              }
           });
-      } else {
-          $('#formLink').hide();
-      }
-
-      function processForm() {
-          var formData = $('#userForm').serialize();
-          $.post('ajax.php', formData, function (data) {
-              console.log(data);
+          //check for editor status
+          $.getJSON("ajax.php?action=checkEditor", function(data) {
+              if (data.isEditor && $('.lexicopia-headword').html()) {
+                  $('#editEntryLink').show();
+              }
           });
-          //display a thank you message
-          $('#userForm').hide();
-          $('#userForm').trigger('reset');
-          $('#submitThanks').show();
-          return false;
       }
 
   </script>
