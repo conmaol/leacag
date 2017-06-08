@@ -163,7 +163,8 @@ function getEntryXml($element, $fields, $id) {
   $sign->addAttribute('id', $id);
   $sign->addChild('form', $fields["gd"]);
   $sign->addChild('syntax');
-  $sign->syntax->addAttribute('ref', $fields["pos"]);
+  $posOptions = array("ainmear"=>"noun", "buadhair"=>"adjective", "gnìomhair"=>"verb", "eile"=>"other");
+  $sign->syntax->addAttribute('ref', $posOptions[$fields["pos"]]);
   $sign->addChild('trans', $fields["en"]);
   $sign->trans->addAttribute('lang', 'en');
   $sign->addChild('note', $fields["related"]);
