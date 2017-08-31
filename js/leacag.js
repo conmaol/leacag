@@ -34,7 +34,7 @@ $('#gaelicSearchField').on({
         if (e.which === 13 && search.length >= minChars) {  //handle the submission of a query with return key
             $.getJSON("php/leacag.php?action=getGaelic&term=" + search, function (data) {
                 if (data.length === 0 || data[0].value.toLowerCase() !== search.toLowerCase()) {    //no matching results
-                    $('#noResults').show();
+                    $('#noResultsGD').show();
                     updateUserSearchDB(search, 1, 'gd');    //log a failed search
                 } else {    //there is a result
                     $('#gaelicSearchField').autocomplete('close');
@@ -51,7 +51,7 @@ $('#gaelicSearchField').on({
     click: function() {
         $(this).val("");	//clear the search field for a new query
         $(this).attr('placeholder', 'Gàidhlig');
-        $('#noResults').hide();
+        $('#noResultsGD').hide();
     }
 });
 
@@ -64,6 +64,7 @@ $(document).on('click', '.leacag-link', function() {
 
 $('#randomEntry').on("click", function() {
     $('#noResults').hide();
+    $('#noResultsGD').hide();
     $('#englishSearchField').val("");
     $('#gaelicSearchField').val("");
     $('#gaelicEquivalentsList').html("");

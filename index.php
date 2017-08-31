@@ -119,6 +119,7 @@ header("Expires: 0"); // Proxies.
       <div class="col-md-12">
         <div>
           <span id="noResults">-- There are no results for this query --</span>
+          <span id="noResultsGD">-- Chan eil toradh ann don cheist seo --</span>
           <ul id="suggestions" tabindex="0">
         </div>
       </div>

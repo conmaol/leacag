@@ -75,12 +75,12 @@ switch ($_REQUEST["action"]) {
       $targetFile = file_get_contents(TARGET_INDEX_PATH);
       $targetJson = json_decode($targetFile, true);
       array_push($targetJson["target_index"], getTargetEntry($_POST, $id));
-      file_put_contents(TARGET_INDEX_PATH, json_encode($targetJson), LOCK_EX);
+      file_put_contents(TARGET_INDEX_PATH, json_encode($targetJson, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT), LOCK_EX);
       //write the English JSON
       $englishFile = file_get_contents(ENGLISH_INDEX_PATH);
       $englishJson = json_decode($englishFile, true);
       array_push($englishJson["english_index"], getEnglishEntry($_POST, $id));
-      file_put_contents(ENGLISH_INDEX_PATH, json_encode($englishJson), LOCK_EX);
+      file_put_contents(ENGLISH_INDEX_PATH, json_encode($englishJson, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT), LOCK_EX);
       $to       = "mark.mcconville@glasgow.ac.uk";
       $message  = getFormEmailText($_POST);
       $subject  = "LEACAG Form Submission";
@@ -133,7 +133,7 @@ switch ($_REQUEST["action"]) {
           }
         }
       }
-      file_put_contents(ENGLISH_INDEX_PATH, json_encode($englishJson), LOCK_EX);
+      file_put_contents(ENGLISH_INDEX_PATH, json_encode($englishJson, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT), LOCK_EX);
       //update the Target JSON file
       $targetFile = file_get_contents(TARGET_INDEX_PATH);
       $targetJson = json_decode($targetFile);
@@ -142,18 +142,38 @@ switch ($_REQUEST["action"]) {
           $entry->word = $_GET["form"];
         }
       }
-      file_put_contents(TARGET_INDEX_PATH, json_encode($targetJson), LOCK_EX);
+      file_put_contents(TARGET_INDEX_PATH, json_encode($targetJson, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT), LOCK_EX);
     }
+
+    $to       = "mark.mcconville@glasgow.ac.uk";
+
+    $to       = "mail@steviebarrett.com";
+
+
+    $message  = <<<TEXT
+      The headword {$_GET["id"]} has been updated to {$_GET["form"]}
+TEXT;
+
+    $subject  = "LEACAG Headword Update";
+    $from     = "stephen.barrett@glasgow.ac.uk";
+    $email    = new Email($to, $subject, $message, $from);
+    echo "Attempting email...";
+    if ($email->send()) {
+      echo " Email sent.";
+    } else {
+      echo " The email could not be sent.";
+    }
+
     break;
 }
 
 function getEnglishEntry($fields, $id) {
-  $entry = array("en" => $fields["en"], "gds" => array(array("id" => "{$id}")));  //change ID from ellipsis
+  $entry = array("en" => $fields["en"], "gds" => array(array("id" => "{$id}")));
   return $entry;
 }
 
 function getTargetEntry($fields, $id) {
-  $entry = array("word" => $fields["gd"], "id" => "{$id}", "en" => $fields["en"]);  //change ID from ellipsis
+  $entry = array("word" => $fields["gd"], "id" => "{$id}", "en" => $fields["en"]);
   return $entry;
 }
 

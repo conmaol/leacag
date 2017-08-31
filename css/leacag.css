@@ -21,7 +21,7 @@ h1 {
     margin-top: 0px;
 }
 
-#suggestions, #noResults {
+#suggestions, #noResults, #noResultsGD {
     position:fixed;
     left:40px;
     top:75px;
