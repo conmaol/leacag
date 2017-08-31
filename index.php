@@ -61,7 +61,7 @@ header("Expires: 0"); // Proxies.
   <script src="https://apis.google.com/js/platform.js" async defer></script>
   <link href="css/bootstrap.min.css" rel="stylesheet"/>
   <link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet"/>
-  <link href="../lexicopia/lexicopia-web/code/css/lexicopia-entries.css" rel="stylesheet"/>
+  <link href="../lexicopia/code/css/lexicopia-entries.css" rel="stylesheet"/>
   <link href="css/leacag.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 </head>
@@ -252,7 +252,7 @@ header("Expires: 0"); // Proxies.
   <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>         <!-- whole library - change to downloaded subset later -->
   <script src="js/js.cookie.js"></script>
   <script src="js/jquery.bpopup.min.js"</script>
-  <script src="../lexicopia/lexicopia-web/code/js/lexicopia-entries.js"></script>
+  <script src="../lexicopia/code/js/lexicopia-entries.js"></script>
   <script>
 	var id_token = null;	//needs to be defined before leacag.js is loaded
     var auth2;

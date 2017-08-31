@@ -140,7 +140,7 @@ $('#backbutton').on("click", function() {
 
 function updateContent(id) {
     // update the content panel when a new lexical entry is selected
-    $('#content-div-entry').load("../lexicopia/lexicopia-web/code/php/generatelexicalentry.php?lang=" + lang + "&id=" + id);
+    $('#content-div-entry').load("../lexicopia/code/php/generatelexicalentry.php?lang=" + lang + "&id=" + id);
     //check for editor status and show edit link
     $.getJSON("ajax.php?action=checkEditor", function(data) {
         if (data.isEditor) {
@@ -161,16 +161,29 @@ function updateContent(id) {
 }
 
 function showEnglish() {
-    $('.en-span').show();
+    $('#en-text').show();
     $('#en-plus').hide();
     $('#en-minus').show();
 }
 
 function hideEnglish() {
-    $('.en-span').hide();
+    $('#en-text ').hide();
     $('#en-plus').show();
     $('#en-minus').hide();
 }
+
+function showPOS() {
+    document.getElementById("pos-minus").style.display = "inline"; // display the [-eng]
+    document.getElementById("pos-plus").style.display = "none"; // hide the [+eng]
+    document.getElementById("pos-text").style.display = "inline"; // display the English text
+}
+
+function hidePOS() {
+    document.getElementById("pos-minus").style.display = "none"; // hide the [-eng]
+    document.getElementById("pos-plus").style.display = "inline"; // show the [+eng]
+    document.getElementById("pos-text").style.display = "none"; // hide the English text
+}
+
 
 /*
  * Add the user email and search term to the database
