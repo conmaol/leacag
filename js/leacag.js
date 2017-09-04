@@ -173,17 +173,16 @@ function hideEnglish() {
 }
 
 function showPOS() {
-    document.getElementById("pos-minus").style.display = "inline"; // display the [-eng]
-    document.getElementById("pos-plus").style.display = "none"; // hide the [+eng]
-    document.getElementById("pos-text").style.display = "inline"; // display the English text
+    $('#pos-text').show();
+    $('#pos-plus').hide();
+    $('#pos-minus').show();
 }
 
 function hidePOS() {
-    document.getElementById("pos-minus").style.display = "none"; // hide the [-eng]
-    document.getElementById("pos-plus").style.display = "inline"; // show the [+eng]
-    document.getElementById("pos-text").style.display = "none"; // hide the English text
+    $('#pos-text ').hide();
+    $('#pos-plus').show();
+    $('#pos-minus').hide();
 }
-
 
 /*
  * Add the user email and search term to the database

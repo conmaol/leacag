@@ -28,7 +28,6 @@ $accessLabels = array(
 /*
  * XML and JSON filepaths
  */
-define("USERFILE_PATH", "../lexicopia/lexicopia-xml/gd/terminology/user-generated.xml");
-define("ENGLISH_INDEX_PATH", "../lexicopia/lexicopia-cache/gd/english-index.json");
-define("TARGET_INDEX_PATH", "../lexicopia/lexicopia-cache/gd/target-index.json");
+define("ENGLISH_INDEX_PATH", "../lexicopia/gd/cache/english-index.json");
+define("TARGET_INDEX_PATH", "../lexicopia/gd/cache/target-index.json");
 
