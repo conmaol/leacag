@@ -328,6 +328,7 @@ header("Expires: 0"); // Proxies.
           return false;
       });
 
+
       function onSignIn(googleUser) {
           var profile = googleUser.getBasicProfile();
           console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
@@ -337,7 +338,7 @@ header("Expires: 0"); // Proxies.
 
           $.ajax({
               method: "GET",
-              url: 'ajax.php?action=login&user='+profile.getEmail()
+              url: 'ajax.php?action=login&email='+profile.getEmail()
           })
               .done(function (msg) {
                   console.log("AJAX called : " + msg);

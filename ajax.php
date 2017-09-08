@@ -13,9 +13,9 @@ require_once 'vendor/autoload.php';
 
 switch ($_REQUEST["action"]) {
   case "login":
-    addUserToDB($_GET);
-    setcookie('userEmail', $_GET["user"], time()+14000); //userEmail cookie expires within 4 hours
-    $_SESSION["email"] = $_GET["user"];
+    if ($_SESSION["email"] != $_GET["email"]) {
+      addUserToDB($_GET);
+    }
     break;
   case "logout":
     setcookie("userEmail", "", time()-3600);  //delete the cookie
@@ -23,10 +23,13 @@ switch ($_REQUEST["action"]) {
   case "logSearchTerm":
   	//add the data to the leacag_userActivity table
   	try {
-  		$dbh = DB::getDatabaseHandle(DB_NAME);
+      if ($_GET["email"] != "anonymous" && ($_SESSION["email"] != $_GET["email"])) {
+        addUserToDB($_GET);
+      }
+      $dbh = DB::getDatabaseHandle(DB_NAME);
   		$sth = $dbh->prepare("INSERT INTO leacag_userActivity (googleId, email, failed, language, searchTerm) VALUES (:id, :email, :failed, :language, :searchTerm)");
   		$sth->execute(array(":id"=>$_GET["id"], ":email"=>$_GET["email"], ":failed"=>$_GET["failed"], ":language"=>$_GET["language"], ":searchTerm"=>$_GET["searchTerm"]));
-  		addUserToDB($_GET);
+
 		echo "Database updated";
   	} catch (PDOException $e) {
   		echo $e->getMessage();
@@ -223,23 +226,29 @@ function checkEditor() {
 
 
 function addUserToDB($fields) {
+
+
+  echo "called addUserToDB";
+
   try {
     //check if user already exists in system
     $dbh = DB::getDatabaseHandle(DB_NAME);
     $sth = $dbh->prepare("SELECT firstLogin FROM leacag_user WHERE email = :email");
-    $sth->execute(array(":email"=>$_GET["user"]));
+    $sth->execute(array(":email"=>$fields["email"]));
     $row = $sth->fetch();
     if (!empty($row[0])) {
       //user exists so just update the lastLogin
       $timestamp = date('Y-m-d H:i:s', time());
       $sth = $dbh->prepare("UPDATE leacag_user SET lastLogin = '{$timestamp}' WHERE email = :email");
-      $sth->execute(array(":email"=>$_GET["user"]));
+      $sth->execute(array(":email"=>$fields["email"]));
     } else {
       //new user, create a new DB entry
       $sth = $dbh->prepare("INSERT INTO leacag_user (email, name, accessLevel, firstLogin) VALUES (:email, :name, :accessLevel, :firstLogin)");
-      $sth->execute(array(":email" => $fields["user"], ":name" => $fields["name"], ":accessLevel" => 1, ":firstLogin" => date('Y-m-d H:i:s', time())));
+      $sth->execute(array(":email" => $fields["email"], ":name" => $fields["name"], ":accessLevel" => 1, ":firstLogin" => date('Y-m-d H:i:s', time())));
     }
   } catch (PDOException $e) {
     echo $e->getMessage();
   }
+  setcookie('userEmail', $fields["email"], time()+14000); //userEmail cookie expires within 4 hours
+  $_SESSION["email"] = $fields["email"];
 }
