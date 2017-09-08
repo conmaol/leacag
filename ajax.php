@@ -20,6 +20,7 @@ switch ($_REQUEST["action"]) {
   case "logout":
     setcookie("userEmail", "", time()-3600);  //delete the cookie
     unset($_SESSION["email"]);
+    break;
   case "logSearchTerm":
   	//add the data to the leacag_userActivity table
   	try {

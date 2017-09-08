@@ -278,7 +278,7 @@ header("Expires: 0"); // Proxies.
               source: "php/leacag.php?action=getEnglish",
               minLength: 3,
               select: function( event, ui ) {
-                  chooseSelectedTerm(ui.item, 'en');
+               //   chooseSelectedTerm(ui.item, 'en');
               }
           });
 
@@ -293,7 +293,7 @@ header("Expires: 0"); // Proxies.
               source: "php/leacag.php?action=getGaelic",
               minLength: 3,
               select: function( event, ui ) {
-                  chooseSelectedTerm(ui.item, 'gd');
+              //    chooseSelectedTerm(ui.item, 'gd');
               }
           });
 
