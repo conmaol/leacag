@@ -232,7 +232,7 @@ function chooseSelectedTerm(item, lang) {
                     $('#gaelicEquivalentsList').append(', ');
                 }
             }
-            $('#content-div-entry').empty();
+            $('#homePageText').hide();
         }
         else {
             entryhistory.push(gds[0].id);

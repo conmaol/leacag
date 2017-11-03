@@ -187,7 +187,7 @@ a.loginLink {
     display: none;
 }
 
-.loggedInStatus {
+#loggedInStatus {
     display: none;
     float: right;
     text-align: right;
