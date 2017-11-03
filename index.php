@@ -1,47 +1,5 @@
 <?php
 
-/*
-session_start();
-
-date_default_timezone_set("Europe/London");
-
-require_once 'vendor/autoload.php';
-
-$client_id = "380282622225-rv86npt8t1n41etqti5a65a2mdtoig6c.apps.googleusercontent.com";
-$client_secret = "z6mnwIQgWJFdqkSqXDEHUSiN";
-$redirect_uri = "http://localhost/~stephenbarrett/leacag/index.php";
-
-$client = new Google_Client();
-$client->setClientId($client_id);
-$client->setClientSecret($client_secret);
-$client->setRedirectUri($redirect_uri);
-$client->addScope("email");
-
-$service = new Google_Service_Oauth2($client);
-
-if (isset($_GET["code"])) {
-    $client->authenticate($_GET["code"]);
-    $_SESSION["access_token"] = $client->getAccessToken();
-    header("Location: " . filter_var($redirect_uri, FILTER_SANITIZE_URL));
-    exit;
-}
-
-if (isset($_SESSION["access_token"]) && $_SESSION["access_token"]) {
-    $client->setAccessToken($_SESSION["access_token"]);
-} else {
-    $authUrl = $client->createAuthUrl();
-}
-
-if (isset($authUrl)) {
-    echo <<<HTML
-        <a href="{$authUrl}">Googe login</a>
-HTML;
-} else {
-    $user = $service->userinfo->get();
-
-    echo "<h1>User name: " . $user->name . "</h1>";
-}
-*/
 session_start();
 
 header("Cache-Control: no-cache, no-store, must-revalidate"); // HTTP 1.1.
@@ -99,7 +57,7 @@ header("Expires: 0"); // Proxies.
                   <li id="randomEntry"><a href="#" title="Random entry">iongnadh</a></li>
                   <li id="enToGdToggle"><a href="#" title="Search for a Gaelic word">Gàidhlig</a></li>
                   <li id="gdToEnToggle"><a href="#" title="Search for an English word">Beurla</a></li>
-                  <li id="formLink"><a href="#" title="Contribute an entry">moladh</a></li>
+                  <li id="newEntry"><a href="#" title="Contribute an entry">moladh</a></li>
                   <li id="loginButtons">
                       <div class="g-signin2" data-onsuccess="onSignIn">Sign In</div>
                       <div class="signOut">
@@ -118,14 +76,13 @@ header("Expires: 0"); // Proxies.
     <div class="row">
       <div class="col-md-12">
         <div>
-          <span id="noResults">-- There are no results for this query --</span>
-          <span id="noResultsGD">-- Chan eil toradh ann don cheist seo --</span>
+          <span id="noResults">-- Chan eil toradh ann don cheist seo --</span>
           <ul id="suggestions" tabindex="0">
         </div>
       </div>
     </div>
     <div class="row">
-      <div class="col-md-6 col-xs-12 loggedInStatus">    <!-- displays the logged-in name -->
+      <div class="col-md-6 col-xs-12" id="loggedInStatus">    <!-- displays the logged-in name -->
       </div>
     </div>
     <div class="row">
@@ -135,7 +92,7 @@ header("Expires: 0"); // Proxies.
       </div>
     </div>
     <div id="formContainer">
-      <form id="userForm" onsubmit="return processForm();">
+      <form id="newEntryForm" onsubmit="return processForm();">
           <p>
               Briathar Beurla:
               <input type="text" class="formField" name="en"/>
@@ -176,14 +133,14 @@ header("Expires: 0"); // Proxies.
       <!-- thank you message on form submission -->
       <div id="submitThanks">
           <h2>Mòran taing!</h2>
-          <button type="button" class="popupClose">close</button>
+          <button type="button" class="popupClose">dùin</button>
       </div>
     </div>
     <div class="row">
       <div class="col-md-12">
           <div id="content-div-entry">
-              <span id="lexicalText"></span>
-              <span id="homePageText">
+              <div id="lexicalText"></div>
+              <div id="homePageText">
               <p><strong>Fàilte gu co-ionad briathrachais LEACAG!</strong></p>
               <p>Chì sibh bocsa teacsa aig ceann na duilleige seo, air an làimh chlì. Cuiribh a-steach na ciad litrichean den fhacal a tha sibh a' sireadh, agus taghaibh fear de na molaidhean.</p>
               <p class="englishTranslation">Welcome to the LEACAG Gaelic terminology hub!</p>
@@ -220,7 +177,7 @@ header("Expires: 0"); // Proxies.
                   <a href="http://mgalba.com/" title="MG Alba" target="_blank"><img src="http://mgalba.com/images/logo-new-80x67.png" height="70px" alt="MG Alba"/></a>
                   <a href="http://www.soillse.ac.uk/" title="Soillse" target="_blank"><img src="http://www.soillse.ac.uk/wp-content/themes/soillse/images/logo.png" height="70px" alt="Soillse"/></a>
               </p>
-              </span>
+              </div>
           </div>
           <div id="editEntryLink">
               <a href="#" id="editEntryButton">Deasaich an innteart seo</a>
@@ -238,10 +195,6 @@ header("Expires: 0"); // Proxies.
                           <input type="submit" value="cuir a-steach"/>
                       </p>
                   </form>
-                  <div id="editThanks">
-                      <h2>Mòran taing!</h2>
-                      <button type="button" class="popupClose">close</button>
-                  </div>
               </div>
           </div>
       </div>
@@ -253,141 +206,8 @@ header("Expires: 0"); // Proxies.
   <script src="js/js.cookie.js"></script>
   <script src="js/jquery.bpopup.min.js"</script>
   <script src="../lexicopia/code/js/lexicopia-entries.js"></script>
-  <script>
-	var id_token = null;	//needs to be defined before leacag.js is loaded
-    var auth2;
-  </script>
   <script src="js/leacag.js"></script>
-  <script type="text/javascript">
 
-      $(function() {
-
-          //close the dropdown when a navbar link is clicked (mobile)
-          $('.navbar-collapse a').on('click', function(){
-              $(".navbar-collapse").collapse('hide');
-          });
-
-          $( "#englishSearchField" ).autocomplete({
-              response: function (event, ui) {
-                  if (ui.content.length === 0) {
-                      $('#noResults').show();
-                  } else {
-                      $('#noResults').hide();
-                  };
-              },
-              source: "php/leacag.php?action=getEnglish",
-              minLength: 3,
-              select: function( event, ui ) {
-                  chooseSelectedTerm(ui.item, 'en');
-              }
-          });
-
-          $( "#gaelicSearchField" ).autocomplete({
-              response: function (event, ui) {
-                  if (ui.content.length === 0) {
-                      $('#noResults').show();
-                  } else {
-                      $('#noResults').hide();
-                  };
-              },
-              source: "php/leacag.php?action=getGaelic",
-              minLength: 3,
-              select: function( event, ui ) {
-                  chooseSelectedTerm(ui.item, 'gd');
-              }
-          });
-
-          /*
-           Sign out code
-           */
-          $('#signOutLink').hide();
-          $('.signOut').hide();
-          $('#formLink').hide();
-          $('#signOutLink').on('click', function () {
-              $('.signOut').hide();
-              $('#formLink').hide();
-              $('.abcRioButtonContents').show();
-              $('.g-signin2').show();
-              $('.abcRioButtonContents > span').eq(1).hide();   //hide the 'Signed In' text
-              $('.abcRioButtonContents > span').eq(0).show();   //show the 'Sign In' text
-              $('.loggedInStatus').hide();  //hide logged-in status
-              $('#editEntryLink').hide();
-              Cookies.remove('userEmail');
-              $.ajax('ajax.php?action=logout');
-              gapi.auth2.getAuthInstance().disconnect();
-              console.log('User signed out.');  //debug code only
-          });
-      });
-
-      var lang = 'gd';
-      var entryhistory = [];
-      $('#englishSearchField').focus();
-      var bpopup;     //to store and handle the modal popup
-      $('.popupClose').on('click', function () {  //close the popup on click
-          bpopup.close();
-          return false;
-      });
-
-
-      function onSignIn(googleUser) {
-          var profile = googleUser.getBasicProfile();
-          console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-          //add user info to form fields
-          $('#userEmail').val(profile.getEmail());
-          $('#userID').val(profile.getId());
-
-          $.ajax({
-              method: "GET",
-              url: 'ajax.php?action=login&email='+profile.getEmail()
-          })
-              .done(function (msg) {
-                  console.log("AJAX called : " + msg);
-              });
-/*
-           //User ID authentication via HTTPS with Google Token ID
-           //Requires PHP 5.5.9
-           id_token = googleUser.getAuthResponse().id_token;
-           var xhr = new XMLHttpRequest();
-           xhr.open('POST', 'ajax.php', true);
-           xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-           xhr.onload = function() {
-           console.log('Signed in as: ' + xhr.responseText);
-           };
-           xhr.send('action=authId&idtoken='+id_token);
-*/
-          auth2 = gapi.auth2.getAuthInstance();
-
-          //Update the button to display "Sign Out" option
-          $('.g-signin2').hide();
-          $('#signOutLink').show();
-          $('.signOut').show();
-          //Show the signed-in message
-          var loggedInMsg = 'Air a chlàradh a-steach mar ' + profile.getName();
-
-          //check for admin status
-          $.getJSON("ajax.php?action=checkAdmin", function(data) {
-              if (data.isAdmin) {
-                  loggedInMsg += '&nbsp;&nbsp;<a href="admin.php">> rianaire</a>';
-              }
-          })
-              .done(function() {
-                  $('.loggedInStatus').html(loggedInMsg).show();
-              });
-          //check for submitter status
-          $.getJSON("ajax.php?action=checkSubmitter", function(data) {
-              if (data.isSubmitter) {
-                  $('#formLink').show();
-              }
-          });
-          //check for editor status
-          $.getJSON("ajax.php?action=checkEditor", function(data) {
-              if (data.isEditor && $('.lexicopia-headword').html()) {
-                  $('#editEntryLink').show();
-              }
-          });
-      }
-
-  </script>
 </body>
 </html>
 
