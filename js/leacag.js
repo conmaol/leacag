@@ -368,27 +368,23 @@ function getUser() {
 /*
  Form submission code
  */
-//show the form if logged-in
-if (Cookies.get("userEmail")) {
-    $('#newEntry a').on('click', function () {
-        bpopup = $('#formContainer').bPopup({
-            modal: true
-        });
-        $('#submitThanks').hide();
-        $('#newEntryForm').show();
+//show the forms
+$('#newEntry a').on('click', function () {
+    bpopup = $('#formContainer').bPopup({
+        modal: true
     });
-    $('#editEntryLink').on('click', function () {
-        bpopup = $('#editFormContainer').bPopup({
-            modal: true
-        });
-        $('#submitThanks').hide();
-        $('#editHeadword').val($('.lexicopia-headword').html());
-        $('#editEntryForm').show();
+    $('#submitThanks').hide();
+    $('#newEntryForm').show();
+});
+$('#editEntryLink').on('click', function () {
+    bpopup = $('#editFormContainer').bPopup({
+        modal: true
     });
-} else {
-    $('#newEntry').hide();
-    $('#editEntryLink').hide();
-}
+    $('#submitThanks').hide();
+    $('#editHeadword').val($('.lexicopia-headword').html());
+    $('#editEntryForm').show();
+});
+
 
 /*
     Process data submitted by contributors for new entry

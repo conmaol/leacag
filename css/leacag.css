@@ -67,6 +67,10 @@ a:hover {
     text-decoration: underline;
 }
 
+.navbar-default .navbar-nav > li > a:focus, .navbar-default .navbar-nav > li > a:hover {
+    color:white;
+}
+
 a#backlink:link {
     background-color: #336699;
     color: white;
