@@ -92,7 +92,7 @@ header("Expires: 0"); // Proxies.
       </div>
     </div>
     <div id="formContainer">
-      <form id="newEntryForm" onsubmit="return processForm();">
+      <form id="newEntryForm" onsubmit="return submitNewEntryForm();">
           <p>
               Briathar Beurla:
               <input type="text" class="formField" name="en"/>
@@ -182,7 +182,7 @@ header("Expires: 0"); // Proxies.
           <div id="editEntryLink">
               <a href="#" id="editEntryButton">Deasaich an innteart seo</a>
               <div id="editFormContainer">
-                  <form id="editEntryForm" onsubmit="return submitEdit();">
+                  <form id="editEntryForm" onsubmit="return submitEditEntryForm();">
                       <h3>
                           Ceann-fhacal
                       </h3>

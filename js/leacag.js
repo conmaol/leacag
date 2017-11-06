@@ -393,7 +393,7 @@ if (Cookies.get("userEmail")) {
 /*
     Process data submitted by contributors for new entry
  */
-function processForm() {
+function submitNewEntryForm() {
     var formData = $('#newEntryForm').serialize();
     $.post('ajax.php', formData, function (data) {
         console.log(data);
@@ -408,7 +408,7 @@ function processForm() {
 /*
     Process data submitted by editor to update an entry
  */
-function submitEdit() {
+function submitEditEntryForm() {
     var newHeadword = $('#editHeadword').val();
     $('.lexicopia-headword').html(newHeadword);
     $.ajax('ajax.php?action=updateHeadword&id='+lexicopiaId+'&form='+newHeadword);
