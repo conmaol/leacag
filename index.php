@@ -204,7 +204,7 @@ header("Expires: 0"); // Proxies.
   <script src="js/bootstrap.min.js"></script>
   <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>         <!-- whole library - change to downloaded subset later -->
   <script src="js/js.cookie.js"></script>
-  <script src="js/jquery.bpopup.min.js"</script>
+  <script src="js/jquery.bpopup.min.js"></script>
   <script src="../lexicopia/code/js/lexicopia-entries.js"></script>
   <script src="js/leacag.js"></script>
 
