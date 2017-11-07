@@ -1,7 +1,10 @@
-var minChars = 3;
-var lexicopiaId = null;
-var id_token = null;
-var auth2;
+//var minChars = 3;
+var lexicopiaId = null; //a global variable to keep track of the current lexical ID, to be used by submitEditEntryForm()
+var auth2;  //a global variable to keep track of the Google sign-in state
+var entryhistory = [];
+$('#englishSearchField').focus();
+var bpopup;     //to store and handle the modal popup
+
 
 $(function() {
 
@@ -82,15 +85,10 @@ $(function() {
     });
 });
 
-var lang = 'gd';
-var entryhistory = [];
-$('#englishSearchField').focus();
-var bpopup;     //to store and handle the modal popup
 $('.popupClose').on('click', function () {  //close the popup on click
     bpopup.close();
     return false;
 });
-
 
 function onSignIn(googleUser) {
     var profile = googleUser.getBasicProfile();
@@ -277,15 +275,17 @@ $('#gdToEnToggle').on("click", function() {
     return false;
 });
 
+/*
 $('#backbutton').on("click", function() {
     goBack();
     return false;
 });
+*/
 
 function updateContent(id) {
     $('#homePageText').hide();
     // update the content panel when a new lexical entry is selected
-    $('#lexicalText').load("../lexicopia/code/php/generatelexicalentry.php?lang=" + lang + "&id=" + id);
+    $('#lexicalText').load("../lexicopia/code/php/generatelexicalentry.php?lang=gd&id=" + id);
     //check for editor status and show edit link
     $.getJSON("ajax.php?action=checkEditor", function(data) {
         if (data.isEditor) {
