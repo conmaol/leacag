@@ -305,6 +305,8 @@ function updateContent(id) {
     $('#gaelicSearchField').attr('placeholder', '');
 }
 
+/*
+
 function showEnglish() {
     $('#en-text').show();
     $('#en-plus').hide();
@@ -328,6 +330,7 @@ function hidePOS() {
     $('#pos-plus').show();
     $('#pos-minus').hide();
 }
+*/
 
 /*
  * Add the user email and search term to the database
