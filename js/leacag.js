@@ -285,7 +285,7 @@ $('#backbutton').on("click", function() {
 function updateContent(id) {
     $('#homePageText').hide();
     // update the content panel when a new lexical entry is selected
-    $('#lexicalText').load("../lexicopia/code/php/generatelexicalentry.php?lang=gd&id=" + id);
+    $('#lexicalText').load("../lexicopia/code/php/generateLexicalEntry.php?lang=gd&id=" + id);
     //check for editor status and show edit link
     $.getJSON("ajax.php?action=checkEditor", function(data) {
         if (data.isEditor) {
