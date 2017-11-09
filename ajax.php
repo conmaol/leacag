@@ -56,7 +56,7 @@ switch ($_REQUEST["action"]) {
         ":pos"=>$_POST["pos"], ":related"=>$_POST["related"], ":source"=>$_POST["source"],  ":notes"=>$_POST["notes"]))) {
       echo "Form data added to DB...";
       //assign the ID
-      $id = str_replace(" ", "_", $_POST["gd"]);
+  /*    $id = str_replace(" ", "_", $_POST["gd"]);
 
       //write the Target JSON and get the new ID
       $id = updateTargetJSONFile($id, $_POST);
@@ -67,7 +67,7 @@ switch ($_REQUEST["action"]) {
       //write the XML
       $filename = "../lexicopia/gd/lexemes/" . $id . ".xml";
       $lexeme = getEntryXml($_POST, $id);
-      file_put_contents($filename, $lexeme);
+      file_put_contents($filename, $lexeme);*/
 
       $to       = "mark.mcconville@glasgow.ac.uk";
  //   $to = "mail@steviebarrett.com";
@@ -137,7 +137,7 @@ TEXT;
     break;
 }
 
-function updateTargetJSONFile($id, $fields) {
+/*function updateTargetJSONFile($id, $fields) {
   $found = false;
   $targetFile = file_get_contents(TARGET_INDEX_PATH);
   $targetJson = json_decode($targetFile);
@@ -157,9 +157,9 @@ function updateTargetJSONFile($id, $fields) {
   }
   file_put_contents(TARGET_INDEX_PATH, json_encode($targetJson, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT), LOCK_EX);
   return $id;
-}
+}*/
 
-function updateEnglishJSONFile($id, $fields) {
+/*function updateEnglishJSONFile($id, $fields) {
   $found = false;
   $englishFile = file_get_contents(ENGLISH_INDEX_PATH);
   $englishJson = json_decode($englishFile, true);
@@ -173,19 +173,19 @@ function updateEnglishJSONFile($id, $fields) {
     array_push($englishJson["english_index"], getEnglishEntry($fields, $id));
   }
   file_put_contents(ENGLISH_INDEX_PATH, json_encode($englishJson, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT), LOCK_EX);
-}
+}*/
 
-function getEnglishEntry($fields, $id) {
+/*function getEnglishEntry($fields, $id) {
   $entry = array("en" => $fields["en"], "gds" => array(array("id" => "{$id}", "form" => "{$fields["gd"]}")));
   return $entry;
-}
+}*/
 
-function getTargetEntry($fields, $id) {
+/*function getTargetEntry($fields, $id) {
   $entry = array("word" => $fields["gd"], "id" => "{$id}", "en" => $fields["en"]);
   return $entry;
-}
+}*/
 
-function getEntryXml($fields, $id)
+/*function getEntryXml($fields, $id)
 {
   $timestamp = time();
   $xml = <<<XML
@@ -201,7 +201,7 @@ function getEntryXml($fields, $id)
     
 XML;
   return $xml;
-}
+}*/
 
 function getFormEmailText($fields) {
   $text = <<<TEXT
@@ -227,7 +227,6 @@ function checkEditor() {
 
 
 function addUserToDB($fields) {
-
 
   echo "called addUserToDB";
 

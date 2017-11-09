@@ -394,9 +394,12 @@ $('#editEntryLink').on('click', function () {
  */
 function submitNewEntryForm() {
     var formData = $('#newEntryForm').serialize();
+    $.post('http://dasg.ac.uk/lexicopia/code/php/addNewEntry.php', formData);
+    //TODO: add a check above for successful addition before calling email code next
     $.post('ajax.php', formData, function (data) {
         console.log(data);
     });
+
     //display a thank you message
     $('#newEntryForm').hide();
     $('#newEntryForm').trigger('reset');
