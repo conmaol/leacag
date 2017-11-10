@@ -97,18 +97,20 @@ function onSignIn(googleUser) {
     //authenticate the user
     var id_token = googleUser.getAuthResponse().id_token;
 
-    $.post("ajax.php", {action: "authenticate", idtoken: id_token}, function(data) {
-        console.log(data);
-        if(data.userid) {
+  /*  $.post("ajax.php", {action: "authenticate", idtoken: id_token}, function(data) {
+
+        if(data.userid) {*/
 
             //add user info to form fields
             $('#userEmail').val(profile.getEmail());
             $('#userID').val(profile.getId());
 
+/*
             $.ajax({
                 method: "GET",
                 url: 'ajax.php?action=login&email=' + profile.getEmail()
             });
+*/
 
             auth2 = gapi.auth2.getAuthInstance();
 
@@ -143,8 +145,8 @@ function onSignIn(googleUser) {
                     $('#editEntryLink').show();
                 }
             });
-        }
-    }, "json");
+  /*      }
+    }, "json");*/
 }
 
 /*
