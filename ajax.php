@@ -1,5 +1,5 @@
 <?php
-header('Access-Control-Allow-Origin: http://dasg.ac.uk');
+//header('Access-Control-Allow-Origin: http://dasg.ac.uk');
 /**
  * Created by PhpStorm.
  * User: stephenbarrett
