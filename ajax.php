@@ -56,7 +56,7 @@ switch ($_REQUEST["action"]) {
     if ($sth->execute(array(":email"=>$_POST["userEmail"], ":en"=>$_POST["en"], ":gd"=>$_POST["target"],
       ":related"=>$_POST["related"], ":notes"=>$_POST["notes"]))) {
       echo "Form data added to DB...";
-      AddNewEntry::addEntry($_POST);
+      AddNewEntry::addEntry($_POST, "/var/www/html/dasg.arts.gla.ac.uk/www/lexicopia/gd/");
       //assign the ID
   /*    $id = str_replace(" ", "_", $_POST["gd"]);
 
