@@ -91,7 +91,7 @@ header("Expires: 0"); // Proxies.
         </div>
       </div>
     </div>
-    <div id="formContainer">
+    <div id="newEntryFormContainer">
       <form id="newEntryForm">
           <p>
               Briathar Beurla:
@@ -141,81 +141,77 @@ header("Expires: 0"); // Proxies.
           <div id="content-div-entry">
               <div id="lexicalText"></div>
               <div id="homePageText">
-              <p><strong>Fàilte gu co-ionad briathrachais LEACAG!</strong></p>
-              <p>Chì sibh bocsa teacsa aig ceann na duilleige seo, air an làimh chlì. Cuiribh a-steach na ciad litrichean den fhacal a tha sibh a' sireadh, agus taghaibh fear de na molaidhean.</p>
-              <p class="englishTranslation">Welcome to the LEACAG Gaelic terminology hub!</p>
-              <p class="englishTranslation">You will see a textbox at the top-left of this page. Type in the first few letters of the word you are looking for, and then choose one of the suggestions that appear.</p>
-              <hr/>
-              <p>
-                  Seo co-ionad air-loidhne a bhios a' cuideachadh daoine briathrachas feumail Gàidhlig a lorg agus a sgaoileadh.
-                  Chaidh a innleachadh le Mark McConville, a tha ag obair ann an sgioba rannsachaidh DASG (Dachaidh
-                  airson Stòras na Gàidhlig) aig Oilthigh Ghlaschu, fo stiùireadh an Àrd-ollamh Roibeard Ó Maolalaigh, agus
-                  le taic coimpiùtarachd bho Stephen Barrett.
-              </p>
-              <p>
-                  Is e toradh pròiseict LEACAG (Leasachadh Corpais na Gàidhlig) a tha anns a' ghoireas seo. Tha LEACAG air a mhaoineachadh le
-                  Bòrd na Gàidhlig agus MG Alba.
-              </p>
-              <p>
-                  Airson tuilleadh fiosrachaidh, nach cuir sibh post dealain thugainn? Mark.McConville@glasgow.ac.uk.
-              </p>
-              <p class="englishTranslation">
-                  This is an online hub for finding and distributing useful Gaelic terminology. It has been developed by Mark McConville, a member of the
-                  DASG (Digital Archive of Scottish Gaelic) research team at Glasgow
-                  University, under the leadership of Professor Roibeard Ó Maolalaigh, and with systems development support from Stephen Barrett.
-              </p>
-              <p class="englishTranslation">
-                  This resource is an output of the LEACAG (Gaelic Corpus Development) project, funded by Bòrd na Gàidhlig and MG Alba.
-              </p>
-              <p class="englishTranslation">
-                  If you have any questions, you can email the editor: Mark.McConville@glasgow.ac.uk
-              </p>
-              <p>
-                  <a href="http://dasg.ac.uk/" title="DASG" target="_blank"><img src="http://dasg.ac.uk/images/logo.png" height="70px" alt="DASG"/></a>
-                  <a href="http://www.glasgow.ac.uk/" title="Glasgow University" target="_blank"><img src="http://www.gla.ac.uk/media/media_446862_en.png" height="70px" alt="Glasgow University"/></a>
-                  <a href="http://www.gaidhlig.org.uk/" title="Bòrd na Gàidhlig" target="_blank"><img src="http://www.gaidhlig.scot/wp-content/uploads/2016/11/logo_bng.png" height="70px" alt="Bòrd na Gàidhlig"/></a>
-                  <a href="http://mgalba.com/" title="MG Alba" target="_blank"><img src="http://mgalba.com/images/logo-new-80x67.png" height="70px" alt="MG Alba"/></a>
-                  <a href="http://www.soillse.ac.uk/" title="Soillse" target="_blank"><img src="http://www.soillse.ac.uk/wp-content/themes/soillse/images/logo.png" height="70px" alt="Soillse"/></a>
-              </p>
+                  <p><strong>Fàilte gu co-ionad briathrachais LEACAG!</strong></p>
+                  <p>Chì sibh bocsa teacsa aig ceann na duilleige seo, air an làimh chlì. Cuiribh a-steach na ciad litrichean den fhacal a tha sibh a' sireadh, agus taghaibh fear de na molaidhean.</p>
+                  <p class="englishTranslation">Welcome to the LEACAG Gaelic terminology hub!</p>
+                  <p class="englishTranslation">You will see a textbox at the top-left of this page. Type in the first few letters of the word you are looking for, and then choose one of the suggestions that appear.</p>
+                  <hr/>
+                  <p>
+                      Seo co-ionad air-loidhne a bhios a' cuideachadh daoine briathrachas feumail Gàidhlig a lorg agus a sgaoileadh.
+                      Chaidh a innleachadh le Mark McConville, a tha ag obair ann an sgioba rannsachaidh DASG (Dachaidh
+                      airson Stòras na Gàidhlig) aig Oilthigh Ghlaschu, fo stiùireadh an Àrd-ollamh Roibeard Ó Maolalaigh, agus
+                      le taic coimpiùtarachd bho Stephen Barrett.
+                  </p>
+                  <p>
+                      Is e toradh pròiseict LEACAG (Leasachadh Corpais na Gàidhlig) a tha anns a' ghoireas seo. Tha LEACAG air a mhaoineachadh le
+                      Bòrd na Gàidhlig agus MG Alba.
+                  </p>
+                  <p>
+                      Airson tuilleadh fiosrachaidh, nach cuir sibh post dealain thugainn? Mark.McConville@glasgow.ac.uk.
+                  </p>
+                  <p class="englishTranslation">
+                      This is an online hub for finding and distributing useful Gaelic terminology. It has been developed by Mark McConville, a member of the
+                      DASG (Digital Archive of Scottish Gaelic) research team at Glasgow
+                      University, under the leadership of Professor Roibeard Ó Maolalaigh, and with systems development support from Stephen Barrett.
+                  </p>
+                  <p class="englishTranslation">
+                      This resource is an output of the LEACAG (Gaelic Corpus Development) project, funded by Bòrd na Gàidhlig and MG Alba.
+                  </p>
+                  <p class="englishTranslation">
+                      If you have any questions, you can email the editor: Mark.McConville@glasgow.ac.uk
+                  </p>
+                  <p>
+                      <a href="http://dasg.ac.uk/" title="DASG" target="_blank"><img src="http://dasg.ac.uk/images/logo.png" height="70px" alt="DASG"/></a>
+                      <a href="http://www.glasgow.ac.uk/" title="Glasgow University" target="_blank"><img src="http://www.gla.ac.uk/media/media_446862_en.png" height="70px" alt="Glasgow University"/></a>
+                      <a href="http://www.gaidhlig.org.uk/" title="Bòrd na Gàidhlig" target="_blank"><img src="http://www.gaidhlig.scot/wp-content/uploads/2016/11/logo_bng.png" height="70px" alt="Bòrd na Gàidhlig"/></a>
+                      <a href="http://mgalba.com/" title="MG Alba" target="_blank"><img src="http://mgalba.com/images/logo-new-80x67.png" height="70px" alt="MG Alba"/></a>
+                      <a href="http://www.soillse.ac.uk/" title="Soillse" target="_blank"><img src="http://www.soillse.ac.uk/wp-content/themes/soillse/images/logo.png" height="70px" alt="Soillse"/></a>
+                  </p>
               </div>
           </div>
-          <div id="addCommentDiv">
+          <div id="addCommentFormContainer">
               <a href="#" id="addCommentLink" title="Add a comment to this entry">Add comment to this entry</a>
-                  <div id="addCommentFormContainer">
-                  <form id="addCommentForm">
-                      <h3>
-                          Add comment:
-                      </h3>
-                      <p>
-                          <textarea name="comment" class="formField"></textarea>
-                      </p>
-                      <p>
-                          <input type="hidden" name="action" value="addComment"/>
-                          <input type="hidden" name="id" id="lexId"/>
-                          <input type="hidden" name="userEmail" class="userEmail"/>
-                          <button class="popupClose">cuir às</button>
-                          <input type="submit" value="cuir a-steach"/>
-                      </p>
-                  </form>
-              </div>
+              <form id="addCommentForm">
+                  <h3>
+                      Add comment:
+                  </h3>
+                  <p>
+                      <textarea name="comment" class="formField"></textarea>
+                  </p>
+                  <p>
+                      <input type="hidden" name="action" value="addComment"/>
+                      <input type="hidden" name="id" id="lexId"/>
+                      <input type="hidden" name="userEmail" class="userEmail"/>
+                      <button class="popupClose">cuir às</button>
+                      <input type="submit" value="cuir a-steach"/>
+                  </p>
+              </form>
           </div>
-          <div id="editEntryLink">
-              <a href="#" id="editEntryButton" title="Edit this entry">Deasaich an innteart seo</a>
-              <div id="editFormContainer">
-                  <form id="editEntryForm" onsubmit="return submitEditEntryForm();">
-                      <h3>
-                          Ceann-fhacal
-                      </h3>
-                      <p>
-                          <input type="text" id="editHeadword" class="formField" value=""/>
-                      </p>
-                      <p>
-                          <input type="hidden" name="action" value="editEntry"/>
-                          <button class="popupClose">cuir às</button>
-                          <input type="submit" value="cuir a-steach"/>
-                      </p>
-                  </form>
-              </div>
+          <div id="editEntryFormContainer">
+              <a href="#" id="editEntryLink" title="Edit this entry">Deasaich an innteart seo</a>
+              <form id="editEntryForm" onsubmit="return submitEditEntryForm();">
+                  <h3>
+                      Ceann-fhacal
+                  </h3>
+                  <p>
+                      <input type="text" id="editHeadword" class="formField" value=""/>
+                  </p>
+                  <p>
+                      <input type="hidden" name="action" value="editEntry"/>
+                      <button class="popupClose">cuir às</button>
+                      <input type="submit" value="cuir a-steach"/>
+                  </p>
+              </form>
           </div>
       </div>
     </div>

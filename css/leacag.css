@@ -207,7 +207,7 @@ a.loginLink {
     display: none;
 }
 
-#formContainer {
+#newEntryFormContainer, #addCommentFormContainer, #editEntryFormContainer {
     display:none;
     width: 20em;
     padding: 20px;
@@ -228,22 +228,14 @@ a.loginLink {
 }
 
 /*
-    edit entry and comment form
+   new entry edit entry and comment form
 */
-#editEntryLink, #addCommentDiv {
+#addCommentLink, #editEntryLink {
     margin-top: 10px;
     display: none;
     float: right;
     font-size: 10pt;
     clear:right;
-}
-
-#editFormContainer, #addCommentFormContainer {
-    display: none;
-    width: 20em;
-    padding: 20px;
-    background-color: white;
-    border: 2px solid #996633;
 }
 
 /*

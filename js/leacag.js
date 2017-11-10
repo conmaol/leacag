@@ -77,8 +77,8 @@ $(function() {
         $('.abcRioButtonContents > span').eq(1).hide();   //hide the 'Signed In' text
         $('.abcRioButtonContents > span').eq(0).show();   //show the 'Sign In' text
         $('#loggedInStatus').hide();  //hide logged-in status
-        $('#editEntryLink').hide();
-        $('#addCommentDiv').hide();
+        $('#editEntryFormContainer').hide();
+        $('#addCommentFormContainer').hide();
         Cookies.remove('userEmail');
         $.ajax('ajax.php?action=logout');
         gapi.auth2.getAuthInstance().disconnect();
@@ -135,14 +135,14 @@ function onSignIn(googleUser) {
                 if (data.isSubmitter) {
                     $('#newEntry').show();
                     if ($('.lexicopia-headword').html()) {
-                        $('#addCommentDiv').show();
+                        $('#addCommentFormContainer').show();
                     }
                 }
             });
             //check for editor status
             $.getJSON("ajax.php?action=checkEditor", function (data) {
                 if (data.isEditor && $('.lexicopia-headword').html()) {
-                    $('#editEntryLink').show();
+                    $('#editEntryFormContainer').show();
                 }
             });
   /*      }
@@ -265,7 +265,7 @@ $('#enToGdToggle').on("click", function() {
     $("#gdToEnToggle").show();
     $('#gaelicSearchField').attr('placeholder', 'Gàidhlig');
     $('#gaelicSearchField').focus();
-    $('#editEntryLink').hide();
+    $('#editEntryFormContainer').hide();
     $('#homePageText').show();
     $('#noResults').hide();
     return false;
@@ -281,7 +281,7 @@ $('#gdToEnToggle').on("click", function() {
     $('#lexicalText').empty();
     $('#englishSearchField').focus();
     $('#englishSearchField').attr('placeholder', 'Beurla');
-    $('#editEntryLink').hide();
+    $('#editEntryFormContainer').hide();
     $('#homePageText').show();
     $('#noResults').hide();
     return false;
@@ -301,13 +301,13 @@ function updateContent(id) {
     //check for editor status and show edit link
     $.getJSON("ajax.php?action=checkEditor", function(data) {
         if (data.isEditor) {
-            $('#editEntryLink').show();
+            $('#editEntryFormContainer').show();
         }
     });
     //check for submitter status and show comment link
     $.getJSON("ajax.php?action=checkSubmitter", function(data) {
         if (data.isSubmitter) {
-            $('#addCommentDiv').show();
+            $('#addCommentFormContainer').show();
         }
     });
     lexicopiaId = id;
@@ -391,7 +391,7 @@ function getUser() {
  */
 //show the forms
 $('#newEntry a').on('click', function () {
-    bpopup = $('#formContainer').bPopup({
+    bpopup = $('#newEntryFormContainer').bPopup({
         modal: true
     });
     $('#submitThanks').hide();
@@ -402,9 +402,10 @@ $('#addCommentLink').on('click', function () {
         modal: true
     });
     $('#submitThanks').hide();
+    $('#addCommentForm').show();
 });
 $('#editEntryLink').on('click', function () {
-    bpopup = $('#editFormContainer').bPopup({
+    bpopup = $('#editEntryFormContainer').bPopup({
         modal: true
     });
     $('#submitThanks').hide();
