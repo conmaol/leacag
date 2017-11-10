@@ -96,8 +96,8 @@ function onSignIn(googleUser) {
 
     //authenticate the user
     var id_token = googleUser.getAuthResponse().id_token;
-    console.log(id_token);
-    $.post("ajax.php?action=authenticate", {idtoken: id_token}, function(data) {
+
+    $.post("ajax.php", {action: "authenticate", idtoken: id_token}, function(data) {
         console.log(data);
         if(data.userid) {
 
