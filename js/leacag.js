@@ -442,8 +442,8 @@ $('#addCommentForm').on('submit', function () {
     });
 
     //display a thank you message
-    $('#newEntryForm').hide();
-    $('#newEntryForm').trigger('reset');
+    $('#addCommentForm').hide();
+    $('#addCommentForm').trigger('reset');
     $('#submitThanks').show();
     return false;
 });
