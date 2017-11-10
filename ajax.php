@@ -40,13 +40,14 @@ switch ($_REQUEST["action"]) {
     $id_token = $_POST["idtoken"];
     $client = new Google_Client(['client_id' => '1067716944598-u8oj6j87j4ho6lm726au2ap3spf5d508.apps.googleusercontent.com']);
     $payload = $client->verifyIdToken($id_token);
+    $response = array("action"=>"authenticate");
     if ($payload) {
       $userid = $payload['sub'];
       $_SESSION["userid"] = $userid;
       $_COOKIE["userid"] = $userid;
-      $response = json_encode(array("userid"=>$userid));
-      echo $response;
+      $response["userid"] = $userid;
     }
+    echo json_encode($response);
     break;
   case "processNewEntryForm":
     $dbh = DB::getDatabaseHandle(DB_NAME);
