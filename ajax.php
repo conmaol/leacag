@@ -10,7 +10,8 @@
 require_once '../includes/include.php';
 require_once 'include.php';
 require_once 'vendor/autoload.php';
-require_once '../lexicopia/code/php/AddNewEntry.php';
+require_once '../lexicopia/code/php/NewEntry.php';
+require_once '../lexicopia/code/php/Comment.php';
 
 switch ($_REQUEST["action"]) {
   case "login":
@@ -56,7 +57,7 @@ switch ($_REQUEST["action"]) {
     if ($sth->execute(array(":email"=>$_POST["userEmail"], ":en"=>$_POST["en"], ":gd"=>$_POST["target"],
       ":related"=>$_POST["related"], ":notes"=>$_POST["notes"]))) {
       echo "Form data added to DB...";
-      AddNewEntry::addEntry($_POST, "/var/www/html/dasg.arts.gla.ac.uk/www/lexicopia/gd/");
+      NewEntry::addEntry($_POST, "/var/www/html/dasg.arts.gla.ac.uk/www/lexicopia/gd/");
       //assign the ID
   /*    $id = str_replace(" ", "_", $_POST["gd"]);
 
@@ -136,6 +137,23 @@ TEXT;
       echo " The email could not be sent.";
     }
 
+    break;
+  case "addComment":
+    Comment::addComment($_POST, "/var/www/html/dasg.arts.gla.ac.uk/www/lexicopia/gd/");
+    $to       = "mark.mcconville@glasgow.ac.uk";
+    $message  = <<<HTML
+        Comment: {$_POST["comment"]}\nUser email: {$_POST["userEmail"]}
+HTML;
+
+    $subject  = "LEACAG AddComment Form Submission";
+    $from     = "stephen.barrett@glasgow.ac.uk";
+    $email    = new Email($to, $subject, $message, $from);
+    echo "Attempting email...";
+    if ($email->send()) {
+      echo " Email sent.";
+    } else {
+      echo " The email could not be sent.";
+    }
     break;
 }
 

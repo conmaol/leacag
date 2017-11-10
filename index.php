@@ -123,11 +123,11 @@ header("Expires: 0"); // Proxies.
               <textarea name="notes" id="formNotesField" class="formField"></textarea>
           </p>
           <p>
-              <input type="hidden" name="userEmail" id="userEmail"/>
+              <input type="hidden" name="userEmail" class="userEmail"/>
               <input type="hidden" name="userID" id="userID"/>
               <input type="hidden" name="action" value="processNewEntryForm"/>
               <button class="popupClose">cuir às</button>
-              <input type="submit" id="submitNewEntry" value="cuir a-steach"/>
+              <input type="submit" value="cuir a-steach"/>
           </p>
       </form>
       <!-- thank you message on form submission -->
@@ -187,10 +187,12 @@ header("Expires: 0"); // Proxies.
                           Add comment:
                       </h3>
                       <p>
-                          <textarea id="editHeadword" class="formField"></textarea>
+                          <textarea name="comment" class="formField"></textarea>
                       </p>
                       <p>
                           <input type="hidden" name="action" value="addComment"/>
+                          <input type="hidden" name="id" id="lexId"/>
+                          <input type="hidden" name="userEmail" class="userEmail"/>
                           <button class="popupClose">cuir às</button>
                           <input type="submit" value="cuir a-steach"/>
                       </p>

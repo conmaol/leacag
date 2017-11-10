@@ -102,7 +102,7 @@ function onSignIn(googleUser) {
         if(data.userid) {*/
 
             //add user info to form fields
-            $('#userEmail').val(profile.getEmail());
+            $('.userEmail').val(profile.getEmail());
             $('#userID').val(profile.getId());
 
 /*
@@ -416,10 +416,27 @@ $('#editEntryLink').on('click', function () {
 /*
     Process data submitted by contributors for new entry
  */
-$('#submitNewEntry').on('click', function () {
-    var formData = $('#newEntryForm').serialize();
+$('#newEntryForm').on('submit', function () {
+    var formData = $(this).serialize();
   //  $.post('http://dasg.ac.uk/lexicopia/code/php/addNewEntry.php', formData);
     //TODO: add a check above for successful addition before calling email code next
+    $.post('ajax.php', formData, function (data) {
+        console.log(data);
+    });
+
+    //display a thank you message
+    $('#newEntryForm').hide();
+    $('#newEntryForm').trigger('reset');
+    $('#submitThanks').show();
+    return false;
+});
+
+/*
+    Process comment form
+ */
+$('#addCommentForm').on('submit', function () {
+    $('#lexId').val(lexicopiaId);
+    var formData = $(this).serialize();
     $.post('ajax.php', formData, function (data) {
         console.log(data);
     });
