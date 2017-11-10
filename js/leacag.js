@@ -398,7 +398,7 @@ $('#newEntry a').on('click', function () {
     $('#newEntryForm').show();
 });
 $('#addCommentLink').on('click', function () {
-    bpopup = $('#addCommentFormContainer').bPopup({
+    bpopup = $('#addCommentForm').bPopup({
         modal: true
     });
     $('#submitThanks').hide();
