@@ -418,7 +418,7 @@ $('#editEntryLink').on('click', function () {
  */
 $('#submitNewEntry').on('click', function () {
     var formData = $('#newEntryForm').serialize();
-    $.post('http://dasg.ac.uk/lexicopia/code/php/addNewEntry.php', formData);
+  //  $.post('http://dasg.ac.uk/lexicopia/code/php/addNewEntry.php', formData);
     //TODO: add a check above for successful addition before calling email code next
     $.post('ajax.php', formData, function (data) {
         console.log(data);

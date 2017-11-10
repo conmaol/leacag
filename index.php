@@ -126,6 +126,7 @@ header("Expires: 0"); // Proxies.
               <input type="hidden" name="userEmail" id="userEmail"/>
               <input type="hidden" name="userID" id="userID"/>
               <input type="hidden" name="action" value="processNewEntryForm"/>
+              <input type="hidden" name="lang" value="gd"/>
               <button class="popupClose">cuir às</button>
               <input type="submit" id="submitNewEntry" value="cuir a-steach"/>
           </p>
