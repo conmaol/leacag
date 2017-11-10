@@ -98,8 +98,8 @@ function onSignIn(googleUser) {
     var id_token = googleUser.getAuthResponse().id_token;
 
     $.post("ajax.php?action=authenticate", {idtoken: id_token}, function(data) {
-
-        if(data.userid == profile.getId()) {
+        console.log(data);
+        if(data.userid) {
 
             //add user info to form fields
             $('#userEmail').val(profile.getEmail());
