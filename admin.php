@@ -18,7 +18,7 @@ if (!isset($_GET["action"])) {
 //run an admin check
 $dbh = DB::getDatabaseHandle(DB_NAME);
 $sth = $dbh->prepare("SELECT accessLevel FROM leacag_user WHERE email = :email");
-$sth->execute(array(":email"=>$_COOKIE["userEmail"]));
+$sth->execute(array(":email"=>$_SESSION["email"]));
 $row = $sth->fetch();
 $userAccessLevel = (int)$row[0];
 

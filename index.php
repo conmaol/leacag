@@ -6,6 +6,7 @@ header("Cache-Control: no-cache, no-store, must-revalidate"); // HTTP 1.1.
 header("Pragma: no-cache"); // HTTP 1.0.
 header("Expires: 0"); // Proxies.
 
+print_r($_SESSION);
 ?>
 
 <!DOCTYPE html>
@@ -92,16 +93,16 @@ header("Expires: 0"); // Proxies.
       </div>
     </div>
     <div id="formContainer">
-      <form id="newEntryForm" onsubmit="return submitNewEntryForm();">
+      <form id="newEntryForm">
           <p>
               Briathar Beurla:
               <input type="text" class="formField" name="en"/>
           </p>
           <p>
               Briathar Gàidhlig:
-              <input type="text" class="formField" name="gd"/>
+              <input type="text" class="formField" name="target"/>
           </p>
-          <p>
+          <!--p>
               Mìr-cainnte:
               <select name="pos">
                   <option>ainmear</option>
@@ -109,25 +110,25 @@ header("Expires: 0"); // Proxies.
                   <option>gnìomhair</option>
                   <option>eile</option>
               </select>
-          </p>
+          </p-->
           <p>
               Cruthan Co-cheangailte:<br/>
               <textarea name="related" id="relatedNotesField" class="formField"></textarea>
           </p>
-          <p>
+          <!--p>
               Tùs:<br/>
               <textarea name="source" id="sourceNotesField" class="formField"></textarea>
-          </p>
+          </p-->
           <p>
-              Nòtaichean:<br/>
+              Tùs/Nòtaichean:<br/>
               <textarea name="notes" id="formNotesField" class="formField"></textarea>
           </p>
           <p>
               <input type="hidden" name="userEmail" id="userEmail"/>
               <input type="hidden" name="userID" id="userID"/>
-              <input type="hidden" name="action" value="processForm"/>
+              <input type="hidden" name="action" value="processNewEntryForm"/>
               <button class="popupClose">cuir às</button>
-              <input type="submit" value="cuir a-steach"/>
+              <input type="submit" id="submitNewEntry" value="cuir a-steach"/>
           </p>
       </form>
       <!-- thank you message on form submission -->
@@ -179,8 +180,26 @@ header("Expires: 0"); // Proxies.
               </p>
               </div>
           </div>
+          <div id="addCommentDiv">
+              <a href="#" id="addCommentLink" title="Add a comment to this entry">Add comment to this entry</a>
+                  <div id="addCommentFormContainer">
+                  <form id="addCommentForm">
+                      <h3>
+                          Add comment:
+                      </h3>
+                      <p>
+                          <textarea id="editHeadword" class="formField"></textarea>
+                      </p>
+                      <p>
+                          <input type="hidden" name="action" value="addComment"/>
+                          <button class="popupClose">cuir às</button>
+                          <input type="submit" value="cuir a-steach"/>
+                      </p>
+                  </form>
+              </div>
+          </div>
           <div id="editEntryLink">
-              <a href="#" id="editEntryButton">Deasaich an innteart seo</a>
+              <a href="#" id="editEntryButton" title="Edit this entry">Deasaich an innteart seo</a>
               <div id="editFormContainer">
                   <form id="editEntryForm" onsubmit="return submitEditEntryForm();">
                       <h3>

@@ -78,6 +78,7 @@ $(function() {
         $('.abcRioButtonContents > span').eq(0).show();   //show the 'Sign In' text
         $('#loggedInStatus').hide();  //hide logged-in status
         $('#editEntryLink').hide();
+        $('#addCommentDiv').hide();
         Cookies.remove('userEmail');
         $.ajax('ajax.php?action=logout');
         gapi.auth2.getAuthInstance().disconnect();
@@ -92,49 +93,58 @@ $('.popupClose').on('click', function () {  //close the popup on click
 
 function onSignIn(googleUser) {
     var profile = googleUser.getBasicProfile();
-    console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-    //add user info to form fields
-    $('#userEmail').val(profile.getEmail());
-    $('#userID').val(profile.getId());
 
-    $.ajax({
-        method: "GET",
-        url: 'ajax.php?action=login&email='+profile.getEmail()
-    })
-        .done(function (msg) {
-            console.log("AJAX called : " + msg);
-        });
+    //authenticate the user
+    var id_token = googleUser.getAuthResponse().id_token;
 
-    auth2 = gapi.auth2.getAuthInstance();
+    $.post("ajax.php?action=authenticate", {idtoken: id_token}, function(data) {
 
-    //Update the button to display "Sign Out" option
-    $('.g-signin2').hide();
-    $('#signOutLink').show();
-    $('.signOut').show();
-    //Show the signed-in message
-    var loggedInMsg = 'Air a chlàradh a-steach mar ' + profile.getName();
+        if(data.userid == profile.getId()) {
 
-    //check for admin status
-    $.getJSON("ajax.php?action=checkAdmin", function(data) {
-        if (data.isAdmin) {
-            loggedInMsg += '&nbsp;&nbsp;<a href="admin.php">> rianaire</a>';
+            //add user info to form fields
+            $('#userEmail').val(profile.getEmail());
+            $('#userID').val(profile.getId());
+
+            $.ajax({
+                method: "GET",
+                url: 'ajax.php?action=login&email=' + profile.getEmail()
+            });
+
+            auth2 = gapi.auth2.getAuthInstance();
+
+            //Update the button to display "Sign Out" option
+            $('.g-signin2').hide();
+            $('#signOutLink').show();
+            $('.signOut').show();
+            //Show the signed-in message
+            var loggedInMsg = 'Air a chlàradh a-steach mar ' + profile.getName();
+
+            //check for admin status
+            $.getJSON("ajax.php?action=checkAdmin", function (data) {
+                if (data.isAdmin) {
+                    loggedInMsg += '&nbsp;&nbsp;<a href="admin.php">> rianaire</a>';
+                }
+            })
+                .done(function () {
+                    $('#loggedInStatus').html(loggedInMsg).show();
+                });
+            //check for submitter status
+            $.getJSON("ajax.php?action=checkSubmitter", function (data) {
+                if (data.isSubmitter) {
+                    $('#newEntry').show();
+                    if ($('.lexicopia-headword').html()) {
+                        $('#addCommentDiv').show();
+                    }
+                }
+            });
+            //check for editor status
+            $.getJSON("ajax.php?action=checkEditor", function (data) {
+                if (data.isEditor && $('.lexicopia-headword').html()) {
+                    $('#editEntryLink').show();
+                }
+            });
         }
-    })
-        .done(function() {
-            $('#loggedInStatus').html(loggedInMsg).show();
-        });
-    //check for submitter status
-    $.getJSON("ajax.php?action=checkSubmitter", function(data) {
-        if (data.isSubmitter) {
-            $('#newEntry').show();
-        }
-    });
-    //check for editor status
-    $.getJSON("ajax.php?action=checkEditor", function(data) {
-        if (data.isEditor && $('.lexicopia-headword').html()) {
-            $('#editEntryLink').show();
-        }
-    });
+    }, "json");
 }
 
 /*
@@ -291,7 +301,13 @@ function updateContent(id) {
         if (data.isEditor) {
             $('#editEntryLink').show();
         }
-    })
+    });
+    //check for submitter status and show comment link
+    $.getJSON("ajax.php?action=checkSubmitter", function(data) {
+        if (data.isSubmitter) {
+            $('#addCommentDiv').show();
+        }
+    });
     lexicopiaId = id;
     if (entryhistory.length > 1) {
         //document.getElementById("backbutton").style.display = 'block';
@@ -379,6 +395,12 @@ $('#newEntry a').on('click', function () {
     $('#submitThanks').hide();
     $('#newEntryForm').show();
 });
+$('#addCommentLink').on('click', function () {
+    bpopup = $('#addCommentFormContainer').bPopup({
+        modal: true
+    });
+    $('#submitThanks').hide();
+});
 $('#editEntryLink').on('click', function () {
     bpopup = $('#editFormContainer').bPopup({
         modal: true
@@ -392,7 +414,7 @@ $('#editEntryLink').on('click', function () {
 /*
     Process data submitted by contributors for new entry
  */
-function submitNewEntryForm() {
+$('#submitNewEntry').on('click', function () {
     var formData = $('#newEntryForm').serialize();
     $.post('http://dasg.ac.uk/lexicopia/code/php/addNewEntry.php', formData);
     //TODO: add a check above for successful addition before calling email code next
@@ -405,7 +427,7 @@ function submitNewEntryForm() {
     $('#newEntryForm').trigger('reset');
     $('#submitThanks').show();
     return false;
-}
+});
 
 /*
     Process data submitted by editor to update an entry

@@ -36,7 +36,7 @@ switch ($_REQUEST["action"]) {
   		echo $e->getMessage();
   	}
   	break;
-  case "authId":
+  case "authenticate":
     $id_token = $_POST["idtoken"];
     $client = new Google_Client(['client_id' => '1067716944598-u8oj6j87j4ho6lm726au2ap3spf5d508.apps.googleusercontent.com']);
     $payload = $client->verifyIdToken($id_token);
@@ -44,16 +44,15 @@ switch ($_REQUEST["action"]) {
       $userid = $payload['sub'];
       $_SESSION["userid"] = $userid;
       $_COOKIE["userid"] = $userid;
-      echo "User verified : {$userid}";
-    } else {
-      echo "Not verified";
+      $response = json_encode(array("userid"=>$userid));
+      echo $response;
     }
     break;
-  case "processForm":
+  case "processNewEntryForm":
     $dbh = DB::getDatabaseHandle(DB_NAME);
-    $sth = $dbh->prepare("INSERT INTO leacag_formSubmission (email, en, gd, pos, related, source, notes) VALUES (:email, :en, :gd, :pos, :related, :source, :notes)");
-    if ($sth->execute(array(":email"=>$_POST["userEmail"], ":en"=>$_POST["en"], ":gd"=>$_POST["gd"],
-        ":pos"=>$_POST["pos"], ":related"=>$_POST["related"], ":source"=>$_POST["source"],  ":notes"=>$_POST["notes"]))) {
+    $sth = $dbh->prepare("INSERT INTO leacag_formSubmission (email, en, gd, related, notes) VALUES (:email, :en, :gd, :related, :notes)");
+    if ($sth->execute(array(":email"=>$_POST["userEmail"], ":en"=>$_POST["en"], ":gd"=>$_POST["target"],
+      ":related"=>$_POST["related"], ":notes"=>$_POST["notes"]))) {
       echo "Form data added to DB...";
       //assign the ID
   /*    $id = str_replace(" ", "_", $_POST["gd"]);
@@ -207,10 +206,8 @@ function getFormEmailText($fields) {
   $text = <<<TEXT
 User {$fields["userEmail"]} submitted the following entry to LEACAG:<br/>
 - English Term: {$fields["en"]}<br/> 
-- Gaelic Term: {$fields["gd"]}<br/>
-- Part of Speech: {$fields["pos"]}<br/>
+- Gaelic Term: {$fields["target"]}<br/>
 - Related Forms: {$fields["related"]}<br/>
-- Source: {$fields["source"]}<br/>
 - Notes: {$fields["notes"]}
 TEXT;
   return $text;
