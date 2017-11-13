@@ -77,8 +77,8 @@ $(function() {
         $('.abcRioButtonContents > span').eq(1).hide();   //hide the 'Signed In' text
         $('.abcRioButtonContents > span').eq(0).show();   //show the 'Sign In' text
         $('#loggedInStatus').hide();  //hide logged-in status
-        $('#editEntryFormContainer').hide();
-        $('#addCommentFormContainer').hide();
+        $('#editEntryLink').hide();
+        $('#addCommentLink').hide();
         Cookies.remove('userEmail');
         $.ajax('ajax.php?action=logout');
         gapi.auth2.getAuthInstance().disconnect();
@@ -105,12 +105,10 @@ function onSignIn(googleUser) {
             $('.userEmail').val(profile.getEmail());
             $('#userID').val(profile.getId());
 
-/*
             $.ajax({
                 method: "GET",
                 url: 'ajax.php?action=login&email=' + profile.getEmail()
             });
-*/
 
             auth2 = gapi.auth2.getAuthInstance();
 
@@ -135,14 +133,14 @@ function onSignIn(googleUser) {
                 if (data.isSubmitter) {
                     $('#newEntry').show();
                     if ($('.lexicopia-headword').html()) {
-                        $('#addCommentFormContainer').show();
+                        $('#addCommentLink').show();
                     }
                 }
             });
             //check for editor status
             $.getJSON("ajax.php?action=checkEditor", function (data) {
                 if (data.isEditor && $('.lexicopia-headword').html()) {
-                    $('#editEntryFormContainer').show();
+                    $('#editEntryLink').show();
                 }
             });
   /*      }
@@ -301,13 +299,13 @@ function updateContent(id) {
     //check for editor status and show edit link
     $.getJSON("ajax.php?action=checkEditor", function(data) {
         if (data.isEditor) {
-            $('#editEntryFormContainer').show();
+            $('#editEntryLink').show();
         }
     });
     //check for submitter status and show comment link
     $.getJSON("ajax.php?action=checkSubmitter", function(data) {
         if (data.isSubmitter) {
-            $('#addCommentFormContainer').show();
+            $('#addCommentLink').show();
         }
     });
     lexicopiaId = id;
@@ -398,14 +396,14 @@ $('#newEntry a').on('click', function () {
     $('#newEntryForm').show();
 });
 $('#addCommentLink').on('click', function () {
-    bpopup = $('#addCommentForm').bPopup({
+    bpopup = $('#addCommentFormPopup').bPopup({
         modal: true
     });
     $('#submitThanks').hide();
     $('#addCommentForm').show();
 });
 $('#editEntryLink').on('click', function () {
-    bpopup = $('#editEntryFormContainer').bPopup({
+    bpopup = $('#editEntryFormPopup').bPopup({
         modal: true
     });
     $('#submitThanks').hide();
@@ -428,7 +426,10 @@ $('#newEntryForm').on('submit', function () {
     //display a thank you message
     $('#newEntryForm').hide();
     $('#newEntryForm').trigger('reset');
-    $('#submitThanks').show();
+    bpopup.close();
+    bpopup = $('#submitThanks').bPopup({
+        modal: true
+    });
     return false;
 });
 
@@ -445,19 +446,25 @@ $('#addCommentForm').on('submit', function () {
     //display a thank you message
     $('#addCommentForm').hide();
     $('#addCommentForm').trigger('reset');
-    $('#submitThanks').show();
+    bpopup.close();
+    bpopup = $('#submitThanks').bPopup({
+        modal: true
+    });
     return false;
 });
 
 /*
     Process data submitted by editor to update an entry
  */
-function submitEditEntryForm() {
+$('#editEntryForm').on('submit', function () {
     var newHeadword = $('#editHeadword').val();
     $('.lexicopia-headword').html(newHeadword);
     $.ajax('ajax.php?action=updateHeadword&id='+lexicopiaId+'&form='+newHeadword);
     $('#editEntryForm').hide();
     $('#editEntryForm').trigger('reset');
-    $('#submitThanks').show();
+    bpopup.close();
+    bpopup = $('#submitThanks').bPopup({
+        modal: true
+    });
     return false;
-}
+});

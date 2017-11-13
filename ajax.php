@@ -140,6 +140,7 @@ TEXT;
     break;
   case "addComment":
     Comment::addComment($_POST, "/var/www/html/dasg.arts.gla.ac.uk/www/lexicopia/gd/");
+//    $to       = "mail@steviebarrett.com";
     $to       = "mark.mcconville@glasgow.ac.uk";
     $message  = <<<HTML
         Comment: {$_POST["comment"]}\nUser email: {$_POST["userEmail"]}

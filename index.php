@@ -91,6 +91,11 @@ header("Expires: 0"); // Proxies.
         </div>
       </div>
     </div>
+    <!-- thank you message on form submission -->
+    <div id="submitThanks">
+      <h2>Mòran taing!</h2>
+      <button type="button" class="popupClose">dùin</button>
+    </div>
     <div id="newEntryFormContainer">
       <form id="newEntryForm">
           <p>
@@ -130,11 +135,6 @@ header("Expires: 0"); // Proxies.
               <input type="submit" value="cuir a-steach"/>
           </p>
       </form>
-      <!-- thank you message on form submission -->
-      <div id="submitThanks">
-          <h2>Mòran taing!</h2>
-          <button type="button" class="popupClose">dùin</button>
-      </div>
     </div>
     <div class="row">
       <div class="col-md-12">
@@ -181,37 +181,41 @@ header("Expires: 0"); // Proxies.
           </div>
           <div id="addCommentFormContainer">
               <a href="#" id="addCommentLink" title="Add a comment to this entry">Add comment to this entry</a>
-              <form id="addCommentForm">
-                  <h3>
-                      Add comment:
-                  </h3>
-                  <p>
-                      <textarea name="comment" class="formField"></textarea>
-                  </p>
-                  <p>
-                      <input type="hidden" name="action" value="addComment"/>
-                      <input type="hidden" name="id" id="lexId"/>
-                      <input type="hidden" name="userEmail" class="userEmail"/>
-                      <button class="popupClose">cuir às</button>
-                      <input type="submit" value="cuir a-steach"/>
-                  </p>
-              </form>
+              <div id="addCommentFormPopup">
+                  <form id="addCommentForm">
+                      <h3>
+                          Add comment:
+                      </h3>
+                      <p>
+                          <textarea name="comment" class="formField"></textarea>
+                      </p>
+                      <p>
+                          <input type="hidden" name="action" value="addComment"/>
+                          <input type="hidden" name="id" id="lexId"/>
+                          <input type="hidden" name="userEmail" class="userEmail"/>
+                          <button class="popupClose">cuir às</button>
+                          <input type="submit" value="cuir a-steach"/>
+                      </p>
+                  </form>
+              </div>
           </div>
           <div id="editEntryFormContainer">
               <a href="#" id="editEntryLink" title="Edit this entry">Deasaich an innteart seo</a>
-              <form id="editEntryForm" onsubmit="return submitEditEntryForm();">
-                  <h3>
-                      Ceann-fhacal
-                  </h3>
-                  <p>
-                      <input type="text" id="editHeadword" class="formField" value=""/>
-                  </p>
-                  <p>
-                      <input type="hidden" name="action" value="editEntry"/>
-                      <button class="popupClose">cuir às</button>
-                      <input type="submit" value="cuir a-steach"/>
-                  </p>
-              </form>
+              <div id="editEntryFormPopup">
+                  <form id="editEntryForm">
+                      <h3>
+                          Ceann-fhacal
+                      </h3>
+                      <p>
+                          <input type="text" id="editHeadword" class="formField" value=""/>
+                      </p>
+                      <p>
+                          <input type="hidden" name="action" value="editEntry"/>
+                          <button class="popupClose">cuir às</button>
+                          <input type="submit" value="cuir a-steach"/>
+                      </p>
+                  </form>
+              </div>
           </div>
       </div>
     </div>

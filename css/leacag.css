@@ -201,13 +201,13 @@ a.loginLink {
 }
 
 /*
-    user entry form
+    user entry forms
  */
 #newEntry {
     display: none;
 }
 
-#newEntryFormContainer, #addCommentFormContainer, #editEntryFormContainer {
+#newEntryFormContainer, #addCommentFormPopup, #editEntryFormPopup, #submitThanks {
     display:none;
     width: 20em;
     padding: 20px;
@@ -221,10 +221,6 @@ a.loginLink {
 
 #formNotesField {
     height: 6em;
-}
-
-#submitThanks {
-    display: none;
 }
 
 /*
