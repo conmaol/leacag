@@ -387,43 +387,34 @@ $("#editEntryLink").on("click", function () {
     $("#editEntryForm").show();
 });
 
+/* Process data submitted by contributors for new entry */
 
-/*
-    Process data submitted by contributors for new entry
- */
-$('#newEntryForm').on('submit', function () {
+$("#newEntryForm").on("submit", function () {
     var formData = $(this).serialize();
-  //  $.post('http://dasg.ac.uk/lexicopia/code/php/addNewEntry.php', formData);
-    //TODO: add a check above for successful addition before calling email code next
-    $.post('ajax.php', formData, function (data) {
+    $.post("ajax.php", formData, function (data) {
         console.log(data);
     });
-
-    //display a thank you message
-    $('#newEntryForm').hide();
-    $('#newEntryForm').trigger('reset');
+    $("#newEntryForm").hide();
+    $("#newEntryForm").trigger('reset');
     bpopup.close();
-    bpopup = $('#submitThanksPopUp').bPopup({
+    bpopup = $("#submitThanksPopUp").bPopup({
         modal: true
     });
     return false;
 });
 
-/*
-    Process comment form
- */
-$('#addCommentForm').on('submit', function () {
-    $('#lexId').val(lexicopiaId);
+/* Process comment form */
+
+$("#addCommentForm").on("submit", function () {
+    $("#lexId").val(lexicopiaId);
     var formData = $(this).serialize();
-    $.post('ajax.php', formData, function (data) {
+    $.post("ajax.php", formData, function (data) {
         console.log(data);
     });
-
-    //display a thank you message
-    $('#addCommentForm').hide();
-    $('#addCommentForm').trigger('reset');
+    $("#addCommentForm").hide();
+    $("#addCommentForm").trigger('reset');
     bpopup.close();
-    bpopup = $('#submitThanksPopUp').bPopup({
+    bpopup = $("#submitThanksPopUp").bPopup({
         modal: true
     });
     return false;
