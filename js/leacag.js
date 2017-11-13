@@ -68,10 +68,10 @@ $(function() {
      */
     $('#signOutLink').hide();
     $('.signOut').hide();
-    $('#newEntry').hide();
+    $('#newEntryLink').hide();
     $('#signOutLink').on('click', function () {
         $('.signOut').hide();
-        $('#newEntry').hide();
+        $('#newEntryLink').hide();
         $('.abcRioButtonContents').show();
         $('.g-signin2').show();
         $('.abcRioButtonContents > span').eq(1).hide();   //hide the 'Signed In' text
@@ -131,7 +131,7 @@ function onSignIn(googleUser) {
             //check for submitter status
             $.getJSON("ajax.php?action=checkSubmitter", function (data) {
                 if (data.isSubmitter) {
-                    $('#newEntry').show();
+                    $('#newEntryLink').show();
                     if ($('.lexicopia-headword').html()) {
                         $('#addCommentLink').show();
                     }
@@ -211,7 +211,7 @@ $(document).on('click', '.leacag-link', function() {
     return false;
 });
 
-$('#randomEntry').on("click", function() {
+$('#randomEntryLink').on("click", function() {
     $('#noResults').hide();
     $('#englishSearchField').val("");
     $('#gaelicSearchField').val("");
@@ -388,27 +388,30 @@ function getUser() {
  Form submission code
  */
 //show the forms
-$('#newEntry a').on('click', function () {
-    bpopup = $('#newEntryFormContainer').bPopup({
+
+$("#newEntryLink a").on("click", function () {
+    bpopup = $("#newEntryFormContainer").bPopup({
         modal: true
     });
-    $('#submitThanks').hide();
-    $('#newEntryForm').show();
+    $("#submitThanks").hide();
+    $("#newEntryForm").show();
 });
-$('#addCommentLink').on('click', function () {
-    bpopup = $('#addCommentFormPopup').bPopup({
+
+$("#addCommentLink").on("click", function () {
+    bpopup = $("#addCommentFormPopup").bPopup({
         modal: true
     });
-    $('#submitThanks').hide();
-    $('#addCommentForm').show();
+    $("#submitThanks").hide();
+    $("#addCommentForm").show();
 });
-$('#editEntryLink').on('click', function () {
-    bpopup = $('#editEntryFormPopup').bPopup({
+
+$("#editEntryLink").on("click", function () {
+    bpopup = $("#editEntryFormPopup").bPopup({
         modal: true
     });
-    $('#submitThanks').hide();
-    $('#editHeadword').val($('.lexicopia-headword').html());
-    $('#editEntryForm').show();
+    $("#submitThanks").hide();
+    $("#editHeadword").val($(".lexicopia-headword").html());
+    $("#editEntryForm").show();
 });
 
 
