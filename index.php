@@ -36,36 +36,34 @@ header("Expires: 0"); // Proxies.
                   <span class="icon-bar"></span>
                   <span class="icon-bar"></span>
                 </button>
-                  <h1 class="navbar-left"><a href="index.php">LEACAG</a></h1>
+                <h1 class="navbar-left"><a href="index.php">LEACAG</a></h1>
                 <form class="navbar-form navbar-left" role="search" id="englishSearchForm">
-                    <div class="form-group mainSearchBox">
+                  <div class="form-group mainSearchBox">
                     <span class="glyphicon glyphicon-search"></span>
                     <input type="search" id="englishSearchField" placeholder="Beurla" autocomplete="off"/>
-                    <!-- <a id="enToGdToggle" href="#">Gàidhlig?</a> -->
                   </div>
                 </form>
                 <form class="navbar-form navbar-left" role="search" id="gaelicSearchForm">
                   <div class="form-group mainSearchBox">
                     <span class="glyphicon glyphicon-search"></span>
                     <input type="search" id="gaelicSearchField" placeholder="Gàidhlig" autocomplete="off"/>
-                    <!-- <a id="gdToEnToggle" href="#">Beurla?</a> -->
                   </div>
                 </form>
               </div>
               <div class="collapse navbar-collapse navbar-right" id="navbar-collapse">
                 <ul class="nav navbar-nav">
-                  <li id="randomEntry"><a href="#" title="Random entry">iongnadh</a></li>
+                  <li id="randomEntryLink"><a href="#" title="Random entry">iongnadh</a></li>
                   <li id="enToGdToggle"><a href="#" title="Search for a Gaelic word">Gàidhlig</a></li>
                   <li id="gdToEnToggle"><a href="#" title="Search for an English word">Beurla</a></li>
-                  <li id="newEntry"><a href="#" title="Contribute an entry">moladh</a></li>
+                  <li id="newEntryLink"><a href="#" title="Contribute an entry">moladh</a></li>
                   <li id="loginButtons">
-                      <div class="g-signin2" data-onsuccess="onSignIn">Sign In</div>
-                      <div class="signOut">
-                          <div class="googleIcon">
-                              <img src="images/btn_google.png" width="28" height="28">
-                          </div>
-                          <a href="#" id="signOutLink" class="loginLink">Sign Out</a>
+                    <div class="g-signin2" data-onsuccess="onSignIn">Sign In</div>
+                    <div class="signOut">
+                      <div class="googleIcon">
+                        <img src="images/btn_google.png" width="28" height="28">
                       </div>
+                      <a href="#" id="signOutLink" class="loginLink">Sign Out</a>
+                    </div>
                   </li>
                 </ul>
               </div>
