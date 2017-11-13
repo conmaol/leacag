@@ -187,7 +187,7 @@ header("Expires: 0"); // Proxies.
                           <textarea name="comment" class="formField"></textarea>
                       </p>
                       <p>
-                          <input type="hidden" name="action" value="addComment"/>
+                          <input type="hidden" name="action" value="processAddCommentForm"/>
                           <input type="hidden" name="id" id="lexId"/>
                           <input type="hidden" name="userEmail" class="userEmail"/>
                           <button class="popupClose">cuir às</button>
@@ -207,7 +207,7 @@ header("Expires: 0"); // Proxies.
                           <input type="text" id="editHeadword" class="formField" value=""/>
                       </p>
                       <p>
-                          <input type="hidden" name="action" value="editEntry"/>
+                          <input type="hidden" name="action" value="processEditEntryForm"/>
                           <button class="popupClose">cuir às</button>
                           <input type="submit" value="cuir a-steach"/>
                       </p>
