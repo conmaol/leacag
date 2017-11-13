@@ -138,7 +138,7 @@ TEXT;
     }
 
     break;
-  case "addComment":
+  case "processAddCommentForm":
     Comment::addComment($_POST, "/var/www/html/dasg.arts.gla.ac.uk/www/lexicopia/gd/");
 //    $to       = "mail@steviebarrett.com";
     $to       = "mark.mcconville@glasgow.ac.uk";
