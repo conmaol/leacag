@@ -17,7 +17,7 @@ $(function() {
         click: function() {
             $(this).val("");	//clear the search field for a new query
             $(this).attr('placeholder', 'Beurla');
-            $('#noResults').hide();
+            $('#noResultsMessage').hide();
         }
     });
 
@@ -25,7 +25,7 @@ $(function() {
         click: function() {
             $(this).val("");	//clear the search field for a new query
             $(this).attr('placeholder', 'Gàidhlig');
-            $('#noResults').hide();
+            $('#noResultsMessage').hide();
         }
     });
 
@@ -33,10 +33,10 @@ $(function() {
         autoFocus: true,
         response: function (event, ui) {
             if (ui.content.length === 0) {
-                $('#noResults').show();
+                $('#noResultsMessage').show();
                 updateUserSearchDB($(this).val(), 1, 'en');    //log a failed search
             } else {
-                $('#noResults').hide();
+                $('#noResultsMessage').hide();
             };
         },
         source: "php/leacag.php?action=getEnglish",
@@ -50,10 +50,10 @@ $(function() {
         autoFocus: true,
         response: function (event, ui) {
             if (ui.content.length === 0) {
-                $('#noResults').show();
+                $('#noResultsMessage').show();
                 updateUserSearchDB($(this).val(), 1, 'gd');    //log a failed search
             } else {
-                $('#noResults').hide();
+                $('#noResultsMessage').hide();
             };
         },
         source: "php/leacag.php?action=getGaelic",
@@ -76,7 +76,7 @@ $(function() {
         $('.g-signin2').show();
         $('.abcRioButtonContents > span').eq(1).hide();   //hide the 'Signed In' text
         $('.abcRioButtonContents > span').eq(0).show();   //show the 'Sign In' text
-        $('#loggedInStatus').hide();  //hide logged-in status
+        $('#loggedInStatusMessage').hide();  //hide logged-in status
         $('#editEntryLink').hide();
         $('#addCommentLink').hide();
         Cookies.remove('userEmail');
@@ -126,7 +126,7 @@ function onSignIn(googleUser) {
                 }
             })
                 .done(function () {
-                    $('#loggedInStatus').html(loggedInMsg).show();
+                    $('#loggedInStatusMessage').html(loggedInMsg).show();
                 });
             //check for submitter status
             $.getJSON("ajax.php?action=checkSubmitter", function (data) {
@@ -212,7 +212,7 @@ $(document).on('click', '.leacag-link', function() {
 });
 
 $('#randomEntryLink').on("click", function() {
-    $('#noResults').hide();
+    $('#noResultsMessage').hide();
     $('#englishSearchField').val("");
     $('#gaelicSearchField').val("");
     $('#gaelicEquivalentsList').html("");
@@ -253,7 +253,7 @@ function chooseSelectedTerm(item, lang) {
 }
 
 $('#enToGdToggle').on("click", function() {
-    $('#suggestions').hide();
+    $('#suggestionsDropDown').hide();
     $('#englishSearchField').val("");
     $('#gaelicEquivalentsList').empty();
     $('#lexicalText').empty();
@@ -265,12 +265,12 @@ $('#enToGdToggle').on("click", function() {
     $('#gaelicSearchField').focus();
     $('#editEntryFormContainer').hide();
     $('#homePageText').show();
-    $('#noResults').hide();
+    $('#noResultsMessage').hide();
     return false;
 });
 
 $('#gdToEnToggle').on("click", function() {
-    $('#suggestions').hide();
+    $('#suggestionsDropDown').hide();
     $('#gaelicSearchField').val("");
     $("#englishSearchForm").show();
     $("#gaelicSearchForm").hide();
@@ -281,7 +281,7 @@ $('#gdToEnToggle').on("click", function() {
     $('#englishSearchField').attr('placeholder', 'Beurla');
     $('#editEntryFormContainer').hide();
     $('#homePageText').show();
-    $('#noResults').hide();
+    $('#noResultsMessage').hide();
     return false;
 });
 
@@ -320,33 +320,6 @@ function updateContent(id) {
     $('#englishSearchField').attr('placeholder', '');
     $('#gaelicSearchField').attr('placeholder', '');
 }
-
-/*
-
-function showEnglish() {
-    $('#en-text').show();
-    $('#en-plus').hide();
-    $('#en-minus').show();
-}
-
-function hideEnglish() {
-    $('#en-text ').hide();
-    $('#en-plus').show();
-    $('#en-minus').hide();
-}
-
-function showPOS() {
-    $('#pos-text').show();
-    $('#pos-plus').hide();
-    $('#pos-minus').show();
-}
-
-function hidePOS() {
-    $('#pos-text ').hide();
-    $('#pos-plus').show();
-    $('#pos-minus').hide();
-}
-*/
 
 /*
  * Add the user email and search term to the database
@@ -393,7 +366,7 @@ $("#newEntryLink a").on("click", function () {
     bpopup = $("#newEntryFormContainer").bPopup({
         modal: true
     });
-    $("#submitThanks").hide();
+    $("#submitThanksPopUp").hide();
     $("#newEntryForm").show();
 });
 
@@ -401,7 +374,7 @@ $("#addCommentLink").on("click", function () {
     bpopup = $("#addCommentFormPopup").bPopup({
         modal: true
     });
-    $("#submitThanks").hide();
+    $("#submitThanksPopUp").hide();
     $("#addCommentForm").show();
 });
 
@@ -409,7 +382,7 @@ $("#editEntryLink").on("click", function () {
     bpopup = $("#editEntryFormPopup").bPopup({
         modal: true
     });
-    $("#submitThanks").hide();
+    $("#submitThanksPopUp").hide();
     $("#editHeadword").val($(".lexicopia-headword").html());
     $("#editEntryForm").show();
 });
@@ -430,7 +403,7 @@ $('#newEntryForm').on('submit', function () {
     $('#newEntryForm').hide();
     $('#newEntryForm').trigger('reset');
     bpopup.close();
-    bpopup = $('#submitThanks').bPopup({
+    bpopup = $('#submitThanksPopUp').bPopup({
         modal: true
     });
     return false;
@@ -450,7 +423,7 @@ $('#addCommentForm').on('submit', function () {
     $('#addCommentForm').hide();
     $('#addCommentForm').trigger('reset');
     bpopup.close();
-    bpopup = $('#submitThanks').bPopup({
+    bpopup = $('#submitThanksPopUp').bPopup({
         modal: true
     });
     return false;
@@ -466,7 +439,7 @@ $('#editEntryForm').on('submit', function () {
     $('#editEntryForm').hide();
     $('#editEntryForm').trigger('reset');
     bpopup.close();
-    bpopup = $('#submitThanks').bPopup({
+    bpopup = $('#submitThanksPopUp').bPopup({
         modal: true
     });
     return false;
