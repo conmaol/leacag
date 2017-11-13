@@ -74,23 +74,22 @@ header("Expires: 0"); // Proxies.
     <div class="row">
       <div class="col-md-12">
         <div>
-          <span id="noResults">-- Chan eil toradh ann don cheist seo --</span>
-          <ul id="suggestions" tabindex="0">
+          <span id="noResultsMessage">-- Chan eil toradh ann don cheist seo --</span>
+          <ul id="suggestionsDropDown" tabindex="0">
         </div>
       </div>
     </div>
     <div class="row">
-      <div class="col-md-6 col-xs-12" id="loggedInStatus">    <!-- displays the logged-in name -->
+      <div class="col-md-6 col-xs-12" id="loggedInStatusMessage">    <!-- displays the logged-in name -->
       </div>
     </div>
     <div class="row">
       <div class="col-md-12">
-        <div id="gaelicEquivalentsList">
-        </div>
+        <div id="gaelicEquivalentsList"></div>
       </div>
     </div>
     <!-- thank you message on form submission -->
-    <div id="submitThanks">
+    <div id="submitThanksPopUp">
       <h2>Mòran taing!</h2>
       <button type="button" class="popupClose">dùin</button>
     </div>
