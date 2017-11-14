@@ -19,8 +19,8 @@ $("#enToGdToggle").on("click", function() {
     $("#noResultsMessage").hide();
     $("#gaelicEquivalentsList").empty();
     $("#lexicalText").empty();
-    $("#addCommentFormContainer").hide();
-    $("#editEntryFormContainer").hide();
+    $("#addCommentLink").hide();
+    $("#editEntryLink").hide();
     $("#homePageText").show();
     return false;
 });
@@ -37,15 +37,15 @@ $("#gdToEnToggle").on("click", function() {
     $("#noResultsMessage").hide();
     $("#gaelicEquivalentsList").empty();
     $("#lexicalText").empty();
-    $("#addCommentFormContainer").hide();
-    $("#editEntryFormContainer").hide();
+    $("#addCommentLink").hide();
+    $("#editEntryLink").hide();
     $("#homePageText").show();
     return false;
 });
 
 $("#randomEntryLink").on("click", function() {
-    $("#englishSearchField").val("");
-    $("#gaelicSearchField").val("");
+    //$("#englishSearchField").val("");
+    //$("#gaelicSearchField").val("");
     $("#noResultsMessage").hide();
     $("#gaelicEquivalentsList").empty();
     $.getJSON("php/leacag.php?action=getRandom", function(data) {
@@ -56,6 +56,42 @@ $("#randomEntryLink").on("click", function() {
     })
 });
 
+/* HELPER FUNCTIONS */
+
+function updateContent(id) {
+    //$('#englishSearchField').attr('placeholder', '');
+    //$('#gaelicSearchField').attr('placeholder', '');
+    $("#englishSearchField").val("");
+    $("#gaelicSearchField").val("");
+    $("#homePageText").hide();
+    // update the content panel when a new lexical entry is selected
+    $("#lexicalText").load("../lexicopia/code/php/generateLexicalEntry.php?lang=gd&id=" + id);
+    //check for Editor status and show edit link
+    $.getJSON("ajax.php?action=checkEditor", function(data) {
+        if (data.isEditor) {
+            $("#editEntryLink").show();
+        }
+    });
+    //check for Contributor status and show comment link
+    $.getJSON("ajax.php?action=checkSubmitter", function(data) {
+        if (data.isSubmitter) {
+            $("#addCommentLink").show();
+        }
+    });
+    lexicopiaId = id;
+    /*
+    if (entryhistory.length > 1) {
+        $("#backbutton").show();
+    }
+    else {
+        $("#backbutton").hide();
+    }
+    */
+}
+
+
+
+/* MISC */
 
 $(function() {
 
@@ -298,34 +334,6 @@ $('#backbutton').on("click", function() {
 });
 */
 
-function updateContent(id) {
-    $('#homePageText').hide();
-    // update the content panel when a new lexical entry is selected
-    $('#lexicalText').load("../lexicopia/code/php/generateLexicalEntry.php?lang=gd&id=" + id);
-    //check for editor status and show edit link
-    $.getJSON("ajax.php?action=checkEditor", function(data) {
-        if (data.isEditor) {
-            $('#editEntryLink').show();
-        }
-    });
-    //check for submitter status and show comment link
-    $.getJSON("ajax.php?action=checkSubmitter", function(data) {
-        if (data.isSubmitter) {
-            $('#addCommentLink').show();
-        }
-    });
-    lexicopiaId = id;
-    if (entryhistory.length > 1) {
-        //document.getElementById("backbutton").style.display = 'block';
-        $('#backbutton').show();
-    }
-    else {
-        //document.getElementById("backbutton").style.display = 'none';
-        $('#backbutton').hide();
-    }
-    $('#englishSearchField').attr('placeholder', '');
-    $('#gaelicSearchField').attr('placeholder', '');
-}
 
 /*
  * Add the user email and search term to the database
