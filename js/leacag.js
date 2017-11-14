@@ -49,10 +49,7 @@ $("#randomEntryLink").on("click", function() {
     $("#noResultsMessage").hide();
     $("#gaelicEquivalentsList").empty();
     $.getJSON("php/leacag.php?action=getRandom", function(data) {
-        //var randomid = data.randomEntry.id;
         var randomID = data.id;
-        console.log(data);
-        console.log(randomID);
         entryhistory.push(randomID);
         updateContent(randomID);
         return false;
