@@ -51,6 +51,7 @@ $("#randomEntryLink").on("click", function() {
     $.getJSON("php/leacag.php?action=getRandom", function(data) {
         //var randomid = data.randomEntry.id;
         var randomID = data.id;
+        console.log(randomID);
         entryhistory.push(randomID);
         updateContent(randomID);
         return false;
