@@ -252,31 +252,25 @@ function onSignIn(googleUser) {
     $(".g-signin2").hide();
     $("#signOutLink").show();
     $(".signOut").show();
-    //check for admin status
-    $.getJSON("ajax.php?action=checkAdmin", function (data) {
-        if (data.isAdmin) {
-            securityClearance = 4;
+    
+    securityClearance++;
+    $.getJSON("ajax.php?action=checkSubmitter", function (data) {
+        if (data.isSubmitter) {
+            securityClearance++;
         }
     });
-    if (securityClearance == 0) {
-        $.getJSON("ajax.php?action=checkEditor", function (data) {
-            if (data.isEditor) {
-                securityClearance = 3;
-            }
-        });
-    }
-    if (securityClearance == 0) {
-        $.getJSON("ajax.php?action=checkSubmitter", function (data) {
-            if (data.isSubmitter) {
-                securityClearance = 2;
-            }
-        });
-    }
-    if (securityClearance == 0) {
-        securityClearance = 1;
-    }
+    $.getJSON("ajax.php?action=checkEditor", function (data) {
+        if (data.isEditor) {
+            securityClearance++;
+        }
+    });
+    $.getJSON("ajax.php?action=checkAdmin", function (data) {
+        if (data.isAdmin) {
+            securityClearance++;
+        }
+    });
     console.log("Security clearance: " + securityClearance);
-    //Show the signed-in message
+    // Show the signed-in message
     var loggedInMsg = "Air a chlàradh a-steach mar " + profile.getName();
     if (securityClearance == 4) {
         loggedInMsg += '&nbsp;&nbsp;<a href="admin.php">> rianaire</a>';
