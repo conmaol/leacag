@@ -5,6 +5,42 @@ var entryhistory = [];
 $('#englishSearchField').focus();
 var bpopup;     //to store and handle the modal popup
 
+/* EVENT HANDLERS */
+
+$("#enToGdToggle").on("click", function() {
+    $("#englishSearchField").val("");
+    $("#englishSearchForm").hide();
+    $(this).hide();
+    $("#gaelicSearchField").attr("placeholder", "Gàidhlig");
+    $("#gaelicSearchForm").show();
+    $("#gdToEnToggle").show();
+    $("#gaelicSearchField").focus();
+    $("#suggestionsDropDown").hide();
+    $("#noResultsMessage").hide();
+    $("#gaelicEquivalentsList").empty();
+    $("#lexicalText").empty();
+    $("#addCommentFormContainer").hide();
+    $("#editEntryFormContainer").hide();
+    $("#homePageText").show();
+    return false;
+});
+
+$("#gdToEnToggle").on("click", function() {
+    $("#gaelicSearchField").val("");
+    $("#gaelicSearchForm").hide();
+    $(this).hide();
+    $("#englishSearchField").attr("placeholder", "Beurla");
+    $("#englishSearchForm").show();
+    $("#enToGdToggle").show();
+    $("#englishSearchField").focus();
+    $("#suggestionsDropDown").hide();
+    $("#noResultsMessage").hide();
+    $("#lexicalText").empty();
+    $("#addCommentFormContainer").hide();
+    $("#editEntryFormContainer").hide();
+    $("#homePageText").show();
+    return false;
+});
 
 $(function() {
 
@@ -252,38 +288,7 @@ function chooseSelectedTerm(item, lang) {
     }
 }
 
-$('#enToGdToggle').on("click", function() {
-    $('#suggestionsDropDown').hide();
-    $('#englishSearchField').val("");
-    $('#gaelicEquivalentsList').empty();
-    $('#lexicalText').empty();
-    $("#englishSearchForm").hide();
-    $(this).hide();
-    $("#gaelicSearchForm").show();
-    $("#gdToEnToggle").show();
-    $('#gaelicSearchField').attr('placeholder', 'Gàidhlig');
-    $('#gaelicSearchField').focus();
-    $('#editEntryFormContainer').hide();
-    $('#homePageText').show();
-    $('#noResultsMessage').hide();
-    return false;
-});
 
-$('#gdToEnToggle').on("click", function() {
-    $('#suggestionsDropDown').hide();
-    $('#gaelicSearchField').val("");
-    $("#englishSearchForm").show();
-    $("#gaelicSearchForm").hide();
-    $(this).hide();
-    $("#enToGdToggle").show();
-    $('#lexicalText').empty();
-    $('#englishSearchField').focus();
-    $('#englishSearchField').attr('placeholder', 'Beurla');
-    $('#editEntryFormContainer').hide();
-    $('#homePageText').show();
-    $('#noResultsMessage').hide();
-    return false;
-});
 
 /*
 $('#backbutton').on("click", function() {
