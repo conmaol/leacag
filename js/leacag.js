@@ -1,6 +1,6 @@
 /* GLOBAL VARIABLES */
 
-var securityClearance = 0; // global variable for user privileges
+var securityClearance = 0; 
 var lexicopiaId = null; // global variable to keep track of the current lexical ID, to be used by submitEditEntryForm()
 var auth2;  // global variable to keep track of the Google sign-in state
 var entryhistory = [];
@@ -201,28 +201,17 @@ function updateContent(id) {
     // update the content panel when a new lexical entry is selected
     $("#lexicalText").load("../lexicopia/code/php/generateLexicalEntry.php?lang=gd&id=" + id);
     //check for Editor status and show edit link
-    console.log("Security clearance: " + securityClearance);
-    if (securityClearance > 2) {
-        $("#editEntryLink").show();
-    }
-    if (securityClearance > 1) {
-        $("#addCommentLink").show();
-    }
-    /*
     $.getJSON("ajax.php?action=checkEditor", function(data) {
         if (data.isEditor) {
             $("#editEntryLink").show();
         }
     });
-    */
     //check for Contributor status and show comment link
-    /*
     $.getJSON("ajax.php?action=checkSubmitter", function(data) {
         if (data.isSubmitter) {
             $("#addCommentLink").show();
         }
     });
-    */
     lexicopiaId = id;
     /*
     if (entryhistory.length > 1) {
@@ -234,74 +223,6 @@ function updateContent(id) {
     */
 }
 
-function onSignIn(googleUser) {
-    var profile = googleUser.getBasicProfile();
-    //authenticate the user
-    var id_token = googleUser.getAuthResponse().id_token;
-  /*  $.post("ajax.php", {action: "authenticate", idtoken: id_token}, function(data) {
-        if(data.userid) {*/
-    //add user info to form fields
-    $(".userEmail").val(profile.getEmail());
-    $("#userID").val(profile.getId());
-    $.ajax({
-        method: "GET",
-        url: "ajax.php?action=login&email=" + profile.getEmail()
-    });
-    auth2 = gapi.auth2.getAuthInstance();
-    //Update the button to display "Sign Out" option
-    $(".g-signin2").hide();
-    $("#signOutLink").show();
-    $(".signOut").show();
-    
-    securityClearance++;
-    $.getJSON("ajax.php?action=checkSubmitter", function (data) {
-        if (data.isSubmitter) {
-            securityClearance++;
-        }
-    });
-    $.getJSON("ajax.php?action=checkEditor", function (data) {
-        if (data.isEditor) {
-            securityClearance++;
-        }
-    });
-    $.getJSON("ajax.php?action=checkAdmin", function (data) {
-        if (data.isAdmin) {
-            securityClearance++;
-        }
-    });
-    console.log("Security clearance: " + securityClearance);
-    // Show the signed-in message
-    var loggedInMsg = "Air a chlàradh a-steach mar " + profile.getName();
-    if (securityClearance == 4) {
-        loggedInMsg += '&nbsp;&nbsp;<a href="admin.php">> rianaire</a>';
-    }
-    $("#loggedInStatusMessage").html(loggedInMsg).show();
-    if (securityClearance > 1) {
-        $("#newEntryLink").show();
-        if ($(".lexicopia-headword").html()) {
-            $("#addCommentLink").show();
-        }
-    }
-    if (securityClearance > 2 && $(".lexicopia-headword").html()) {
-        $('#editEntryLink').show();
-    }
-  /*      }
-    }, "json");*/
-}
-
-function getUser() {     /* Get signed-in Google user */
-    if (!auth2) {
-        return false;
-    }
-    var user = auth2.currentUser.get();
-    var profile = user.getBasicProfile();
-    if (profile) {
-        return profile;
-    } 
-    else {
-        return false;
-    }
-}
 
 
 /* MISC */
@@ -313,6 +234,7 @@ $(function() {
         $(".navbar-collapse").collapse('hide');
     });
 
+   
     /*
      Sign out code
      */
@@ -333,16 +255,64 @@ $(function() {
         $.ajax('ajax.php?action=logout');
         gapi.auth2.getAuthInstance().disconnect();
         securityClearance = 0;
-        console.log("Security clearance: " + securityClearance);
         console.log('User signed out.');  //debug code only
     });
 });
 
+function onSignIn(googleUser) {
+    var profile = googleUser.getBasicProfile();
 
+    //authenticate the user
+    var id_token = googleUser.getAuthResponse().id_token;
 
+  /*  $.post("ajax.php", {action: "authenticate", idtoken: id_token}, function(data) {
+        if(data.userid) {*/
 
+            //add user info to form fields
+            $('.userEmail').val(profile.getEmail());
+            $('#userID').val(profile.getId());
 
+            $.ajax({
+                method: "GET",
+                url: 'ajax.php?action=login&email=' + profile.getEmail()
+            });
 
+            auth2 = gapi.auth2.getAuthInstance();
+
+            //Update the button to display "Sign Out" option
+            $('.g-signin2').hide();
+            $('#signOutLink').show();
+            $('.signOut').show();
+            //Show the signed-in message
+            var loggedInMsg = 'Air a chlàradh a-steach mar ' + profile.getName();
+
+            //check for admin status
+            $.getJSON("ajax.php?action=checkAdmin", function (data) {
+                if (data.isAdmin) {
+                    loggedInMsg += '&nbsp;&nbsp;<a href="admin.php">> rianaire</a>';
+                }
+            })
+                .done(function () {
+                    $('#loggedInStatusMessage').html(loggedInMsg).show();
+                });
+            //check for submitter status
+            $.getJSON("ajax.php?action=checkSubmitter", function (data) {
+                if (data.isSubmitter) {
+                    $('#newEntryLink').show();
+                    if ($('.lexicopia-headword').html()) {
+                        $('#addCommentLink').show();
+                    }
+                }
+            });
+            //check for editor status
+            $.getJSON("ajax.php?action=checkEditor", function (data) {
+                if (data.isEditor && $('.lexicopia-headword').html()) {
+                    $('#editEntryLink').show();
+                }
+            });
+  /*      }
+    }, "json");*/
+}
 
 function chooseSelectedTerm(item, lang) {
     updateUserSearchDB(item.value, 0, lang);           //records the search as successful in the server DB
@@ -371,11 +341,6 @@ function chooseSelectedTerm(item, lang) {
     }
 }
 
-
-
-
-
-
 /*
  * Add the user email and search term to the database
  */
@@ -396,8 +361,28 @@ function updateUserSearchDB(searchTerm, failed, language) {
     });
 }
 
+/*
+ * Get signed-in Google user
+ */
+function getUser() {
+    if (!auth2) {
+        return false;
+    }
+    var user = auth2.currentUser.get();
+    var profile = user.getBasicProfile();
+    if (profile) {
+        return profile;
+    } else {
+        return false;
+    }
+}
 
-
+/*
+$('#backbutton').on("click", function() {
+    goBack();
+    return false;
+});
+*/
 
 /*
 $('#englishSearchField').on({
@@ -426,8 +411,6 @@ $('#englishSearchField').on({
         $('#noResults').hide();
     }
 });
-
-
 $('#gaelicSearchField').on({
     keyup: function (e) {
         var search = $('#gaelicSearchField').val();
@@ -453,11 +436,5 @@ $('#gaelicSearchField').on({
         $(this).attr('placeholder', 'Gàidhlig');
         $('#noResults').hide();
     }
-});
-*/
-/*
-$('#backbutton').on("click", function() {
-    goBack();
-    return false;
 });
 */
