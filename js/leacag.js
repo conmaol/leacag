@@ -274,6 +274,7 @@ function onSignIn(googleUser) {
     if (securityClearance == 0) {
         securityClearance = 1;
     }
+    console.log("Security clearance: " + securityClearance);
     //Show the signed-in message
     var loggedInMsg = "Air a chlàradh a-steach mar " + profile.getName();
     if (securityClearance == 4) {
