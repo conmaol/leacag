@@ -35,6 +35,7 @@ $("#gdToEnToggle").on("click", function() {
     $("#englishSearchField").focus();
     $("#suggestionsDropDown").hide();
     $("#noResultsMessage").hide();
+    $("#gaelicEquivalentsList").empty();
     $("#lexicalText").empty();
     $("#addCommentFormContainer").hide();
     $("#editEntryFormContainer").hide();
@@ -43,15 +44,15 @@ $("#gdToEnToggle").on("click", function() {
 });
 
 $("#randomEntryLink").on("click", function() {
-    $("#noResultsMessage").hide();
     $("#englishSearchField").val("");
     $("#gaelicSearchField").val("");
-    $("#gaelicEquivalentsList").html("");
+    $("#noResultsMessage").hide();
+    $("#gaelicEquivalentsList").empty();
     $.getJSON("php/leacag.php?action=getRandom", function(data) {
-        var randomid = data.randomEntry.id; // THIS DOESN'T WORK
-        entryhistory.push(randomid);
-        //entryhistory=[randomid];
-        updateContent(randomid);
+        //var randomid = data.randomEntry.id;
+        var randomID = data.id;
+        entryhistory.push(randomID);
+        updateContent(randomID);
         return false;
     })
 });
