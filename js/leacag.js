@@ -1,9 +1,12 @@
-//var minChars = 3;
-var lexicopiaId = null; //a global variable to keep track of the current lexical ID, to be used by submitEditEntryForm()
-var auth2;  //a global variable to keep track of the Google sign-in state
+/* GLOBAL VARIABLES */
+
+var systemRole = null; // global variable with possible values "user", "contributor", "editor", "admin"
+var lexicopiaId = null; // global variable to keep track of the current lexical ID, to be used by submitEditEntryForm()
+var auth2;  // global variable to keep track of the Google sign-in state
 var entryhistory = [];
+var bpopup;     // to store and handle the modal popup
+
 $('#englishSearchField').focus();
-var bpopup;     //to store and handle the modal popup
 
 /* EVENT HANDLERS */
 
@@ -56,6 +59,137 @@ $("#randomEntryLink").on("click", function() {
     })
 });
 
+$("#newEntryLink a").on("click", function () {
+    bpopup = $("#newEntryFormContainer").bPopup({
+        modal: true
+    });
+    $("#submitThanksPopUp").hide();
+    $("#newEntryForm").show();
+});
+
+$("#addCommentLink").on("click", function () {
+    bpopup = $("#addCommentFormPopup").bPopup({
+        modal: true
+    });
+    $("#submitThanksPopUp").hide();
+    $("#addCommentForm").show();
+});
+
+$("#editEntryLink").on("click", function () {
+    bpopup = $("#editEntryFormPopup").bPopup({
+        modal: true
+    });
+    $("#submitThanksPopUp").hide();
+    $("#editHeadword").val($(".lexicopia-headword").html());
+    $("#editEntryForm").show();
+});
+
+$("#newEntryForm").on("submit", function () {
+    var formData = $(this).serialize();
+    $.post("ajax.php", formData, function (data) {
+        console.log(data);
+    });
+    $("#newEntryForm").hide();
+    $("#newEntryForm").trigger('reset');
+    bpopup.close();
+    bpopup = $("#submitThanksPopUp").bPopup({
+        modal: true
+    });
+    return false;
+});
+
+$("#addCommentForm").on("submit", function () {
+    $("#lexId").val(lexicopiaId);
+    var formData = $(this).serialize();
+    $.post("ajax.php", formData, function (data) {
+        console.log(data);
+    });
+    $("#addCommentForm").hide();
+    $("#addCommentForm").trigger('reset');
+    bpopup.close();
+    bpopup = $("#submitThanksPopUp").bPopup({
+        modal: true
+    });
+    return false;
+});
+
+$("#editEntryForm").on("submit", function () {
+    var newHeadword = $("#editHeadword").val();
+    $(".lexicopia-headword").html(newHeadword);
+    $.ajax("ajax.php?action=updateHeadword&id="+lexicopiaId+"&form="+newHeadword);
+    $("#editEntryForm").hide();
+    $("#editEntryForm").trigger("reset");
+    bpopup.close();
+    bpopup = $("#submitThanksPopUp").bPopup({
+        modal: true
+    });
+    return false;
+});
+
+$(".popupClose").on("click", function () {  //close the popup on click
+    bpopup.close();
+    return false;
+});
+
+// event handler has to be attached to the document in order to register the dynamically added elements
+$(document).on("click", ".leacag-link", function() {
+    var id = $(this).attr("id");
+    updateContent(id);
+    return false;
+});
+
+$("#englishSearchField").on({
+    click: function() {
+        $(this).val("");	//clear the search field for a new query
+        $(this).attr("placeholder", "Beurla");
+        $("#noResultsMessage").hide();
+    }
+});
+
+$("#gaelicSearchField").on({
+    click: function() {
+        $(this).val("");	//clear the search field for a new query
+        $(this).attr("placeholder", "Gàidhlig");
+        $("#noResultsMessage").hide();
+    }
+});
+
+$("#englishSearchField").autocomplete({
+    autoFocus: true,
+    response: function (event, ui) {
+        if (ui.content.length === 0) {
+            $("#noResultsMessage").show();
+            updateUserSearchDB($(this).val(), 1, "en");    //log a failed search
+        }
+        else {
+            $("#noResultsMessage").hide();
+        };
+    },
+    source: "php/leacag.php?action=getEnglish",
+    minLength: 3,
+    select: function( event, ui ) {
+        chooseSelectedTerm(ui.item, "en");
+    }
+});
+
+$("#gaelicSearchField").autocomplete({
+    autoFocus: true,
+    response: function (event, ui) {
+        if (ui.content.length === 0) {
+                $("#noResultsMessage").show();
+                updateUserSearchDB($(this).val(), 1, "gd");    //log a failed search
+        } 
+        else {
+            $("#noResultsMessage").hide();
+        };
+    },
+    source: "php/leacag.php?action=getGaelic",
+    minLength: 3,
+    select: function( event, ui ) {
+        chooseSelectedTerm(ui.item, "gd");
+    }
+});
+
 /* HELPER FUNCTIONS */
 
 function updateContent(id) {
@@ -100,55 +234,7 @@ $(function() {
         $(".navbar-collapse").collapse('hide');
     });
 
-    $('#englishSearchField').on({
-        click: function() {
-            $(this).val("");	//clear the search field for a new query
-            $(this).attr('placeholder', 'Beurla');
-            $('#noResultsMessage').hide();
-        }
-    });
-
-    $('#gaelicSearchField').on({
-        click: function() {
-            $(this).val("");	//clear the search field for a new query
-            $(this).attr('placeholder', 'Gàidhlig');
-            $('#noResultsMessage').hide();
-        }
-    });
-
-    $( "#englishSearchField" ).autocomplete({
-        autoFocus: true,
-        response: function (event, ui) {
-            if (ui.content.length === 0) {
-                $('#noResultsMessage').show();
-                updateUserSearchDB($(this).val(), 1, 'en');    //log a failed search
-            } else {
-                $('#noResultsMessage').hide();
-            };
-        },
-        source: "php/leacag.php?action=getEnglish",
-        minLength: 3,
-        select: function( event, ui ) {
-            chooseSelectedTerm(ui.item, 'en');
-        }
-    });
-
-    $( "#gaelicSearchField" ).autocomplete({
-        autoFocus: true,
-        response: function (event, ui) {
-            if (ui.content.length === 0) {
-                $('#noResultsMessage').show();
-                updateUserSearchDB($(this).val(), 1, 'gd');    //log a failed search
-            } else {
-                $('#noResultsMessage').hide();
-            };
-        },
-        source: "php/leacag.php?action=getGaelic",
-        minLength: 3,
-        select: function( event, ui ) {
-            chooseSelectedTerm(ui.item, 'gd');
-        }
-    });
+    
 
     /*
      Sign out code
@@ -173,10 +259,6 @@ $(function() {
     });
 });
 
-$('.popupClose').on('click', function () {  //close the popup on click
-    bpopup.close();
-    return false;
-});
 
 function onSignIn(googleUser) {
     var profile = googleUser.getBasicProfile();
@@ -291,12 +373,7 @@ $('#gaelicSearchField').on({
 });
 */
 
-//the event handler has to be attached to the document in order to register the dynamically added elements
-$(document).on('click', '.leacag-link', function() {
-    var id = $(this).attr('id');
-    updateContent(id);
-    return false;
-});
+
 
 function chooseSelectedTerm(item, lang) {
     updateUserSearchDB(item.value, 0, lang);           //records the search as successful in the server DB
@@ -374,78 +451,8 @@ function getUser() {
 /*
  Form submission code
  */
-//show the forms
 
-$("#newEntryLink a").on("click", function () {
-    bpopup = $("#newEntryFormContainer").bPopup({
-        modal: true
-    });
-    $("#submitThanksPopUp").hide();
-    $("#newEntryForm").show();
-});
 
-$("#addCommentLink").on("click", function () {
-    bpopup = $("#addCommentFormPopup").bPopup({
-        modal: true
-    });
-    $("#submitThanksPopUp").hide();
-    $("#addCommentForm").show();
-});
-
-$("#editEntryLink").on("click", function () {
-    bpopup = $("#editEntryFormPopup").bPopup({
-        modal: true
-    });
-    $("#submitThanksPopUp").hide();
-    $("#editHeadword").val($(".lexicopia-headword").html());
-    $("#editEntryForm").show();
-});
 
 /* Process data submitted by contributors for new entry */
 
-$("#newEntryForm").on("submit", function () {
-    var formData = $(this).serialize();
-    $.post("ajax.php", formData, function (data) {
-        console.log(data);
-    });
-    $("#newEntryForm").hide();
-    $("#newEntryForm").trigger('reset');
-    bpopup.close();
-    bpopup = $("#submitThanksPopUp").bPopup({
-        modal: true
-    });
-    return false;
-});
-
-/* Process comment form */
-
-$("#addCommentForm").on("submit", function () {
-    $("#lexId").val(lexicopiaId);
-    var formData = $(this).serialize();
-    $.post("ajax.php", formData, function (data) {
-        console.log(data);
-    });
-    $("#addCommentForm").hide();
-    $("#addCommentForm").trigger('reset');
-    bpopup.close();
-    bpopup = $("#submitThanksPopUp").bPopup({
-        modal: true
-    });
-    return false;
-});
-
-/*
-    Process data submitted by editor to update an entry
- */
-$('#editEntryForm').on('submit', function () {
-    var newHeadword = $('#editHeadword').val();
-    $('.lexicopia-headword').html(newHeadword);
-    $.ajax('ajax.php?action=updateHeadword&id='+lexicopiaId+'&form='+newHeadword);
-    $('#editEntryForm').hide();
-    $('#editEntryForm').trigger('reset');
-    bpopup.close();
-    bpopup = $('#submitThanksPopUp').bPopup({
-        modal: true
-    });
-    return false;
-});
