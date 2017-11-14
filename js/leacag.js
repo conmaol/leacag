@@ -255,6 +255,7 @@ $(function() {
         Cookies.remove('userEmail');
         $.ajax('ajax.php?action=logout');
         gapi.auth2.getAuthInstance().disconnect();
+        systemRole = null;
         console.log('User signed out.');  //debug code only
     });
 });
