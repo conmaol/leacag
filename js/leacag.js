@@ -276,7 +276,7 @@ function onSignIn(googleUser) {
     }
     //Show the signed-in message
     var loggedInMsg = "Air a chlàradh a-steach mar " + profile.getName();
-    if (securityStatus == 4) {
+    if (securityClearance == 4) {
         loggedInMsg += '&nbsp;&nbsp;<a href="admin.php">> rianaire</a>';
     }
     $("#loggedInStatusMessage").html(loggedInMsg).show();
