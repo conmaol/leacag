@@ -50,8 +50,8 @@ function getRandom() {
   $json = json_decode($gaelicIndex, true);
   $randomKey = array_rand($json["target_index"]);
   $randomEntry = $json["target_index"][$randomKey];
-  return json_encode(array("randomEntry"=>$randomEntry));
-
+  $randomID = $randomEntry->id;
+  return json_encode(array("id"=>$randomID));
 }
 
 function getAccentInsensitive($text) {
