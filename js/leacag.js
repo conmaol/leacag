@@ -201,6 +201,7 @@ function updateContent(id) {
     // update the content panel when a new lexical entry is selected
     $("#lexicalText").load("../lexicopia/code/php/generateLexicalEntry.php?lang=gd&id=" + id);
     //check for Editor status and show edit link
+    console.log("Security clearance: " + securityClearance);
     if (securityClearance > 2) {
         $("#editEntryLink").show();
     }
@@ -338,6 +339,7 @@ $(function() {
         $.ajax('ajax.php?action=logout');
         gapi.auth2.getAuthInstance().disconnect();
         securityClearance = 0;
+        console.log("Security clearance: " + securityClearance);
         console.log('User signed out.');  //debug code only
     });
 });
