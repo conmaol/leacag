@@ -42,6 +42,21 @@ $("#gdToEnToggle").on("click", function() {
     return false;
 });
 
+$("#randomEntryLink").on("click", function() {
+    $("#noResultsMessage").hide();
+    $("#englishSearchField").val("");
+    $("#gaelicSearchField").val("");
+    $("#gaelicEquivalentsList").html("");
+    $.getJSON("php/leacag.php?action=getRandom", function(data) {
+        var randomid = data.randomEntry.id; // THIS DOESN'T WORK
+        entryhistory.push(randomid);
+        //entryhistory=[randomid];
+        updateContent(randomid);
+        return false;
+    })
+});
+
+
 $(function() {
 
     //close the dropdown when a navbar link is clicked (mobile)
@@ -245,20 +260,6 @@ $(document).on('click', '.leacag-link', function() {
     var id = $(this).attr('id');
     updateContent(id);
     return false;
-});
-
-$('#randomEntryLink').on("click", function() {
-    $('#noResultsMessage').hide();
-    $('#englishSearchField').val("");
-    $('#gaelicSearchField').val("");
-    $('#gaelicEquivalentsList').html("");
-    $.getJSON("php/leacag.php?action=getRandom", function(data) {
-        var randomid = data.randomEntry.id; // THIS DOESN'T WORK
-        entryhistory.push(randomid);
-        //entryhistory=[randomid];
-        updateContent(randomid);
-        return false;
-    })
 });
 
 function chooseSelectedTerm(item, lang) {
