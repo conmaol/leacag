@@ -50,7 +50,7 @@ function getRandom() {
   $json = json_decode($gaelicIndex, true);
   $randomKey = array_rand($json["target_index"]);
   $randomEntry = $json["target_index"][$randomKey];
-  $randomID = $randomEntry->id;
+  $randomID = $randomEntry["id"];
   return json_encode(array("id"=>$randomID));
 }
 
