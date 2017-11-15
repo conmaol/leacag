@@ -227,15 +227,6 @@ TEXT;
   return $text;
 }
 
-function checkEditor() {
-  $dbh = DB::getDatabaseHandle(DB_NAME);
-  $sth = $dbh->prepare("SELECT accessLevel FROM leacag_user WHERE email = :email");
-  $sth->execute(array(":email"=>$_SESSION["email"]));
-  $row = $sth->fetch();
-  $result = array("isEditor" => $row[0] >= EDITOR_ACCESS_LEVEL);
-  return $result;
-}
-
 function checkSecurityClearance() {
   $dbh = DB::getDatabaseHandle(DB_NAME);
   $sth = $dbh->prepare("SELECT accessLevel FROM leacag_user WHERE email = :email");
