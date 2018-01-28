@@ -19,7 +19,7 @@ header("Expires: 0"); // Proxies.
   <script src="https://apis.google.com/js/platform.js" async defer></script>
   <link href="css/bootstrap.min.css" rel="stylesheet"/>
   <link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet"/>
-  <link href="../lexicopia/code/css/lexicopia-entries.css" rel="stylesheet"/>
+  <link href="../lexicopia/code/css/lexicopiaEntries.css" rel="stylesheet"/>
   <link href="css/leacag.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 </head>
@@ -103,23 +103,10 @@ header("Expires: 0"); // Proxies.
               Briathar Gàidhlig:
               <input type="text" class="formField" name="target"/>
           </p>
-          <!--p>
-              Mìr-cainnte:
-              <select name="pos">
-                  <option>ainmear</option>
-                  <option>buadhair</option>
-                  <option>gnìomhair</option>
-                  <option>eile</option>
-              </select>
-          </p-->
           <p>
               Cruthan Co-cheangailte:<br/>
               <textarea name="related" id="relatedNotesField" class="formField"></textarea>
           </p>
-          <!--p>
-              Tùs:<br/>
-              <textarea name="source" id="sourceNotesField" class="formField"></textarea>
-          </p-->
           <p>
               Tùs/Nòtaichean:<br/>
               <textarea name="notes" id="formNotesField" class="formField"></textarea>
@@ -128,6 +115,7 @@ header("Expires: 0"); // Proxies.
               <input type="hidden" name="userEmail" class="userEmail"/>
               <input type="hidden" name="userID" id="userID"/>
               <input type="hidden" name="action" value="processNewEntryForm"/>
+              <input type="hidden" name="lang" value="gd"/>
               <button class="popupClose">cuir às</button>
               <input type="submit" value="cuir a-steach"/>
           </p>
@@ -188,6 +176,7 @@ header("Expires: 0"); // Proxies.
                       </p>
                       <p>
                           <input type="hidden" name="action" value="processAddCommentForm"/>
+                          <input type="hidden" name="lang" value="gd"/>
                           <input type="hidden" name="id" id="lexId"/>
                           <input type="hidden" name="userEmail" class="userEmail"/>
                           <button class="popupClose">cuir às</button>
@@ -196,18 +185,63 @@ header("Expires: 0"); // Proxies.
                   </form>
               </div>
           </div>
-          <div id="editEntryFormContainer">
-              <a href="#" id="editEntryLink" title="Edit this entry">Deasaich an innteart seo</a>
-              <div id="editEntryFormPopup">
-                  <form id="editEntryForm">
+          <div id="addEnglishFormContainer">
+              <a href="#" id="addEnglishLink" title="Add an English equivalent term to this entry">Add an English equivalent term to this entry</a>
+              <div id="addEnglishFormPopup">
+                  <form id="addEnglishForm">
                       <h3>
-                          Ceann-fhacal
+                          Add English equivalent term:
                       </h3>
                       <p>
-                          <input type="text" id="editHeadword" class="formField" value=""/>
+                          <textarea name="trans" class="formField"></textarea>
                       </p>
                       <p>
-                          <input type="hidden" name="action" value="processEditEntryForm"/>
+                          <input type="hidden" name="action" value="processAddEnglishForm"/>
+                          <input type="hidden" name="lang" value="gd"/>
+                          <input type="hidden" name="id" id="lexId"/>
+                          <input type="hidden" name="userEmail" class="userEmail"/>
+                          <button class="popupClose">cuir às</button>
+                          <input type="submit" value="cuir a-steach"/>
+                      </p>
+                  </form>
+              </div>
+          </div>
+          <div id="addFormOrthFormContainer">
+              <a href="#" id="addFormOrthLink" title="Add an orthographic form to this entry">Add an orthographic form to this entry</a>
+              <div id="addFormOrthFormPopup">
+                  <form id="addFormOrthForm">
+                      <h3>
+                          Add orthographic form:
+                      </h3>
+                      <p>
+                          <textarea name="target" class="formField"></textarea>
+                      </p>
+                      <p>
+                          <input type="hidden" name="action" value="processAddFormOrthForm"/>
+                          <input type="hidden" name="lang" value="gd"/>
+                          <input type="hidden" name="id" id="lexId"/>
+                          <input type="hidden" name="userEmail" class="userEmail"/>
+                          <button class="popupClose">cuir às</button>
+                          <input type="submit" value="cuir a-steach"/>
+                      </p>
+                  </form>
+              </div>
+          </div>
+          <div id="authEnglishFormContainer">
+              <a href="#" id="authEnglishLink" title="Authorise an English equivalent term in this entry">Authorise an English equivalent term in this entry</a>
+              <div id="authEnglishFormPopup">
+                  <form id="authEnglishForm">
+                      <h3>
+                          Authorise English equivalent term:
+                      </h3>
+                      <p>
+                          <textarea name="trans" class="formField"></textarea>
+                      </p>
+                      <p>
+                          <input type="hidden" name="action" value="processAuthEnglishForm"/>
+                          <input type="hidden" name="lang" value="gd"/>
+                          <input type="hidden" name="id" id="lexId"/>
+                          <input type="hidden" name="userEmail" class="userEmail"/>
                           <button class="popupClose">cuir às</button>
                           <input type="submit" value="cuir a-steach"/>
                       </p>
@@ -222,7 +256,7 @@ header("Expires: 0"); // Proxies.
   <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>         <!-- whole library - change to downloaded subset later -->
   <script src="js/js.cookie.js"></script>
   <script src="js/jquery.bpopup.min.js"></script>
-  <script src="../lexicopia/code/js/lexicopia-entries.js"></script>
+  <script src="../lexicopia/code/js/lexicopiaEntries.js"></script>
   <script src="js/leacag.js"></script>
 
 </body>

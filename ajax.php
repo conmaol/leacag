@@ -52,6 +52,10 @@ switch ($_REQUEST["action"]) {
     echo json_encode($response);
     break;
   case "processNewEntryForm":
+    $securityClearance = checkSecurityClearance();
+    if ($securityClearance["level"] < SUBMIT_ACCESS_LEVEL) {
+      break;
+    }
     $dbh = DB::getDatabaseHandle(DB_NAME);
     $sth = $dbh->prepare("INSERT INTO leacag_formSubmission (email, en, gd, related, notes) VALUES (:email, :en, :gd, :related, :notes)");
     if ($sth->execute(array(":email"=>$_POST["userEmail"], ":en"=>$_POST["en"], ":gd"=>$_POST["target"],
@@ -88,38 +92,23 @@ switch ($_REQUEST["action"]) {
       echo "There was a problem saving the form data";
     }
     break;
-  case "checkAdmin":
-    $dbh = DB::getDatabaseHandle(DB_NAME);
-    $sth = $dbh->prepare("SELECT accessLevel FROM leacag_user WHERE email = :email");
-    $sth->execute(array(":email"=>$_SESSION["email"]));
-    $row = $sth->fetch();
-    $result = array("isAdmin" => $row[0] >= EDITOR_ACCESS_LEVEL);
-    echo json_encode($result);
-    break;
-  case "checkSubmitter":
-    $dbh = DB::getDatabaseHandle(DB_NAME);
-    $sth = $dbh->prepare("SELECT accessLevel FROM leacag_user WHERE email = :email");
-    $sth->execute(array(":email"=>$_SESSION["email"]));
-    $row = $sth->fetch();
-    $result = array("isSubmitter" => $row[0] >= SUBMIT_ACCESS_LEVEL);
-    echo json_encode($result);
-    break;
-  case "checkEditor":
-    $result = checkEditor();
+  case "checkSecurityClearance":
+    $result = checkSecurityClearance();
     echo json_encode($result);
     break;
   case "updateHeadword":
-    $result = checkEditor();
-    if ($result["isEditor"]) {
-      $id = $_GET["id"];
-      $form = str_replace(" ", "_", $_GET["form"]);
-      $cmd = exec('php ../lexicopia/code/php/setheadword.php gd ' . $id . ' '  . $form .' 2>&1', $output, $return_var);
-      echo $cmd; print_r($output); echo $return_var;
-      //update the English JSON file
-      updateEnglishJSONFile($id, $_GET);
-      //update the Target JSON file
-      updateTargetJSONFile($id, $_GET);
+    $securityClearance = checkSecurityClearance();
+    if ($securityClearance["level"] < EDITOR_ACCESS_LEVEL) {
+      break;
     }
+    $id = $_GET["id"];
+    $form = str_replace(" ", "_", $_GET["form"]);
+    $cmd = exec('php ../lexicopia/code/php/setheadword.php gd ' . $id . ' '  . $form .' 2>&1', $output, $return_var);
+    echo $cmd; print_r($output); echo $return_var;
+    //update the English JSON file
+    updateEnglishJSONFile($id, $_GET);
+    //update the Target JSON file
+    updateTargetJSONFile($id, $_GET);
 
     $to       = "mark.mcconville@glasgow.ac.uk";
  // $to = "mail@steviebarrett.com";
@@ -136,9 +125,12 @@ TEXT;
     } else {
       echo " The email could not be sent.";
     }
-
     break;
   case "processAddCommentForm":
+    $securityClearance = checkSecurityClearance();
+    if ($securityClearance["level"] < SUBMIT_ACCESS_LEVEL) {
+      break;
+    }
     Comment::addComment($_POST, "/var/www/html/dasg.arts.gla.ac.uk/www/lexicopia/gd/");
 //    $to       = "mail@steviebarrett.com";
     $to       = "mark.mcconville@glasgow.ac.uk";
@@ -235,12 +227,12 @@ TEXT;
   return $text;
 }
 
-function checkEditor() {
+function checkSecurityClearance() {
   $dbh = DB::getDatabaseHandle(DB_NAME);
   $sth = $dbh->prepare("SELECT accessLevel FROM leacag_user WHERE email = :email");
   $sth->execute(array(":email"=>$_SESSION["email"]));
   $row = $sth->fetch();
-  $result = array("isEditor" => $row[0] >= EDITOR_ACCESS_LEVEL);
+  $result = array("level" => $row[0]);
   return $result;
 }
 
