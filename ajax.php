@@ -12,6 +12,8 @@ require_once 'include.php';
 require_once 'vendor/autoload.php';
 require_once '../lexicopia/code/php/NewEntry.php';
 require_once '../lexicopia/code/php/Comment.php';
+require_once '../lexicopia/code/php/EnTrans.php';
+require_once '../lexicopia/code/php/FormOrth.php';
 
 switch ($_REQUEST["action"]) {
   case "login":
@@ -61,21 +63,7 @@ switch ($_REQUEST["action"]) {
     if ($sth->execute(array(":email"=>$_POST["userEmail"], ":en"=>$_POST["en"], ":gd"=>$_POST["target"],
       ":related"=>$_POST["related"], ":notes"=>$_POST["notes"]))) {
       echo "Form data added to DB...";
-      NewEntry::addEntry($_POST, "/var/www/html/dasg.arts.gla.ac.uk/www/lexicopia/gd/");
-      //assign the ID
-  /*    $id = str_replace(" ", "_", $_POST["gd"]);
-
-      //write the Target JSON and get the new ID
-      $id = updateTargetJSONFile($id, $_POST);
-
-      //write the English JSON
-      updateEnglishJSONFile($id, $_POST);
-
-      //write the XML
-      $filename = "../lexicopia/gd/lexemes/" . $id . ".xml";
-      $lexeme = getEntryXml($_POST, $id);
-      file_put_contents($filename, $lexeme);*/
-
+      NewEntry::addEntry($_POST, "/var/www/html/dasg.arts.gla.ac.uk/www/lexicopia/");
       $to       = "mark.mcconville@glasgow.ac.uk";
  //   $to = "mail@steviebarrett.com";
       $message  = getFormEmailText($_POST);
@@ -131,7 +119,7 @@ TEXT;
     if ($securityClearance["level"] < SUBMIT_ACCESS_LEVEL) {
       break;
     }
-    Comment::addComment($_POST, "/var/www/html/dasg.arts.gla.ac.uk/www/lexicopia/gd/");
+    Comment::addComment($_POST, "/var/www/html/dasg.arts.gla.ac.uk/www/lexicopia/");
 //    $to       = "mail@steviebarrett.com";
     $to       = "mark.mcconville@glasgow.ac.uk";
     $message  = <<<HTML
@@ -148,6 +136,28 @@ HTML;
       echo " The email could not be sent.";
     }
     break;
+  case "processAddEnglishForm":
+    $securityClearance = checkSecurityClearance();
+    if ($securityClearance["level"] < SUBMIT_ACCESS_LEVEL) {
+      break;
+    }
+    EnTrans::addEnTrans($_POST, "/var/www/html/dasg.arts.gla.ac.uk/www/lexicopia/");
+    break;
+  case "processAddFormOrthForm":
+    $securityClearance = checkSecurityClearance();
+    if ($securityClearance["level"] < SUBMIT_ACCESS_LEVEL) {
+      break;
+    }
+    FormOrth::addFormOrth($_POST, "/var/www/html/dasg.arts.gla.ac.uk/www/lexicopia/");
+    break;
+  case "processAuthEnglishForm":
+    $securityClearance = checkSecurityClearance();
+    if ($securityClearance["level"] < EDITOR_ACCESS_LEVEL) {
+      break;
+    }
+    EnTrans::authEnTrans($_POST, "/var/www/html/dasg.arts.gla.ac.uk/www/lexicopia/");
+    break;	
+		
 }
 
 /*function updateTargetJSONFile($id, $fields) {
