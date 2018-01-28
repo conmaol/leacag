@@ -103,23 +103,10 @@ header("Expires: 0"); // Proxies.
               Briathar Gàidhlig:
               <input type="text" class="formField" name="target"/>
           </p>
-          <!--p>
-              Mìr-cainnte:
-              <select name="pos">
-                  <option>ainmear</option>
-                  <option>buadhair</option>
-                  <option>gnìomhair</option>
-                  <option>eile</option>
-              </select>
-          </p-->
           <p>
               Cruthan Co-cheangailte:<br/>
               <textarea name="related" id="relatedNotesField" class="formField"></textarea>
           </p>
-          <!--p>
-              Tùs:<br/>
-              <textarea name="source" id="sourceNotesField" class="formField"></textarea>
-          </p-->
           <p>
               Tùs/Nòtaichean:<br/>
               <textarea name="notes" id="formNotesField" class="formField"></textarea>
@@ -128,6 +115,7 @@ header("Expires: 0"); // Proxies.
               <input type="hidden" name="userEmail" class="userEmail"/>
               <input type="hidden" name="userID" id="userID"/>
               <input type="hidden" name="action" value="processNewEntryForm"/>
+              <input type="hidden" name="lang" value="gd"/>
               <button class="popupClose">cuir às</button>
               <input type="submit" value="cuir a-steach"/>
           </p>
