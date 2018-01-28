@@ -176,6 +176,7 @@ header("Expires: 0"); // Proxies.
                       </p>
                       <p>
                           <input type="hidden" name="action" value="processAddCommentForm"/>
+                          <input type="hidden" name="lang" value="gd"/>
                           <input type="hidden" name="id" id="lexId"/>
                           <input type="hidden" name="userEmail" class="userEmail"/>
                           <button class="popupClose">cuir às</button>
