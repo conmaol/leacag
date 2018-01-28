@@ -196,18 +196,60 @@ header("Expires: 0"); // Proxies.
                   </form>
               </div>
           </div>
-          <div id="editEntryFormContainer">
-              <a href="#" id="editEntryLink" title="Edit this entry">Deasaich an innteart seo</a>
-              <div id="editEntryFormPopup">
-                  <form id="editEntryForm">
+          <div id="addEnglishFormContainer">
+              <a href="#" id="addEnglishLink" title="Add an English equivalent term to this entry">Add an English equivalent term to this entry</a>
+              <div id="addEnglishFormPopup">
+                  <form id="addEnglishForm">
                       <h3>
-                          Ceann-fhacal
+                          Add English equivalent term:
                       </h3>
                       <p>
-                          <input type="text" id="editHeadword" class="formField" value=""/>
+                          <textarea name="comment" class="formField"></textarea>
                       </p>
                       <p>
-                          <input type="hidden" name="action" value="processEditEntryForm"/>
+                          <input type="hidden" name="action" value="processAddEnglishForm"/>
+                          <input type="hidden" name="id" id="lexId"/>
+                          <input type="hidden" name="userEmail" class="userEmail"/>
+                          <button class="popupClose">cuir às</button>
+                          <input type="submit" value="cuir a-steach"/>
+                      </p>
+                  </form>
+              </div>
+          </div>
+          <div id="addFormOrthFormContainer">
+              <a href="#" id="addFormOrthLink" title="Add an orthographic form to this entry">Add an orthographic form to this entry</a>
+              <div id="addFormOrthFormPopup">
+                  <form id="addFormOrthForm">
+                      <h3>
+                          Add orthographic form:
+                      </h3>
+                      <p>
+                          <textarea name="comment" class="formField"></textarea>
+                      </p>
+                      <p>
+                          <input type="hidden" name="action" value="processAddFormOrthForm"/>
+                          <input type="hidden" name="id" id="lexId"/>
+                          <input type="hidden" name="userEmail" class="userEmail"/>
+                          <button class="popupClose">cuir às</button>
+                          <input type="submit" value="cuir a-steach"/>
+                      </p>
+                  </form>
+              </div>
+          </div>
+          <div id="authEnglishFormContainer">
+              <a href="#" id="authEnglishLink" title="Authorise an English equivalent term in this entry">Authorise an English equivalent term in this entry</a>
+              <div id="authEnglishFormPopup">
+                  <form id="authEnglishForm">
+                      <h3>
+                          Authorise English equivalent term:
+                      </h3>
+                      <p>
+                          <textarea name="comment" class="formField"></textarea>
+                      </p>
+                      <p>
+                          <input type="hidden" name="action" value="processAuthEnglishForm"/>
+                          <input type="hidden" name="id" id="lexId"/>
+                          <input type="hidden" name="userEmail" class="userEmail"/>
                           <button class="popupClose">cuir às</button>
                           <input type="submit" value="cuir a-steach"/>
                       </p>
