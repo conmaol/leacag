@@ -113,7 +113,7 @@ div#gaelicEquivalentsList {
     padding-bottom: 10px;
 }
 
-div.lexicopia-entry {
+div.lexicopiaEntry {
     border: thin solid;
 }
 
@@ -207,7 +207,7 @@ a.loginLink {
     display: none;
 }
 
-#newEntryFormContainer, #addCommentFormPopup, #editEntryFormPopup, #submitThanksPopUp {
+#newEntryFormContainer, #addCommentFormPopup, #addEnglishFormPopup, #addFormOrthFormPopup, #authEnglishFormPopUp, #submitThanksPopUp {
     display:none;
     width: 20em;
     padding: 20px;
@@ -226,7 +226,7 @@ a.loginLink {
 /*
    new entry edit entry and comment form
 */
-#addCommentLink, #editEntryLink {
+#addCommentLink, #addEnglishLink, #addFormOrthLink, #authEnglishLink {
     margin-top: 10px;
     display: none;
     float: right;
