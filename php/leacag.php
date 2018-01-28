@@ -20,12 +20,12 @@ switch ($action) {
 }
 
 function getEnglish($q) {
-  $englishIndex = file_get_contents("../../lexicopia/gd/cache/english-index.json");
+  $englishIndex = file_get_contents("../../lexicopia/gd/cache/englishIndex.json");
   $results = array();
   $json = json_decode($englishIndex, true);
-  foreach ($json["english_index"] as $item) {
+  foreach ($json["englishIndex"] as $item) {
     if (strtolower(substr($item["en"], 0, strlen($q))) == strtolower($q)) {
-      $results[] = array("id"=>$item["gds"][0], "value"=>$item["en"], "label"=>$item["en"], "item"=>$item);
+      $results[] = array("id"=>$item["targets"][0], "value"=>$item["en"], "label"=>$item["en"], "item"=>$item);
     }
   }
   return json_encode($results);
@@ -33,23 +33,23 @@ function getEnglish($q) {
 
 function getGaelic($q) {
   $aiQ = getAccentInsensitive($q);
-  $gaelicIndex = file_get_contents("../../lexicopia/gd/cache/target-index.json");
+  $gaelicIndex = file_get_contents("../../lexicopia/gd/cache/targetIndex.json");
   $results = array();
   $json = json_decode($gaelicIndex, true);
   $pattern = "/^" . $aiQ . ".*/ui";
-  foreach ($json["target_index"] as $item) {
-    if (preg_match($pattern, $item["word"])) {
-      $results[] = array("id"=>$item["id"], "value"=>$item["word"], "label"=>$item["word"], "item"=>$item);
+  foreach ($json["targetIndex"] as $item) {
+    if (preg_match($pattern, $item["target"])) {
+      $results[] = array("id"=>$item["id"], "value"=>$item["target"], "label"=>$item["target"], "item"=>$item);
     }
   }
   return json_encode($results);
 }
 
 function getRandom() {
-  $gaelicIndex = file_get_contents("../../lexicopia/gd/cache/target-index.json");
+  $gaelicIndex = file_get_contents("../../lexicopia/gd/cache/targetIndex.json");
   $json = json_decode($gaelicIndex, true);
-  $randomKey = array_rand($json["target_index"]);
-  $randomEntry = $json["target_index"][$randomKey];
+  $randomKey = array_rand($json["targetIndex"]);
+  $randomEntry = $json["targetIndex"][$randomKey];
   $randomID = $randomEntry["id"];
   return json_encode(array("id"=>$randomID));
 }
