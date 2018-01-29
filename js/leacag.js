@@ -434,7 +434,7 @@ function chooseSelectedTerm(item, lang) {
     $('#gaelicSearchField').val("");
     $('#gaelicEquivalentsList').empty();
     if (lang=='en') {
-        var gds = item.item.gds;
+        var gds = item.item.targets;
         if (gds.length > 1) {
             $('#gaelicEquivalentsList').append("Faclan Gàidhlig airson <i>" + item.value + "</i>: ");
             for(var i = 0;i < gds.length;i++) {
