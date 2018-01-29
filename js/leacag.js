@@ -23,7 +23,9 @@ $("#enToGdToggle").on("click", function() {
     $("#gaelicEquivalentsList").empty();
     $("#lexicalText").empty();
     $("#addCommentLink").hide();
-    $("#editEntryLink").hide();
+    $("#addEnglishLink").hide();
+    $("#addFormOrthLink").hide();
+    $("#authEnglishLink").hide();
     $("#homePageText").show();
     return false;
 });
@@ -41,7 +43,9 @@ $("#gdToEnToggle").on("click", function() {
     $("#gaelicEquivalentsList").empty();
     $("#lexicalText").empty();
     $("#addCommentLink").hide();
-    $("#editEntryLink").hide();
+    $("#addEnglishLink").hide();
+    $("#addFormOrthLink").hide();
+    $("#authEnglishLink").hide();
     $("#homePageText").show();
     return false;
 });
