@@ -126,7 +126,7 @@ TEXT;
         Comment: {$_POST["comment"]}\nUser email: {$_POST["userEmail"]}
 HTML;
 
-    $subject  = "LEACAG AddComment Form Submission";
+    $subject  = "LEACAG AddComment Form Submission: " . $_POST["id"];
     $from     = "stephen.barrett@glasgow.ac.uk";
     $email    = new Email($to, $subject, $message, $from);
     echo "Attempting email...";
