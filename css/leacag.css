@@ -207,7 +207,7 @@ a.loginLink {
     display: none;
 }
 
-#newEntryFormContainer, #addCommentFormPopup, #addEnglishFormPopup, #addFormOrthFormPopup, #authEnglishFormPopUp, #submitThanksPopUp {
+#newEntryFormContainer, #addCommentFormPopup, #addEnglishFormPopup, #addFormOrthFormPopup, #authEnglishFormPopup, #submitThanksPopUp {
     display:none;
     width: 20em;
     padding: 20px;
