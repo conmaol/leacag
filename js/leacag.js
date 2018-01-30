@@ -130,6 +130,7 @@ $("#newEntryForm").on("submit", function () {
 
 $("#addCommentForm").on("submit", function () {
     $("#lexId").val(lexicopiaId);
+    console.log(lexicopiaId);
     var formData = $(this).serialize();
     $.post("ajax.php", formData, function (data) {
         console.log(data);
