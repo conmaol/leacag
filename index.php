@@ -165,11 +165,11 @@ header("Expires: 0"); // Proxies.
               </div>
           </div>
           <div id="addCommentFormContainer">
-              <a href="#" id="addCommentLink" title="Add a comment to this entry">Add comment to this entry</a>
+              <a href="#" id="addCommentLink" title="Add a comment to this entry">Cuir iomradh ris a’ bhriathar seo</a>
               <div id="addCommentFormPopup">
                   <form id="addCommentForm">
                       <h3>
-                          Add comment:
+                          Iomradh:
                       </h3>
                       <p>
                           <textarea name="comment" class="formField"></textarea>
@@ -186,11 +186,11 @@ header("Expires: 0"); // Proxies.
               </div>
           </div>
           <div id="addEnglishFormContainer">
-              <a href="#" id="addEnglishLink" title="Add an English equivalent term to this entry">Add an English equivalent term to this entry</a>
+              <a href="#" id="addEnglishLink" title="Add an English equivalent term to this entry">Cuir Beurla ris a’ bhriathar seo</a>
               <div id="addEnglishFormPopup">
                   <form id="addEnglishForm">
                       <h3>
-                          Add English equivalent term:
+                          Beurla:
                       </h3>
                       <p>
                           <textarea name="trans" class="formField"></textarea>
@@ -207,11 +207,11 @@ header("Expires: 0"); // Proxies.
               </div>
           </div>
           <div id="addFormOrthFormContainer">
-              <a href="#" id="addFormOrthLink" title="Add an orthographic form to this entry">Add an orthographic form to this entry</a>
+              <a href="#" id="addFormOrthLink" title="Add an orthographic form to this entry">Cuir foirm ris a’ bhriathar seo</a>
               <div id="addFormOrthFormPopup">
                   <form id="addFormOrthForm">
                       <h3>
-                          Add orthographic form:
+                          Foirm:
                       </h3>
                       <p>
                           <textarea name="target" class="formField"></textarea>
@@ -228,11 +228,11 @@ header("Expires: 0"); // Proxies.
               </div>
           </div>
           <div id="authEnglishFormContainer">
-              <a href="#" id="authEnglishLink" title="Authorise an English equivalent term in this entry">Authorise an English equivalent term in this entry</a>
+              <a href="#" id="authEnglishLink" title="Authorise an English equivalent term in this entry">Ùghdarraich Beurla anns a’ bhriathar seo</a>
               <div id="authEnglishFormPopup">
                   <form id="authEnglishForm">
                       <h3>
-                          Authorise English equivalent term:
+                          Beurla ùghdarraichte:
                       </h3>
                       <p>
                           <textarea name="trans" class="formField"></textarea>
