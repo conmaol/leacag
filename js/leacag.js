@@ -129,7 +129,7 @@ $("#newEntryForm").on("submit", function () {
 });
 
 $("#addCommentForm").on("submit", function () {
-    $("#lexId").val(lexicopiaId);
+    $("#lexId-addComment").val(lexicopiaId);
     console.log($("#lexId"));
     var formData = $(this).serialize();
     $.post("ajax.php", formData, function (data) {
@@ -145,7 +145,7 @@ $("#addCommentForm").on("submit", function () {
 });
 
 $("#addEnglishForm").on("submit", function () {
-    $("#lexId").val(lexicopiaId);
+    $("#lexId-addEnglish").val(lexicopiaId);
     var formData = $(this).serialize();
     $.post("ajax.php", formData, function (data) {
         console.log(data);
@@ -160,7 +160,7 @@ $("#addEnglishForm").on("submit", function () {
 });
 
 $("#addFormOrthForm").on("submit", function () {
-    $("#lexId").val(lexicopiaId);
+    $("#lexId-addFormOrth").val(lexicopiaId);
     var formData = $(this).serialize();
     $.post("ajax.php", formData, function (data) {
         console.log(data);
@@ -175,7 +175,7 @@ $("#addFormOrthForm").on("submit", function () {
 });
 
 $("#authEnglishForm").on("submit", function () {
-    $("#lexId").val(lexicopiaId);
+    $("#lexId-authEnglish").val(lexicopiaId);
     var formData = $(this).serialize();
     $.post("ajax.php", formData, function (data) {
         console.log(data);
@@ -304,7 +304,7 @@ function updateContent(id) {
     });
     */
     lexicopiaId = id;
-    $('#lexId').val(lexicopiaId);
+    //$('#lexId').val(lexicopiaId);
     /*
     if (entryhistory.length > 1) {
         $("#backbutton").show();
