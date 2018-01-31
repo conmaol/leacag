@@ -304,6 +304,7 @@ function updateContent(id) {
     });
     */
     lexicopiaId = id;
+    $('#lexId').val(lexicopiaId);
     /*
     if (entryhistory.length > 1) {
         $("#backbutton").show();
