@@ -177,7 +177,7 @@ header("Expires: 0"); // Proxies.
                       <p>
                           <input type="hidden" name="action" value="processAddCommentForm"/>
                           <input type="hidden" name="lang" value="gd"/>
-                          <input type="hidden" name="id" id="lexId"/>
+                          <input type="hidden" name="id" id="lexId-addComment"/>
                           <input type="hidden" name="userEmail" class="userEmail"/>
                           <button class="popupClose">cuir às</button>
                           <input type="submit" value="cuir a-steach"/>
@@ -198,7 +198,7 @@ header("Expires: 0"); // Proxies.
                       <p>
                           <input type="hidden" name="action" value="processAddEnglishForm"/>
                           <input type="hidden" name="lang" value="gd"/>
-                          <input type="hidden" name="id" id="lexId"/>
+                          <input type="hidden" name="id" id="lexId-addEnglish"/>
                           <input type="hidden" name="userEmail" class="userEmail"/>
                           <button class="popupClose">cuir às</button>
                           <input type="submit" value="cuir a-steach"/>
@@ -219,7 +219,7 @@ header("Expires: 0"); // Proxies.
                       <p>
                           <input type="hidden" name="action" value="processAddFormOrthForm"/>
                           <input type="hidden" name="lang" value="gd"/>
-                          <input type="hidden" name="id" id="lexId"/>
+                          <input type="hidden" name="id" id="lexId-addFormOrth"/>
                           <input type="hidden" name="userEmail" class="userEmail"/>
                           <button class="popupClose">cuir às</button>
                           <input type="submit" value="cuir a-steach"/>
@@ -240,7 +240,7 @@ header("Expires: 0"); // Proxies.
                       <p>
                           <input type="hidden" name="action" value="processAuthEnglishForm"/>
                           <input type="hidden" name="lang" value="gd"/>
-                          <input type="hidden" name="id" id="lexId"/>
+                          <input type="hidden" name="id" id="lexId-authEnglish"/>
                           <input type="hidden" name="userEmail" class="userEmail"/>
                           <button class="popupClose">cuir às</button>
                           <input type="submit" value="cuir a-steach"/>
