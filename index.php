@@ -91,7 +91,7 @@ header("Expires: 0"); // Proxies.
     <!-- thank you message on form submission -->
     <div id="submitThanksPopUp">
       <h2>Mòran taing!</h2>
-      <button type="button" class="popupClose">dùin</button>
+      <button type="button" class="popupClose" onclick="updateContent(lexicopiaId);">dùin</button>
     </div>
     <div id="newEntryFormContainer">
       <form id="newEntryForm">
