@@ -14,7 +14,7 @@ header("Expires: 0"); // Proxies.
   <meta charset="UTF-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="google-signin-client_id" content="1067716944598-u8oj6j87j4ho6lm726au2ap3spf5d508.apps.googleusercontent.com">
+  <meta name="google-signin-client_id" content="288152230357-nhbn2rhb252lp994m87h2i5iq2fi45pa.apps.googleusercontent.com">
   <title>LeaCaG</title>
   <script src="https://apis.google.com/js/platform.js" async defer></script>
   <link href="css/bootstrap.min.css" rel="stylesheet"/>
